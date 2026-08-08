@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hqbase-site",
+  "compatibility_date": "2026-07-12",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "hqbase.io",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.hqbase.io",
+      "custom_domain": true
+    }
+  ],
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

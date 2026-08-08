@@ -1,0 +1,181 @@
+<hqbase-theme-toggle>
+  <button type="button" aria-label="Switch color theme" title="Switch color theme">
+    <svg
+      class="theme-icon theme-icon-moon"
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+    >
+      <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401Z"></path>
+    </svg>
+    <svg
+      class="theme-icon theme-icon-sun"
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+    >
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+    </svg>
+  </button>
+</hqbase-theme-toggle>
+
+<script>
+  type Theme = "light" | "dark"
+
+  const storageKey = "starlight-theme"
+  const themeEvent = "hqbase-theme-change"
+
+  function readTheme(): Theme {
+    return document.documentElement.dataset.theme === "light" ? "light" : "dark"
+  }
+
+  function applyTheme(theme: Theme, persist: boolean) {
+    const root = document.documentElement
+
+    root.dataset.theme = theme
+    root.classList.toggle("dark", theme === "dark")
+    root.style.colorScheme = theme
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", theme === "dark" ? "#111113" : "#fafafa")
+
+    if (persist) {
+      try {
+        window.localStorage.setItem(storageKey, theme)
+      } catch {
+        // The selected theme still applies for this visit when storage is unavailable.
+      }
+    }
+
+    window.dispatchEvent(new CustomEvent<Theme>(themeEvent, { detail: theme }))
+  }
+
+  class HqbaseThemeToggle extends HTMLElement {
+    private button: HTMLButtonElement | null = null
+    private media = window.matchMedia("(prefers-color-scheme: dark)")
+
+    private sync = () => {
+      const theme = readTheme()
+      const nextTheme = theme === "dark" ? "light" : "dark"
+
+      this.button?.setAttribute("aria-label", `Switch to ${nextTheme} mode`)
+      this.button?.setAttribute("title", `Switch to ${nextTheme} mode`)
+    }
+
+    private handleClick = () => {
+      applyTheme(readTheme() === "dark" ? "light" : "dark", true)
+    }
+
+    private handleStorage = (event: StorageEvent) => {
+      if (event.key !== storageKey) return
+      if (event.newValue === "light" || event.newValue === "dark") {
+        applyTheme(event.newValue, false)
+        return
+      }
+
+      applyTheme(this.media.matches ? "dark" : "light", false)
+    }
+
+    private handleSystemTheme = () => {
+      let hasSavedTheme = false
+
+      try {
+        const savedTheme = window.localStorage.getItem(storageKey)
+        hasSavedTheme = savedTheme === "light" || savedTheme === "dark"
+      } catch {
+        // Fall back to the operating-system preference when storage is unavailable.
+      }
+
+      if (!hasSavedTheme) applyTheme(this.media.matches ? "dark" : "light", false)
+    }
+
+    connectedCallback() {
+      this.button = this.querySelector("button")
+      this.sync()
+      this.button?.addEventListener("click", this.handleClick)
+      window.addEventListener(themeEvent, this.sync)
+      window.addEventListener("storage", this.handleStorage)
+      this.media.addEventListener("change", this.handleSystemTheme)
+    }
+
+    disconnectedCallback() {
+      this.button?.removeEventListener("click", this.handleClick)
+      window.removeEventListener(themeEvent, this.sync)
+      window.removeEventListener("storage", this.handleStorage)
+      this.media.removeEventListener("change", this.handleSystemTheme)
+    }
+  }
+
+  if (!window.customElements.get("hqbase-theme-toggle")) {
+    window.customElements.define("hqbase-theme-toggle", HqbaseThemeToggle)
+  }
+</script>
+
+<style>
+  hqbase-theme-toggle {
+    display: inline-flex;
+  }
+
+  button {
+    display: inline-grid;
+    width: 1.75rem;
+    height: 1.75rem;
+    min-height: 1.75rem;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    transition:
+      background-color 140ms ease,
+      color 140ms ease;
+  }
+
+  button:hover {
+    background: color-mix(in srgb, var(--sl-color-white) 8%, transparent);
+    color: var(--sl-color-white);
+  }
+
+  button:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 2px;
+  }
+
+  .theme-icon {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .theme-icon-sun {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .theme-icon-moon {
+    display: none;
+  }
+
+  :global(:root[data-theme="dark"]) .theme-icon-sun {
+    display: block;
+  }
+
+  :global(:root[data-theme="light"]) button:hover {
+    background: color-mix(in srgb, var(--sl-color-white) 6%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    button {
+      transition: none;
+    }
+  }
+
+</style>

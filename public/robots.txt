@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hqbase.io/sitemap-index.xml

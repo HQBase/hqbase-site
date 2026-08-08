@@ -1,0 +1,85 @@
+---
+title: Checking a deployed change
+description: Run staging checks without using production data or credentials.
+---
+
+:::caution[Authorized maintainers only]
+Requires access to HQBase's protected staging environment. [Contributors use their own
+infrastructure](/docs/maintainers/contributing/).
+:::
+
+Staging proves that HQBase works after it is deployed to real Cloudflare resources. A local browser
+or Worker test is useful, but it is not a staging result.
+
+The test code lives in `hqbase/test/e2e/staging`. GitHub runs it through
+`hqbase/.github/workflows/staging-e2e.yml`.
+
+## What staging proves
+
+Each run checks:
+
+- the public health response, web-app manifest, service worker, offline shell, and rendered app;
+- creation of the first owner and browser sign-in;
+- mailbox access for different users;
+- operator diagnostics; and
+- backup and restore with a populated D1 database.
+
+The signed-release workflow adds one critical update test: it installs the previous stable release,
+creates data, updates through the normal customer path to the exact candidate, and repeats the
+checks. The GitHub Release stays in draft until this passes.
+
+Retries, permanently failed queue jobs, unused-object cleanup, log redaction, and failure branches
+are covered by lower-level integration tests. Staging should not claim to prove behavior it does not
+exercise.
+
+Receiving public email through Cloudflare Email Routing is a separate candidate check until it has
+dedicated automation.
+
+## Keep staging isolated
+
+Use the HQBase staging Cloudflare account with:
+
+- app and email hostnames used only for staging;
+- the stable `hqbase-e2e-staging` Worker name and new D1, R2, and queue resources for each run;
+- a separate Cloudflare API token with only the permissions staging needs;
+- secrets stored in the GitHub `hqbase-staging` Environment; and
+- Cloudflare Access in front of the staging app.
+
+Never use production email domains, data, or credentials. Wait for hostname changes by checking
+whether they are ready; do not guess with a fixed sleep.
+
+## GitHub secrets and variables
+
+The `hqbase-staging` Environment needs these secrets:
+
+- `HQBASE_E2E_CLOUDFLARE_ACCOUNT_ID`
+- `HQBASE_E2E_CLOUDFLARE_API_TOKEN`
+- `HQBASE_E2E_ACCESS_CLIENT_ID`
+- `HQBASE_E2E_ACCESS_CLIENT_SECRET`
+- `HQBASE_E2E_APP_HOSTNAME`
+- `HQBASE_E2E_EMAIL_DOMAIN`
+- `HQBASE_E2E_OWNER_EMAIL` — a login on a different domain from
+  `HQBASE_E2E_EMAIL_DOMAIN`, so it remains usable when the staging workspace is unavailable.
+- `HQBASE_E2E_OWNER_PASSWORD`
+
+It also needs this Environment variable:
+
+- `HQBASE_E2E_OAUTH_CLIENT_ID` — a private PKCE client in the staging Cloudflare account with setup, domain,
+  and update callback URLs for the stable staging hostname.
+
+## Run a reviewed candidate
+
+Always run the workflow definition from `main`, then pass the commit or ref you reviewed:
+
+```sh
+gh workflow run staging-e2e.yml --repo HQBase/hqbase --ref main -f candidate_ref=<commit>
+```
+
+Do not expose staging secrets to pull-request workflows or weaken the GitHub Environment's branch
+policy.
+
+## After the run
+
+Each run uploads only its non-secret deployment record, then removes its temporary Cloudflare
+resources. If cleanup fails, use that record to identify the exact resources; never delete by a
+broad name pattern.

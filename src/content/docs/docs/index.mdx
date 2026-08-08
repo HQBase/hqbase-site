@@ -1,0 +1,54 @@
+---
+title: HQBase Docs
+description: Install HQBase, manage access, connect AI tools, and keep your workspace running.
+---
+
+import { CardGrid, LinkCard } from "@astrojs/starlight/components";
+
+Use these guides to install HQBase, give people access to shared mailboxes, connect AI tools, and
+keep your workspace running. HQBase runs in your Cloudflare account, so your mail, data, and app
+secrets stay there.
+
+## What do you want to do?
+
+<CardGrid>
+  <LinkCard
+    title="Install HQBase"
+    description="Prepare Cloudflare, deploy HQBase, and create your first mailboxes."
+    href="/docs/getting-started/"
+  />
+  <LinkCard
+    title="See how it works"
+    description="See where the app, email, data, and Cloudflare services live."
+    href="/docs/architecture/"
+  />
+  <LinkCard
+    title="Manage mailbox access"
+    description="Choose who can read, reply, organize mail, or change deletion rules."
+    href="/docs/access-control/"
+  />
+  <LinkCard
+    title="Connect AI tools"
+    description="Connect an AI tool with read-only access or permission to act on mail."
+    href="/docs/mcp/"
+  />
+  <LinkCard
+    title="Back up or recover"
+    description="Diagnose problems, record backups, restore data, and recover safely."
+    href="/docs/operations/"
+  />
+  <LinkCard
+    title="Update HQBase"
+    description="Check and install a signed release with clear recovery steps."
+    href="/docs/guides/updates/"
+  />
+</CardGrid>
+
+## Building or maintaining HQBase?
+
+The [Product reference](/docs/specs/product/) explains behavior that spans several parts of HQBase.
+[For maintainers](/docs/maintainers/) covers engineering, staging, releases, and
+documentation work.
+
+The public [`HQBase/hqbase`](https://github.com/HQBase/hqbase) repository contains the complete
+product source and signed releases.

@@ -1,0 +1,33 @@
+---
+import MobileMenuFooter from "@astrojs/starlight/components/MobileMenuFooter.astro"
+import SidebarPersister from "@astrojs/starlight/components/SidebarPersister.astro"
+import SidebarSublist from "@astrojs/starlight/components/SidebarSublist.astro"
+import ThemeSelect from "./starlight-theme-toggle.astro"
+
+const { sidebar } = Astro.locals.starlightRoute
+---
+
+<SidebarPersister>
+  <SidebarSublist sublist={sidebar} />
+</SidebarPersister>
+
+<div class="desktop-theme-control sl-hidden md:sl-flex">
+  <ThemeSelect />
+</div>
+
+<div class="md:sl-hidden">
+  <MobileMenuFooter />
+</div>
+
+<style>
+  @layer starlight.core {
+    .desktop-theme-control {
+      flex: none;
+      align-items: center;
+      justify-content: flex-end;
+      margin-block-start: auto;
+      padding: 0.75rem 0.25rem 0.8125rem;
+      border-top: 1px solid var(--sl-color-hairline-shade);
+    }
+  }
+</style>

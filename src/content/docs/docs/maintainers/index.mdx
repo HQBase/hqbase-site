@@ -1,0 +1,50 @@
+---
+title: For maintainers
+description: Choose the right workflow for changing, testing, or releasing HQBase.
+---
+
+import { CardGrid, LinkCard } from "@astrojs/starlight/components";
+
+Use this section when you are changing HQBase itself. Start with the job you need to do.
+
+<CardGrid>
+  <LinkCard
+    title="Contribute to HQBase"
+    description="Make a change, open the right pull requests, and hand it to an HQBase maintainer."
+    href="/docs/maintainers/contributing/"
+  />
+  <LinkCard
+    title="Change the documentation"
+    description="Choose the right page, keep one copy, and finish the documentation checks."
+    href="/docs/maintainers/documentation/"
+  />
+  <LinkCard
+    title="Make a product change"
+    description="Find the owning repository, protect customer data, and test the behavior."
+    href="/docs/maintainers/engineering-standards/"
+  />
+  <LinkCard
+    title="Check a deployed change"
+    description="Run the staging checks without using production data or credentials."
+    href="/docs/maintainers/staging-e2e/"
+  />
+  <LinkCard
+    title="Publish a release"
+    description="Package, sign, test, and publish an official HQBase release."
+    href="/docs/maintainers/releases/"
+  />
+</CardGrid>
+
+## The usual order
+
+1. Choose the repository or repositories that own the change.
+2. Write down the product rule when behavior is changing.
+3. Change the code and tests in every affected repository.
+4. Update the reader documentation when people will install, use, or operate the product
+   differently.
+5. Run each repository's full check and open linked pull requests.
+6. An authorized HQBase maintainer uses official staging when the behavior crosses deployed
+   systems.
+7. An authorized maintainer publishes a signed release only after the exact candidate passes.
+
+You are finished when the product, tests, and public documentation all describe the same behavior.
