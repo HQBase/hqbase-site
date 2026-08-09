@@ -40,7 +40,7 @@ const threads: Thread[] = [
     initials: "PS",
     time: "11:42 AM",
     subject: "Launch assets for Friday",
-    count: 3,
+    count: 4,
     preview: "Final homepage copy is attached. Everything is ready for review.",
     unread: true,
     attachment: true,
@@ -88,6 +88,23 @@ const threads: Thread[] = [
     subject: "Team access request",
     preview: "Could you add our operations lead to the shared mailbox?",
     tone: "rose",
+  },
+  {
+    sender: "Jordan Lee",
+    initials: "JL",
+    time: "Jul 28",
+    subject: "Partner briefing",
+    preview: "Thursday afternoon works for everyone on our side.",
+    tone: "violet",
+  },
+  {
+    sender: "Amara Okafor",
+    initials: "AO",
+    time: "Jul 28",
+    subject: "Re: Support handoff",
+    count: 2,
+    preview: "I added the notes and assigned the remaining follow-ups.",
+    tone: "green",
   },
 ]
 
@@ -286,6 +303,16 @@ function WorkspaceReader() {
               <span><Download aria-hidden="true" /></span>
               <span><strong>launch-assets.zip</strong><small>8.4 MB</small></span>
             </span>
+          </div>
+        </article>
+        <article className="workspace-message workspace-message-sent">
+          <span className="workspace-avatar workspace-avatar-blue">AB</span>
+          <div>
+            <header>
+              <span><strong>Alex Brown</strong><small>to Priya</small></span>
+              <time>11:51 AM</time>
+            </header>
+            <p>Got it - the launch is scheduled and the team has the final files.</p>
           </div>
         </article>
         <div className="workspace-reply-actions">

@@ -7,13 +7,6 @@ import {
   RotateCcw,
 } from "lucide-react"
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-
 const features = [
   {
     icon: Bot,
@@ -23,7 +16,7 @@ const features = [
   {
     icon: AtSign,
     title: "Multiple domains and mailboxes",
-    description: "One workspace for all your domains and mailboxes.",
+    description: "Bring all your domains and mailboxes into one place.",
   },
   {
     icon: KeyRound,
@@ -52,28 +45,19 @@ export function FeaturesBento() {
     <section className="page-section features-section" id="features" aria-labelledby="features-title">
       <div className="page-shell">
         <div className="features-heading">
-          <h2 id="features-title">One home for all your team's email</h2>
-          <p>Manage every inbox, connect AI tools, and keep your mail and data in your own Cloudflare account.</p>
+          <h2 id="features-title">Email that works for the whole team</h2>
+          <p>Share inboxes, manage access, and connect AI tools, while your mail stays in your Cloudflare account.</p>
         </div>
 
         <div className="feature-grid">
           {features.map(({ icon: Icon, title, description }) => (
-            <Card className="feature-item" key={title} role="article">
-              <CardHeader className="feature-card-header">
-                <div className="feature-icon-field" aria-hidden="true">
-                  <span className="feature-icon-grid" />
-                  <Icon className="feature-icon-mark" />
-                </div>
-                <div className="feature-card-copy">
-                  <CardTitle className="feature-card-title">
-                    <h3>{title}</h3>
-                  </CardTitle>
-                  <CardDescription className="feature-card-description">
-                    <p>{description}</p>
-                  </CardDescription>
-                </div>
-              </CardHeader>
-            </Card>
+            <article className="feature-item" key={title}>
+              <header className="feature-item-heading">
+                <Icon className="feature-icon-mark" aria-hidden="true" />
+                <h3>{title}</h3>
+              </header>
+              <p>{description}</p>
+            </article>
           ))}
         </div>
       </div>

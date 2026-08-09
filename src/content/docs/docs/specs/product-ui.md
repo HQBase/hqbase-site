@@ -49,9 +49,12 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 
 ### Landing page
 
-- Keep the page to a compact header, hero, product features, and one footer. Do not add pricing,
-  fabricated adoption proof, or a separate hosted-product story.
-- Lead with **Your team&apos;s workspace. On your Cloudflare infrastructure.** Show the desktop
+- Keep the page to a compact header, hero, product features, public journey, and one footer. Do not
+  add pricing, fabricated adoption proof, or a separate hosted-product story.
+- Use one shared responsive section gap between the hero illustration and features, between the
+  feature grid and public journey, and between the journey and footer. Each transition owns that
+  gap once; adjacent sections do not stack bottom and top padding.
+- Lead with **Your team&apos;s email. On your Cloudflare infrastructure.** Show the desktop
   workspace as live interface markup rather than a screenshot or decorative browser window. Use
   clearly illustrative data without invented customers, usage totals, locations, or performance
   claims.
@@ -59,16 +62,54 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   the lower edge of the viewport. A subtle orange-to-amber dot field may sit behind it. Scrolling
   may shift the field and enlarge the preview by no more than about 7.5 percent. Reduced-motion
   visitors receive the same static resting composition.
-- The header begins as a flat transparent row containing the logo, compact navigation, and a small
-  deployment action. After scrolling, it may become a narrower translucent pill with a quiet border
-  and shadow.
-- Features use one centered heading and six compact cards. The cards cover MCP, multiple domains,
+- The desktop preview fills the visible conversation column with illustrative inbox rows and shows
+  a coherent four-message exchange in the selected conversation. The rows share the available
+  height without leaving an empty band or clipping the final item. Its Compose control remains
+  prominent without using the mockup&apos;s inverse primary at full brightness.
+- The header begins as a flat transparent row containing the logo and compact navigation. After
+  scrolling, it may become a narrower translucent pill with a quiet border and shadow.
+- The hero deployment action and adjacent documentation action share the same height, two-pixel
+  border weight, pill radius, type size, and horizontal padding. The deployment action adapts the
+  official Cloudflare palette to the active theme: light mode uses an amber-to-coral surface with a
+  black label, while dark mode uses the official black surface, two-pixel orange border, and
+  amber-to-coral label. The hero gradient and modal confirmation gradient glide once on hover and
+  ease back on exit; dark mode applies the same motion to the hero label. Reduced-motion visitors
+  receive the static states. The action opens an animated,
+  accessible readiness dialog centered in
+  the viewport instead of navigating immediately. The dialog gives a concise
+  three-item checklist for Workers Paid, an active R2 subscription, and an active domain using
+  Cloudflare DNS, with links to the relevant Cloudflare guidance. **Cancel** closes the dialog and
+  **Confirm** continues to the official deployment URL. Opening motion cascades through the
+  checklist and becomes static when reduced motion is requested.
+- Features use one centered heading and six flat grid cells. They cover MCP, multiple domains,
   mailbox access levels, PWA and Web Push, customer-owned Cloudflare resources, and signed updates.
   Their copy must not imply that MCP administers the workspace or that HQBase ships separate native
   apps.
-- Feature cards use short copy, simple Lucide icons, a small neutral grid, and a soft theme-aware
-  halo. Hover may lift the card and bring orange into the grid, but the section does not use
-  miniature product scenes, broad gloss, shader backgrounds, or elaborate animation.
+- The feature matrix is slightly wider than the standard content shell and uses slightly larger
+  orange Lucide icons inline with each title. It has no card surfaces, corner radius, shadow, glow,
+  icon backdrop, or hover lift. Subtle orange rules use three-pixel, widely spaced dashes that
+  match the visual weight of the background dots. They appear on internal row and column dividers
+  only, leaving the matrix edges open. Each segment fades before its junction.
+- The public journey pairs an open, unframed milestone timeline with a concise mission statement.
+  Completed, current, and planned steps are visually distinct without promising uncommitted
+  features. The mission is stated directly as **We&apos;re building team email on Cloudflare.**
+  without a separate eyebrow label, while current feature claims remain grounded in the team email
+  product.
+  The product principles **Free. Open source. Self-hosted. Unlimited
+  seats.** sit directly below the hero title rather than inside the journey section; the final claim
+  describes seat availability, not unlimited infrastructure. The timeline uses a single **Follow
+  the journey** heading without a progress counter or supporting subheading. Its compact,
+  sentence-case status badges all use quiet neutral backgrounds, and its milestone markers stay
+  smaller than the surrounding copy. Planned milestone markers use a clearly visible muted neutral
+  while remaining secondary to completed and current steps. The timeline has
+  separators between milestones but no top or bottom border. Each separator begins after the marker
+  column so it does not cross the vertical timeline and fades at both ends. Two compact actions link
+  to the public repository and the HQBase organization&apos;s GitHub Discussions forum.
+  A decorative, low-contrast dotted world map sits behind the community. It remains the
+  section background rather than extending the page below it. It uses an inline,
+  theme-aware vector pattern rather than external imagery, remains hidden from assistive technology,
+  and crops responsively without horizontal overflow. Orange is reserved for the small current-step
+  accent and the subdued map dots.
 - The footer keeps brand context, licensing, primary links, and the appearance control in one band.
 - Compact navigation has a labelled menu button, traps focus, closes after navigation, prevents
   background scrolling while open, and restores scrolling afterward.
@@ -84,9 +125,12 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 - Documentation aligns its logo and GitHub icon to matching outer insets. The GitHub icon has no
   trailing divider. The header product label is 14px; previous and next navigation uses 12px
   direction labels with 18px titles and compact icons.
-- Header links point only to real sections and public destinations. The primary action starts the
-  official Deploy to Cloudflare flow, the source action opens `HQBase/hqbase`, and Getting started
-  uses Cloudflare&apos;s official deployment-button asset.
+- Landing links point only to real sections and public destinations. The hero&apos;s primary action
+  starts the official Deploy to Cloudflare flow, its secondary action opens `/docs/`, and Getting
+  started uses Cloudflare&apos;s official deployment-button asset. The landing header replaces its static
+  GitHub link with the `HQBase/hqbase` star-count widget on desktop and mobile. Its iframe uses a
+  compact fixed width, receives a dark-mode treatment without showing a white field, and remains the
+  header's only call to action. The security policy permits frames only from `ghbtns.com`.
 - Every link uses the pointer cursor on mouse-capable devices. Public pages keep visible focus,
   reduced-motion support, and readable layouts from 320px through desktop.
 
