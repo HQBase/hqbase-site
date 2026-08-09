@@ -1562,6 +1562,15 @@ a[href] {
 }
 
 @media (min-width: 64rem) {
+  .features-heading,
+  .features-heading h2 {
+    max-width: none;
+  }
+
+  .features-heading h2 {
+    white-space: nowrap;
+  }
+
   .feature-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }

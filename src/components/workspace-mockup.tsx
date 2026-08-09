@@ -261,7 +261,7 @@ function WorkspaceReader() {
               <time>10:07 AM</time>
             </header>
             <p>Hi team,</p>
-            <p>The final launch assets are ready. I’ve included the revised homepage copy and the press folder below.</p>
+            <p>The final launch assets are ready. I've included the revised homepage copy and the press folder below.</p>
           </div>
         </article>
         <article className="workspace-message workspace-message-sent">
@@ -281,7 +281,7 @@ function WorkspaceReader() {
               <span><strong>Priya Shah</strong><small>to Support</small></span>
               <time>11:42 AM</time>
             </header>
-            <p>Perfect — here is the approved package for Friday.</p>
+            <p>Perfect - here is the approved package for Friday.</p>
             <span className="workspace-attachment">
               <span><Download aria-hidden="true" /></span>
               <span><strong>launch-assets.zip</strong><small>8.4 MB</small></span>

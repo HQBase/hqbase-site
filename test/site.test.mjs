@@ -233,12 +233,13 @@ test("features stay inside the documented product boundary", async () => {
   ]);
 
   assert.match(page, /<FeaturesBento \/>/);
-  assert.match(features, /One place for people, agents, and every inbox\./);
-  assert.match(features, /AI-ready mail/);
-  assert.match(features, /trusted AI clients over OAuth to search, draft, reply, and send/);
-  assert.match(features, /Run every domain and mailbox from one workspace/);
-  assert.match(features, /Read, Agent, or Manager access/);
-  assert.match(features, /PWA with optional, privacy-conscious Web Push/);
+  assert.match(features, /One home for all your team's email/);
+  assert.match(features, /Email via MCP/);
+  assert.match(features, /icon: Bot,[\s\S]*title: "Email via MCP"/);
+  assert.match(features, /Connect AI clients over OAuth to search, draft, reply, and send/);
+  assert.match(features, /One workspace for all your domains and mailboxes/);
+  assert.match(features, /Give each team member access to their respective mailboxes/);
+  assert.match(features, /Polished desktop and mobile PWA client with self hosted push notifications/);
   assert.match(features, /Worker, D1 mail index, and R2 attachments stay yours/);
   assert.match(features, /Verify every release, back up first, and roll back/);
   assert.match(features, /from "@\/components\/ui\/card"/);
@@ -262,6 +263,7 @@ test("features stay inside the documented product boundary", async () => {
   assert.doesNotMatch(styles, /\.feature-icon-grid::after|\.feature-item:hover|--feature-card-lift/);
   assert.doesNotMatch(styles, /color-feature-grid-light|color-feature-shine/);
   assert.match(styles, /\.features-heading > p[\s\S]*font-size: 0\.9375rem/);
+  assert.match(styles, /@media \(min-width: 64rem\)[\s\S]*\.features-heading h2[\s\S]*white-space: nowrap/);
   assert.match(styles, /\.feature-card-title h3[\s\S]*1\.0625rem[\s\S]*1\.1875rem/);
   assert.match(styles, /\.feature-card-description p[\s\S]*font-size: 0\.875rem/);
   assert.doesNotMatch(styles, /\[data-slot="card"\]\.feature-item\s*\{[^}]*\btransition:/);

@@ -42,7 +42,7 @@ then moved to a separate queue for investigation if they keep failing.
 ## Remove HQBase safely
 
 HQBase keeps a small deployment record listing the Worker, D1 database, R2 bucket, queues, routes,
-and domain records it created. Removal uses that record—not a name or naming pattern—to decide what
+and domain records it created. Removal uses that record - not a name or naming pattern - to decide what
 belongs to HQBase.
 
 Resources reused from somewhere else are preserved. If ownership is missing or unclear, removal

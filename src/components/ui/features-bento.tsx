@@ -1,10 +1,10 @@
 import {
   AtSign,
   BellRing,
+  Bot,
   Cloud,
   KeyRound,
   RotateCcw,
-  SquareTerminal,
 } from "lucide-react"
 
 import {
@@ -16,24 +16,24 @@ import {
 
 const features = [
   {
-    icon: SquareTerminal,
-    title: "AI-ready mail",
-    description: "Connect trusted AI clients over OAuth to search, draft, reply, and send.",
+    icon: Bot,
+    title: "Email via MCP",
+    description: "Connect AI clients over OAuth to search, draft, reply, and send.",
   },
   {
     icon: AtSign,
-    title: "Every inbox, together",
-    description: "Run every domain and mailbox from one workspace.",
+    title: "Multiple domains and mailboxes",
+    description: "One workspace for all your domains and mailboxes.",
   },
   {
     icon: KeyRound,
     title: "Access by mailbox",
-    description: "Give each person Read, Agent, or Manager access—nothing broader.",
+    description: "Give each team member access to their respective mailboxes.",
   },
   {
     icon: BellRing,
-    title: "Install anywhere",
-    description: "Use HQBase as a PWA with optional, privacy-conscious Web Push.",
+    title: "Access anywhere",
+    description: "Polished desktop and mobile PWA client with self hosted push notifications.",
   },
   {
     icon: Cloud,
@@ -52,8 +52,8 @@ export function FeaturesBento() {
     <section className="page-section features-section" id="features" aria-labelledby="features-title">
       <div className="page-shell">
         <div className="features-heading">
-          <h2 id="features-title">One place for people, agents, and every inbox.</h2>
-          <p>Email, permissions, automation, and updates—running in your Cloudflare account.</p>
+          <h2 id="features-title">One home for all your team's email</h2>
+          <p>Manage every inbox, connect AI tools, and keep your mail and data in your own Cloudflare account.</p>
         </div>
 
         <div className="feature-grid">

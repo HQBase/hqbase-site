@@ -331,7 +331,7 @@ unread experience without a dead control.
 - A new non-duplicate inbound message schedules notifications only for subscribed users who
   currently have read access. Delivery failure never delays or rolls back accepted mail.
 - Every push displays a visible notification. Its encrypted payload contains only an opaque app
-  route, thread replacement tag, and the recipient&apos;s unread total—never sender, recipient, subject,
+  route, thread replacement tag, and the recipient&apos;s unread total - never sender, recipient, subject,
   snippet, body, attachment, session, or Cloudflare data.
 - Activating a notification focuses or opens the represented message. Authentication and current
   mailbox access remain authoritative; a notification never grants access.

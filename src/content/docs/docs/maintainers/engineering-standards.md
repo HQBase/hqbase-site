@@ -29,7 +29,7 @@ existing workspace belongs to `hqbase` only.
 - Make dependencies explicit. Avoid circular imports and reaching through one feature to use
   another feature's internals.
 - Prefer small, typed, direct code over a generic framework built for imagined future needs.
-- Treat 250–300 lines as a reason to look for a cleaner split. Implementation files should normally
+- Treat 250-300 lines as a reason to look for a cleaner split. Implementation files should normally
   stay below 400 lines; a narrow exception needs an allowlist entry and an explanation.
 
 ## Protect customer data and credentials

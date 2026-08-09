@@ -58,13 +58,13 @@ The `hqbase-staging` Environment needs these secrets:
 - `HQBASE_E2E_ACCESS_CLIENT_SECRET`
 - `HQBASE_E2E_APP_HOSTNAME`
 - `HQBASE_E2E_EMAIL_DOMAIN`
-- `HQBASE_E2E_OWNER_EMAIL` — a login on a different domain from
+- `HQBASE_E2E_OWNER_EMAIL` - a login on a different domain from
   `HQBASE_E2E_EMAIL_DOMAIN`, so it remains usable when the staging workspace is unavailable.
 - `HQBASE_E2E_OWNER_PASSWORD`
 
 It also needs this Environment variable:
 
-- `HQBASE_E2E_OAUTH_CLIENT_ID` — a private PKCE client in the staging Cloudflare account with setup, domain,
+- `HQBASE_E2E_OAUTH_CLIENT_ID` - a private PKCE client in the staging Cloudflare account with setup, domain,
   and update callback URLs for the stable staging hostname.
 
 ## Run a reviewed candidate
