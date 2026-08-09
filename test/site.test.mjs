@@ -73,6 +73,7 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(page, /<WorkspaceMockup client:load \/>/);
   assert.match(page, /<FeaturesBento \/>/);
   assert.match(page, /<CommunityJourney \/>/);
+  assert.match(page, /<FaqSection client:load \/>/);
   assert.match(page, /Your team&apos;s email\./);
   assert.doesNotMatch(page, /Your team&apos;s workspace/);
   assert.match(page, /On your Cloudflare infrastructure\./);
@@ -466,6 +467,74 @@ test("the public journey links milestones to the HQBase community", async () => 
   assert.match(productUi, /complete the flattening motion sooner[\s\S]*avoiding an empty spacer below it/);
 });
 
+test("the landing answers common questions with the native shadcn accordion", async () => {
+  const [page, faq, accordion, styles, productUi] = await Promise.all([
+    read("src/pages/index.astro"),
+    read("src/components/faq-section.tsx"),
+    read("src/components/ui/accordion.tsx"),
+    read("public/styles.css"),
+    read("src/content/docs/docs/specs/product-ui.md"),
+  ]);
+
+  assert.match(page, /import \{ FaqSection \} from "@\/components\/faq-section"/);
+  assert.match(page, /<FaqSection client:load \/>/);
+  assert.match(faq, /from "@\/components\/ui\/accordion"/);
+  assert.match(faq, /type="single"/);
+  assert.match(faq, /collapsible/);
+  assert.match(faq, /defaultValue="deployment-requirements"/);
+  assert.equal((faq.match(/question: "/g) ?? []).length, 4);
+  assert.match(
+    faq,
+    /question: "What do I need before deploying\?"[\s\S]*question: "How is HQBase different from Cloudflare Agentic Inbox\?"[\s\S]*question: "Where does my data live\?"[\s\S]*question: "Is HQBase fully free and open source\?"/,
+  );
+  assert.match(faq, /How is HQBase different from Cloudflare Agentic Inbox\?/);
+  assert.match(faq, /Is HQBase fully free and open source\?/);
+  assert.match(faq, /Where does my data live\?/);
+  assert.match(faq, /What do I need before deploying\?/);
+  assert.doesNotMatch(faq, /What is HQBase\?|Can I connect AI tools to HQBase\?/);
+  assert.match(faq, /They share a similar foundation: self-hosted email on Cloudflare with AI support/);
+  assert.match(faq, /complete team email workspace/);
+  assert.match(faq, /individual accounts,[\s\S]*per-mailbox permissions,[\s\S]*OAuth-scoped AI access/);
+  assert.match(faq, /Web Push, audit history, multi-domain[\s\S]*administration/);
+  assert.match(faq, /signed updates with backup and recovery/);
+  assert.match(faq, /We encourage you to try[\s\S]*Agentic Inbox as well/);
+  assert.match(faq, /deployment is not registered with us[\s\S]*not even[\s\S]*aware that your installation exists/);
+  assert.match(faq, /complete HQBase product, including its OAuth relay[\s\S]*AGPL-3\.0-only/);
+  assert.match(faq, /no per-seat fees/);
+  assert.match(faq, /AGPL-3\.0-only/);
+  assert.match(faq, /Workers Paid/);
+  assert.match(faq, /active domain using[\s\S]*Cloudflare DNS/);
+  assert.match(faq, /href="\/docs\/getting-started\/"/);
+  assert.match(faq, /data-reveal="up"/);
+  assert.match(faq, /suppressHydrationWarning/);
+  assert.match(accordion, /data-open:animate-accordion-down/);
+  assert.match(accordion, /data-closed:animate-accordion-up/);
+  assert.match(styles, /\.faq-section\s*\{[^}]*padding-block: 0 var\(--space-section\)/);
+  assert.match(styles, /\.faq-section > \.page-shell\s*\{[^}]*width: min\(100%, 54rem\)/);
+  assert.match(styles, /\.faq-accordion \[data-slot="accordion-item"\]:not\(:last-child\)::after[\s\S]*mask-image: linear-gradient/);
+  assert.match(styles, /\.faq-accordion \[data-slot="accordion-content"\] p\s*\{[^}]*max-width: none/);
+  assert.match(styles, /\.faq-heading\s*\{[^}]*margin-inline: auto;[^}]*text-align: center/);
+  assert.doesNotMatch(faq, /faq-number|padStart/);
+  assert.doesNotMatch(styles, /\.faq-number|\.faq-layout\s*\{[^}]*grid-template-columns/);
+  assert.match(productUi, /FAQ follows the public journey[\s\S]*source-owned shadcn Accordion/);
+  assert.match(productUi, /contains exactly four questions/);
+  assert.match(productUi, /what Cloudflare preparation deployment requires[\s\S]*in that order/);
+  assert.match(productUi, /deployment preparation answer open by default/);
+  assert.match(productUi, /how HQBase differs from Cloudflare Agentic Inbox/);
+  assert.match(productUi, /shared foundation of self-hosted email on Cloudflare with AI support/);
+  assert.match(
+    productUi,
+    /individual[\s\S]*accounts,[\s\S]*per-mailbox permissions,[\s\S]*OAuth-scoped AI access/,
+  );
+  assert.match(productUi, /encouraging people to try[\s\S]*Agentic Inbox as well/);
+  assert.match(productUi, /deployments[\s\S]*are not registered with HQBase[\s\S]*not aware that an installation exists/);
+  assert.match(productUi, /complete product, including its OAuth relay[\s\S]*AGPL-3\.0-only/);
+  assert.match(productUi, /no per-seat fees/);
+  assert.match(productUi, /answer copy use almost the full accordion width/);
+  assert.match(productUi, /heading centered above the accordion[\s\S]*as one reading column/);
+  assert.match(productUi, /without[\s\S]*question numbers or a split desktop layout/);
+});
+
 test("the landing reveals content progressively without hiding reduced-motion visitors", async () => {
   const [page, mockup, features, journey, reveal, styles, productUi] = await Promise.all([
     read("src/pages/index.astro"),
@@ -703,6 +772,7 @@ test("the design scaffold and local assets remain available", async () => {
 
   for (const path of [
     "src/components/ui/button.tsx",
+    "src/components/ui/accordion.tsx",
     "src/components/ui/card.tsx",
     "src/components/ui/dialog.tsx",
     "public/favicon.svg",

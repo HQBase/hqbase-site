@@ -1,5 +1,6 @@
 ---
 import { CommunityJourney } from "@/components/community-journey"
+import { FaqSection } from "@/components/faq-section"
 import { HeroActions } from "@/components/hero-actions"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { FeaturesBento } from "@/components/ui/features-bento"
@@ -72,6 +73,7 @@ const pageDescription =
       </section>
       <FeaturesBento />
       <CommunityJourney />
+      <FaqSection client:load />
     </main>
     <footer class="site-footer">
       <div class="page-shell" data-reveal="up">

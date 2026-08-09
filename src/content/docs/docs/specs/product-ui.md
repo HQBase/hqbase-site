@@ -49,8 +49,9 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 
 ### Landing page
 
-- Keep the page to a compact header, hero, product features, public journey, and one footer. Do not
-  add pricing, fabricated adoption proof, or a separate hosted-product story.
+- Keep the page to a compact header, hero, product features, public journey, frequently asked
+  questions, and one footer. Do not add pricing, fabricated adoption proof, or a separate
+  hosted-product story.
 - Use one shared responsive section gap between the hero illustration and features, between the
   feature grid and public journey, and between the journey and footer. Each transition owns that
   gap once; adjacent sections do not stack bottom and top padding.
@@ -132,8 +133,8 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   sentence-case status badges all use quiet neutral backgrounds, and its milestone markers stay
   smaller than the surrounding copy. Planned milestone markers use a clearly visible muted neutral
   while remaining secondary to completed and current steps. The timeline has
-  a current community step inviting people to share ideas, ask questions, and request features. It has
-  separators between milestones but no top or bottom border. Each separator begins after the marker
+  a current community step inviting people to share ideas, ask questions, and request features. It
+  has separators between milestones but no top or bottom border. Each separator begins after the marker
   column so it does not cross the vertical timeline and fades at both ends. Two compact actions link
   to the public repository and the HQBase organization&apos;s GitHub Discussions forum.
   A decorative, low-contrast dotted world map sits behind the community. It remains the
@@ -141,6 +142,22 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   theme-aware vector pattern rather than external imagery, remains hidden from assistive technology,
   and crops responsively without horizontal overflow. Orange is reserved for the small current-step
   accent and the subdued map dots.
+- The FAQ follows the public journey and uses the source-owned shadcn Accordion with Radix semantics,
+  native keyboard behavior, and animated open and close states. It contains exactly four questions:
+  what Cloudflare preparation deployment requires, how HQBase differs from Cloudflare Agentic Inbox,
+  where customer data lives, and whether HQBase is fully free and open source, in that order. Keep
+  the deployment preparation answer open by default. The comparison starts by acknowledging their
+  shared foundation of self-hosted email on Cloudflare with AI support, then explains that HQBase
+  develops it into a complete team email workspace with individual accounts, per-mailbox permissions,
+  OAuth-scoped AI access, Web Push, audit history, multi-domain administration, and signed updates
+  with backup and recovery, while encouraging people to try Agentic Inbox as well. The data-location
+  answer states that customer data remains in customer-owned Cloudflare resources and that deployments
+  are not registered with HQBase, so HQBase is not aware that an installation exists. The open-source
+  answer states that the complete product, including its OAuth relay, is public under AGPL-3.0-only
+  and has no per-seat fees. Keep the presentation flat and unframed, with quiet separators that fade
+  at both ends. Let answer copy use almost the full accordion width instead of imposing a narrow
+  reading measure. Present the heading centered above the accordion as one reading column at every
+  viewport size, without question numbers or a split desktop layout.
 - The footer keeps brand context, licensing, primary links, and the appearance control in one band.
 - Compact navigation has a labelled menu button, traps focus, closes after navigation, prevents
   background scrolling while open, and restores scrolling afterward.
