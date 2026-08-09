@@ -24,7 +24,7 @@ const milestones = [
   },
   {
     title: "Community feedback",
-    detail: "Share ideas, questions, and what you need",
+    detail: "Share ideas, ask questions, and request features",
     label: "In progress",
     state: "current",
     dateTime: undefined,
@@ -43,10 +43,10 @@ export function CommunityJourney() {
     <section className="page-section journey-section" id="community" aria-labelledby="journey-title">
       <div className="page-shell">
         <div className="journey-layout">
-          <div className="journey-copy">
-            <h2 id="journey-title">We're building team email on Cloudflare.</h2>
+          <div className="journey-copy" data-reveal="left">
+            <h2 id="journey-title">We're building the workspace OS on Cloudflare.</h2>
             <p className="journey-description">
-              Own the software, the data, and the way your team works.
+              Team email today, with more of your team's work coming together.
             </p>
             <div className="journey-actions">
               <Button asChild className="journey-community-button" size="lg">
@@ -70,7 +70,7 @@ export function CommunityJourney() {
           </div>
 
           <div className="journey-timeline-panel">
-            <div className="journey-timeline-header">
+            <div className="journey-timeline-header" data-reveal="up">
               <h3>Follow the journey</h3>
             </div>
             <ol className="journey-timeline" aria-label="HQBase journey">
@@ -78,6 +78,7 @@ export function CommunityJourney() {
                 <li
                   className="journey-step"
                   data-state={state}
+                  data-reveal="right"
                   aria-current={state === "current" ? "step" : undefined}
                   key={title}
                 >

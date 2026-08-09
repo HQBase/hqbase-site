@@ -142,11 +142,17 @@ test("the hero keeps the live, scroll-linked workspace preview", async () => {
   ]);
 
   assert.doesNotMatch(page, /hero-atmosphere|hero-glow-mark|hero-signal-grid/);
-  assert.match(styles, /\.workspace-cloud-field[\s\S]*width: 100vw[\s\S]*translateX\(-50%\)/);
+  assert.match(styles, /\.workspace-cloud-field[\s\S]*width: 100vw[\s\S]*transparent 80%[\s\S]*translateX\(-50%\)/);
   assert.match(styles, /\.workspace-cloud-dots[\s\S]*radial-gradient/);
-  assert.match(styles, /\.browser-screen[\s\S]*aspect-ratio: 16 \/ 10/);
-  assert.match(mockup, /HQBase interface rendered live at a desktop layout/i);
+  assert.match(styles, /\.browser-screen[\s\S]*aspect-ratio: 16 \/ 9/);
+  assert.match(mockup, /HQBase interface rendered live at desktop and mobile layouts/i);
   assert.match(mockup, /workspace-live workspace-desktop/);
+  assert.match(mockup, /workspace-live workspace-mobile/);
+  assert.match(mockup, /<WorkspaceTopbar mobile \/>/);
+  assert.match(mockup, /<ThreadRows mobile \/>/);
+  assert.match(mockup, /className="mobile-preview"/);
+  assert.match(mockup, /className="phone-hardware"/);
+  assert.match(mockup, /className="workspace-perspective-stage"/);
   assert.match(mockup, /Launch assets for Friday/);
   assert.match(mockup, /count: 4/);
   assert.match(mockup, /Partner briefing/);
@@ -156,10 +162,43 @@ test("the hero keeps the live, scroll-linked workspace preview", async () => {
   assert.match(styles, /\.workspace-thread-list\s*\{[^}]*display: flex[^}]*flex-direction: column/);
   assert.match(styles, /\.workspace-thread-rows\s*\{[^}]*flex: 1/);
   assert.match(styles, /\.workspace-thread-row\s*\{[^}]*min-height: 0[^}]*flex: 1/);
-  assert.match(styles, /\.workspace-compose\s*\{[^}]*border-color: color-mix\(in srgb, var\(--workspace-primary\) 78%, var\(--workspace-background\)\)[^}]*background: color-mix\(in srgb, var\(--workspace-primary\) 86%, var\(--workspace-background\)\)/);
+  assert.match(styles, /\.workspace-compose\s*\{[^}]*border-color: var\(--workspace-border\);[^}]*background: transparent;[^}]*color: var\(--workspace-primary\)/);
   assert.match(mockup, /window\.requestAnimationFrame\(render\)/);
   assert.match(mockup, /matchMedia\("\(prefers-reduced-motion: reduce\)"\)/);
-  assert.match(mockup, /1 \+ easedProgress \* 0\.075/);
+  assert.doesNotMatch(mockup, /1 \+ easedProgress \* 0\.075/);
+  assert.match(mockup, /restingPitch \* \(1 - easedProgress\)/);
+  assert.match(mockup, /restingPhoneDepth \* \(1 - easedProgress\)/);
+  assert.match(mockup, /restingStageLift \* \(1 - easedProgress\)/);
+  assert.match(mockup, /headerHeightToken\.endsWith\("rem"\)/);
+  assert.match(mockup, /headerHeightValue \* rootFontSize/);
+  assert.match(mockup, /const finalViewportTop = headerHeight \+ 24/);
+  assert.match(mockup, /const isMobile = window\.innerWidth < 768/);
+  assert.match(mockup, /const motionWindow = viewportHeight \* \(isMobile \? 0\.34 : 0\.72\)/);
+  assert.match(mockup, /const finalFollowDistance = isMobile[\s\S]*\? 0[\s\S]*finalScrollPosition \+ finalViewportTop - stageDocumentTop/);
+  assert.match(mockup, /easedProgress \* finalFollowDistance/);
+  assert.match(styles, /\.workspace-showcase\s*\{[\s\S]*--stage-lift: -5\.25rem;[\s\S]*--phone-preview-width: clamp\(5rem, 20vw, 16\.25rem\);[\s\S]*--phone-preview-overlap: clamp\(2\.5rem, 10vw, 8\.125rem\);[\s\S]*width: min\(86vw, 77\.5rem\);[\s\S]*height: clamp\(46rem, 65vw, 64rem\);[\s\S]*margin: clamp\(1\.25rem, 2\.5vw, 2rem\) 0 0/);
+  assert.match(styles, /\.workspace-perspective-stage\s*\{[\s\S]*inset-inline-start: 50%;[\s\S]*width: 100%;[\s\S]*pointer-events: none;[\s\S]*rotateX\(var\(--stage-pitch\)\) scale\(var\(--desktop-scale\)\)/);
+  assert.match(styles, /\.hero\s*\{[^}]*z-index: 2;[^}]*overflow: visible/);
+  assert.match(styles, /translate3d\(-50%, calc\(var\(--desktop-y\) \+ var\(--stage-lift\)\), var\(--desktop-z\)\)/);
+  assert.match(styles, /\.browser-window\s*\{[^}]*width: calc\(100% - var\(--phone-preview-overlap\)\)/);
+  assert.match(styles, /\.mobile-preview\s*\{[^}]*inset-inline: auto 0[^}]*width: var\(--phone-preview-width\)/);
+  assert.match(styles, /@media \(max-width: 47\.999rem\)[\s\S]*:root\s*\{[\s\S]*--page-gutter: 1\.5rem[\s\S]*--stage-lift: -2\.5rem;[\s\S]*--phone-preview-width: 24vw;[\s\S]*--phone-preview-overlap: 12vw;[\s\S]*width: 108vw;[\s\S]*height: clamp\(12rem, 52vw, 14rem\);[\s\S]*margin-block-start: var\(--space-md\);[\s\S]*\.workspace-perspective-stage\s*\{[\s\S]*inset-inline-start: 48%;[\s\S]*rotateX\(var\(--stage-pitch\)\)[\s\S]*\.mobile-preview\s*\{[\s\S]*width: var\(--phone-preview-width\);/);
+  assert.match(styles, /@media \(max-width: 47\.999rem\)[\s\S]*\.feature-item\s*\{[\s\S]*padding-inline: 0/);
+  assert.match(styles, /@media \(max-width: 47\.999rem\)[\s\S]*\.journey-step\s*\{[\s\S]*grid-template-columns: 1\.5rem minmax\(0, 1fr\)[\s\S]*\.journey-step:not\(:last-child\)::before\s*\{[\s\S]*inset-inline-start: calc\(1\.5rem \+ var\(--space-xs\)\)/);
+  assert.doesNotMatch(styles, /--phone-preview-width: 48vw|--phone-preview-overlap: 24vw/);
+  assert.match(styles, /\.phone-device\s*\{[^}]*--phone-frame-width: clamp\(0\.2rem, 0\.5vw, 0\.31rem\)[^}]*background: hsl\(0 0% 100%\)/);
+  assert.match(styles, /\.dark \.phone-device\s*\{[^}]*background: hsl\(0 0% 3%\)/);
+  assert.match(styles, /\.phone-hardware\s*\{[^}]*border: var\(--phone-frame-width\) solid[^}]*color-mix\(in oklch, var\(--color-ink\) 48%, var\(--color-paper\)\)/);
+  assert.match(styles, /\.dark \.phone-hardware\s*\{[^}]*border-color: hsl\(0 0% 12%\)/);
+  assert.match(styles, /\.phone-hardware::before\s*\{[^}]*inset-block-start: 1\.7%;[^}]*width: 34%;[^}]*height: 2\.65%/);
+  assert.match(styles, /\.dark \.phone-hardware::before\s*\{[^}]*background: hsl\(0 0% 12%\)/);
+  assert.match(styles, /\.phone-hardware::after\s*\{[^}]*color-mix\(in oklch, var\(--color-ink\) 42%, var\(--color-paper\)\)/);
+  assert.match(styles, /\.dark \.phone-hardware::after\s*\{[^}]*background: hsl\(0 0% 18%\)/);
+  assert.match(styles, /\.dark \.phone-device\s*\{[^}]*drop-shadow\(0 0\.5rem 1rem hsl\(0 0% 0% \/ 18%\)\)/);
+  assert.match(styles, /\.dark \.workspace-cloud-field\s*\{[^}]*--cloud-dot-opacity: 0\.68/);
+  assert.doesNotMatch(styles, /\.workspace-perspective-stage\s*\{[^}]*(?:rotateY|rotateZ)/);
+  assert.doesNotMatch(styles, /\.phone-device\s*\{[^}]*rotateZ/);
+  assert.doesNotMatch(styles, /@media \(max-width: 47\.999rem\)[\s\S]*\.browser-window\s*\{\s*display: none;/);
   assert.doesNotMatch(mockup, /hqbase-workspace-(?:desktop|mobile)\.png/);
 });
 
@@ -307,7 +346,7 @@ test("features stay inside the documented product boundary", async () => {
   assert.match(features, /Verify every release, back up first, and roll back/);
   assert.doesNotMatch(features, /from "@\/components\/ui\/card"/);
   assert.doesNotMatch(features, /React\.useEffect|requestAnimationFrame|addEventListener|sectionRef/);
-  assert.match(features, /<article className="feature-item" key={title}>/);
+  assert.match(features, /<article className="feature-item" data-reveal="up" key={title}>/);
   assert.doesNotMatch(features, /handleCardPointerMove|resetCardPointer/);
   assert.match(features, /<header className="feature-item-heading">/);
   assert.match(features, /className="feature-icon-mark" aria-hidden="true"/);
@@ -352,6 +391,7 @@ test("features stay inside the documented product boundary", async () => {
   assert.match(productUi, /leaving the matrix edges open/);
   assert.match(productUi, /slightly larger[\s\S]*orange Lucide icons inline with each title/);
   assert.match(productUi, /icon backdrop/);
+  assert.match(productUi, /feature rows add no second horizontal inset[\s\S]*icon and text axes aligned with[\s\S]*roadmap marker and milestone text axes/);
 });
 
 test("the public journey links milestones to the HQBase community", async () => {
@@ -364,13 +404,14 @@ test("the public journey links milestones to the HQBase community", async () => 
   ]);
 
   assert.match(page, /<CommunityJourney \/>/);
-  assert.match(journey, /We're building team email on Cloudflare\./);
+  assert.match(journey, /We're building the workspace OS on Cloudflare\./);
   assert.doesNotMatch(journey, /Our mission|journey-label|Free\. Open source\. Self-hosted\. Unlimited seats\./);
-  assert.match(journey, /Own the software, the data, and the way your team works\./);
+  assert.match(journey, /Team email today, with more of your team's work coming together\./);
   assert.match(journey, /Project started/);
   assert.match(journey, /HQBase v1 release/);
   assert.match(journey, /August 8, 2026/);
   assert.match(journey, /Community feedback/);
+  assert.match(journey, /Share ideas, ask questions, and request features/);
   assert.match(journey, /Next release/);
   assert.match(journey, /https:\/\/github\.com\/HQBase\/hqbase/);
   assert.match(journey, /https:\/\/github\.com\/orgs\/HQBase\/discussions/);
@@ -391,9 +432,9 @@ test("the public journey links milestones to the HQBase community", async () => 
   assert.match(journey, /<Badge variant="secondary">{label}<\/Badge>/);
   assert.doesNotMatch(journey, /<Badge variant="outline"|state === "upcoming" \? "outline"/);
   assert.match(journey, /aria-current={state === "current" \? "step" : undefined}/);
-  assert.match(styles, /\.journey-layout[\s\S]*grid-template-areas:[\s\S]*"copy"[\s\S]*"timeline"/);
+  assert.match(styles, /\.journey-layout[\s\S]*grid-template-areas:[\s\S]*"copy"[\s\S]*"timeline"[\s\S]*gap: clamp\(4\.5rem, 9vw, 7\.5rem\)/);
   assert.match(styles, /\.hero\s*\{[^}]*padding-block: clamp\(8\.5rem, 18vh, 11rem\) 0/);
-  assert.match(styles, /\.workspace-showcase\s*\{[^}]*padding: 0 clamp\(0\.75rem, 3vw, 2\.5rem\)/);
+  assert.match(styles, /\.workspace-showcase\s*\{[^}]*width: min\(86vw, 77\.5rem\)[^}]*padding: 0/);
   assert.match(styles, /\.features-section\s*\{[^}]*padding-block: var\(--space-section\) 0/);
   assert.match(styles, /\.journey-section\s*\{[^}]*padding-block: var\(--space-section\)/);
   assert.match(styles, /@media \(min-width: 64rem\)[\s\S]*grid-template-areas: "copy timeline"/);
@@ -404,13 +445,14 @@ test("the public journey links milestones to the HQBase community", async () => 
   assert.doesNotMatch(styles, /\.journey-step-heading \[data-slot="badge"\][^}]*text-transform: uppercase/);
   assert.match(styles, /\.journey-marker \{[\s\S]*width: 1\.125rem;[\s\S]*height: 1\.125rem/);
   assert.match(styles, /\.journey-step\[data-state="upcoming"\] \.journey-marker\s*\{[^}]*border-color: color-mix\(in oklch, var\(--color-muted\) 50%, var\(--color-paper\)\)[^}]*color: color-mix\(in oklch, var\(--color-muted\) 72%, var\(--color-paper\)\)/);
-  assert.match(styles, /\.journey-section > \.page-shell \{[\s\S]*position: relative;[\s\S]*z-index: 1/);
+  assert.match(styles, /\.journey-section > \.page-shell \{[\s\S]*position: relative;[\s\S]*z-index: 1;[\s\S]*width: min\(100%, var\(--layout-features\)\)/);
+  assert.match(styles, /\.journey-step\s*\{[^}]*min-height: 6\.25rem;[^}]*padding-block: 1\.5rem/);
   assert.match(styles, /\.journey-map \{[\s\S]*position: absolute;[\s\S]*inset: 0;[\s\S]*height: 100%;[\s\S]*color: var\(--color-accent\);[\s\S]*mask-image:/);
   assert.doesNotMatch(styles, /\[data-slot="card"\]\.journey-timeline-panel|\.journey-timeline-panel\s*\{[^}]*(?:background|box-shadow|border-radius)/);
   assert.match(productUi, /The public journey pairs an open, unframed milestone timeline with a concise mission statement/);
   assert.match(productUi, /GitHub Discussions forum/);
   assert.match(productUi, /product principles[\s\S]*sit directly below the hero title/);
-  assert.match(productUi, /without a separate eyebrow label/);
+  assert.match(productUi, /without a[\s\S]*separate eyebrow label/);
   assert.match(productUi, /sentence-case status badges all use quiet neutral backgrounds/);
   assert.match(productUi, /Planned milestone markers use a clearly visible muted neutral/);
   assert.match(productUi, /separators between milestones but no top or[\s\S]*bottom border/);
@@ -419,6 +461,44 @@ test("the public journey links milestones to the HQBase community", async () => 
   assert.match(productUi, /section background rather than extending the page below it/);
   assert.match(productUi, /one shared responsive section gap/);
   assert.match(productUi, /do not stack bottom and top padding/);
+  assert.match(productUi, /one shared, slightly roomy horizontal gutter for the header, hero copy,[\s\S]*features, public journey, and footer/);
+  assert.match(productUi, /deliberate full-bleed exception/);
+  assert.match(productUi, /complete the flattening motion sooner[\s\S]*avoiding an empty spacer below it/);
+});
+
+test("the landing reveals content progressively without hiding reduced-motion visitors", async () => {
+  const [page, mockup, features, journey, reveal, styles, productUi] = await Promise.all([
+    read("src/pages/index.astro"),
+    read("src/components/workspace-mockup.tsx"),
+    read("src/components/ui/features-bento.tsx"),
+    read("src/components/community-journey.tsx"),
+    read("public/reveal.js"),
+    read("public/styles.css"),
+    read("src/content/docs/docs/specs/product-ui.md"),
+  ]);
+
+  assert.match(page, /<script is:inline src="\/reveal\.js" defer><\/script>/);
+  assert.match(page, /class="hero-copy" data-reveal="up"/);
+  assert.match(page, /class="page-shell" data-reveal="up"/);
+  assert.match(mockup, /className="workspace-showcase"[\s\S]*data-reveal="fade"[\s\S]*suppressHydrationWarning/);
+  assert.match(features, /className="features-heading" data-reveal="up"/);
+  assert.match(features, /className="feature-item" data-reveal="up"/);
+  assert.match(journey, /className="journey-copy" data-reveal="left"/);
+  assert.match(journey, /className="journey-timeline-header" data-reveal="up"/);
+  assert.match(journey, /className="journey-step"[\s\S]*data-reveal="right"/);
+  assert.match(reveal, /matchMedia\("\(prefers-reduced-motion: reduce\)"\)/);
+  assert.match(reveal, /"IntersectionObserver" in window/);
+  assert.match(reveal, /observer\.unobserve\(element\)/);
+  assert.match(reveal, /root\.classList\.add\("reveal-motion"\)/);
+  assert.match(reveal, /element\.classList\.add\("is-revealed"\)/);
+  assert.match(reveal, /root\.classList\.remove\("reveal-motion"\)/);
+  assert.match(styles, /html\.reveal-motion \[data-reveal\]\s*\{[^}]*opacity: 0[^}]*filter: blur\(0\.1875rem\)[^}]*transition:/);
+  assert.match(styles, /html\.reveal-motion \[data-reveal\]\.is-revealed\s*\{[^}]*opacity: 1[^}]*filter: blur\(0\)[^}]*transform: none/);
+  assert.match(styles, /\.feature-item:nth-child\(3n \+ 2\)\s*\{[^}]*--reveal-delay: 90ms/);
+  assert.match(styles, /\.journey-step:nth-child\(4\)\s*\{[^}]*--reveal-delay: 260ms/);
+  assert.match(productUi, /short,[\s\S]*one-time entrance motion as they enter the viewport/);
+  assert.match(productUi, /Content remains visible without JavaScript/);
+  assert.match(productUi, /reduced-motion visitors see[\s\S]*complete static page/);
 });
 
 test("Starlight keeps the complete public guides, reference, and maintainer workflows", async () => {

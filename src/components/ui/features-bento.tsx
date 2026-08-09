@@ -44,14 +44,14 @@ export function FeaturesBento() {
   return (
     <section className="page-section features-section" id="features" aria-labelledby="features-title">
       <div className="page-shell">
-        <div className="features-heading">
+        <div className="features-heading" data-reveal="up">
           <h2 id="features-title">Email that works for the whole team</h2>
           <p>Share inboxes, manage access, and connect AI tools, while your mail stays in your Cloudflare account.</p>
         </div>
 
         <div className="feature-grid">
           {features.map(({ icon: Icon, title, description }) => (
-            <article className="feature-item" key={title}>
+            <article className="feature-item" data-reveal="up" key={title}>
               <header className="feature-item-heading">
                 <Icon className="feature-icon-mark" aria-hidden="true" />
                 <h3>{title}</h3>

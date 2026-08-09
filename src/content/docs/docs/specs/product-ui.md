@@ -54,18 +54,44 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 - Use one shared responsive section gap between the hero illustration and features, between the
   feature grid and public journey, and between the journey and footer. Each transition owns that
   gap once; adjacent sections do not stack bottom and top padding.
+- On phone-sized landing views, use one shared, slightly roomy horizontal gutter for the header, hero copy,
+  features, public journey, and footer. The product stage is the deliberate full-bleed exception:
+  it may extend only slightly beyond the viewport so the desktop surface feels close without
+  heavily cropping the phone preview or creating horizontal page overflow.
+- Reveal the hero composition, feature groups, public journey, milestones, and footer with short,
+  one-time entrance motion as they enter the viewport. Use restrained direction and stagger rather
+  than large movement. Content remains visible without JavaScript, and reduced-motion visitors see
+  the complete static page without reveal transitions.
 - Lead with **Your team&apos;s email. On your Cloudflare infrastructure.** Show the desktop
   workspace as live interface markup rather than a screenshot or decorative browser window. Use
   clearly illustrative data without invented customers, usage totals, locations, or performance
   claims.
-- The first view should remain level and undistorted, with roughly half the workspace preview near
-  the lower edge of the viewport. A subtle orange-to-amber dot field may sit behind it. Scrolling
-  may shift the field and enlarge the preview by no more than about 7.5 percent. Reduced-motion
+- Present the desktop workspace and compact inbox together as one centered product stage narrower
+  than the viewport. The stage rests with a deliberate backward pitch but no sideways yaw or roll.
+  Keep both previews straight and place the phone over the desktop&apos;s right edge by roughly half the
+  phone&apos;s width. Preserve both the overlap and the desktop-to-phone scale relationship on
+  phone-sized landing views, so the phone remains a supporting preview instead of becoming the
+  dominant object, without creating horizontal page overflow. Use a compact 16:9 desktop surface
+  and keep the tilted composition close to the hero actions instead of leaving a large empty band.
+  Size the phone at roughly one quarter of the stage width. Use a slim frame, softer neutral side
+  controls in light mode, and an opaque theme-matched chassis behind the screen so underlying
+  content never shows through its inner edge. Place the larger Dynamic Island close to the top edge
+  and give it a subtle graphite surface in dark mode. Keep the dark-mode shadow restrained without
+  a bright halo.
+- A subtle orange-to-amber dot field may sit behind the product stage. Scrolling may shift the field
+  while the complete composition follows the scroll downward and progressively returns its backward
+  pitch and the phone&apos;s depth to a normal flat presentation. At the end of the transition, keep the
+  complete mockup inside the viewport with a quiet gap below the fixed header and enough scroll
+  runway that its bottom is never clipped by the hero or a following section. Keep the product stage
+  above adjacent section content throughout the transition, and fade the dot field to transparent
+  before its lower edge. On phone-sized views, complete the flattening motion sooner and reserve
+  only the compact height the illustration needs, avoiding an empty spacer below it. Reduced-motion
   visitors receive the same static resting composition.
 - The desktop preview fills the visible conversation column with illustrative inbox rows and shows
   a coherent four-message exchange in the selected conversation. The rows share the available
-  height without leaving an empty band or clipping the final item. Its Compose control remains
-  prominent without using the mockup&apos;s inverse primary at full brightness.
+  height without leaving an empty band or clipping the final item. Its Compose control uses the
+  same transparent outline treatment in the desktop and phone previews instead of a filled primary
+  surface. Its border color matches the adjacent **All mailboxes** control exactly.
 - The header begins as a flat transparent row containing the logo and compact navigation. After
   scrolling, it may become a narrower translucent pill with a quiet border and shadow.
 - The hero deployment action and adjacent documentation action share the same height, two-pixel
@@ -89,12 +115,16 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   orange Lucide icons inline with each title. It has no card surfaces, corner radius, shadow, glow,
   icon backdrop, or hover lift. Subtle orange rules use three-pixel, widely spaced dashes that
   match the visual weight of the background dots. They appear on internal row and column dividers
-  only, leaving the matrix edges open. Each segment fades before its junction.
+  only, leaving the matrix edges open. Each segment fades before its junction. On phone-sized
+  views, feature rows add no second horizontal inset, keeping their icon and text axes aligned with
+  the roadmap marker and milestone text axes at the shared page gutter.
 - The public journey pairs an open, unframed milestone timeline with a concise mission statement.
+  It uses the same wide shell and generous spatial rhythm as the feature matrix, with substantial
+  breathing room between the mission, timeline heading, and individual milestones.
   Completed, current, and planned steps are visually distinct without promising uncommitted
-  features. The mission is stated directly as **We&apos;re building team email on Cloudflare.**
-  without a separate eyebrow label, while current feature claims remain grounded in the team email
-  product.
+  features. The mission is stated directly as **We&apos;re building the workspace OS on Cloudflare.**
+  with **Team email today, with more of your team&apos;s work coming together.** beneath it, without a
+  separate eyebrow label. Current feature claims remain grounded in the team email product.
   The product principles **Free. Open source. Self-hosted. Unlimited
   seats.** sit directly below the hero title rather than inside the journey section; the final claim
   describes seat availability, not unlimited infrastructure. The timeline uses a single **Follow
@@ -102,6 +132,7 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   sentence-case status badges all use quiet neutral backgrounds, and its milestone markers stay
   smaller than the surrounding copy. Planned milestone markers use a clearly visible muted neutral
   while remaining secondary to completed and current steps. The timeline has
+  a current community step inviting people to share ideas, ask questions, and request features. It has
   separators between milestones but no top or bottom border. Each separator begins after the marker
   column so it does not cross the vertical timeline and fades at both ends. Two compact actions link
   to the public repository and the HQBase organization&apos;s GitHub Discussions forum.

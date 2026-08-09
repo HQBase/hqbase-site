@@ -36,6 +36,7 @@ const pageDescription =
     <meta name="twitter:card" content="summary" />
     <title>{pageTitle}</title>
     <script is:inline src="/theme.js"></script>
+    <script is:inline src="/reveal.js" defer></script>
     <link
       rel="preload"
       href="/fonts/Geist-Regular.woff2"
@@ -58,7 +59,7 @@ const pageDescription =
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="page-shell hero-shell">
-          <div class="hero-copy">
+          <div class="hero-copy" data-reveal="up">
             <h1 class="hero-title" id="hero-title">
               Your team&apos;s email.
               <span>On your Cloudflare infrastructure.</span>
@@ -73,7 +74,7 @@ const pageDescription =
       <CommunityJourney />
     </main>
     <footer class="site-footer">
-      <div class="page-shell">
+      <div class="page-shell" data-reveal="up">
         <Separator />
         <div class="footer-content">
           <div class="footer-brand">
