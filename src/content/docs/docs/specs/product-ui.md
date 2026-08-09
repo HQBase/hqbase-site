@@ -93,8 +93,9 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   height without leaving an empty band or clipping the final item. Its Compose control uses the
   same transparent outline treatment in the desktop and phone previews instead of a filled primary
   surface. Its border color matches the adjacent **All mailboxes** control exactly.
-- The header begins as a flat transparent row containing the logo and compact navigation. After
-  scrolling, it may become a narrower translucent pill with a quiet border and shadow.
+- The header begins as a flat transparent row containing the logo and compact navigation for
+  Features, FAQ, and Docs, followed by the GitHub star control. After scrolling, it may become a
+  narrower translucent pill with a quiet border and shadow. The compact menu exposes the same links.
 - The hero deployment action and adjacent documentation action share the same height, two-pixel
   border weight, pill radius, type size, and horizontal padding. The deployment action adapts the
   official Cloudflare palette to the active theme: light mode uses an amber-to-coral surface with a
@@ -157,8 +158,10 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   and has no per-seat fees. Keep the presentation flat and unframed, with quiet separators that fade
   at both ends. Let answer copy use almost the full accordion width instead of imposing a narrow
   reading measure. Present the heading centered above the accordion as one reading column at every
-  viewport size, without question numbers or a split desktop layout.
-- The footer keeps brand context, licensing, primary links, and the appearance control in one band.
+  viewport size, without question numbers or a split desktop layout. Below the accordion, center a
+  quiet text prompt that sends unanswered questions to the HQBase GitHub Discussions community.
+- The footer keeps brand context, licensing, primary links including FAQ, and the appearance control
+  in one band.
 - Compact navigation has a labelled menu button, traps focus, closes after navigation, prevents
   background scrolling while open, and restores scrolling afterward.
 
@@ -170,6 +173,10 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 - Both use the same compact sun-or-moon button. The landing page places it in the footer.
   Documentation places it at the bottom-right of the Starlight sidebar, optically centered between
   the footer divider and browser edge.
+- The landing and every Starlight documentation page load Google Analytics measurement
+  `G-Z2FRK5MFMR` once through the standard Google tag. The site security policy permits only the
+  Google Tag Manager script and Google Analytics collection hosts needed by that tag. This public-site
+  analytics boundary does not extend to the OAuth relay or customer-owned HQBase installations.
 - Documentation aligns its logo and GitHub icon to matching outer insets. The GitHub icon has no
   trailing divider. The header product label is 14px; previous and next navigation uses 12px
   direction labels with 18px titles and compact icons.

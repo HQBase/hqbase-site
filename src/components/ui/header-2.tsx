@@ -10,6 +10,7 @@ const githubButtonUrl =
 
 const links = [
   { label: "Features", href: "#features" },
+  { label: "FAQ", href: "#faq" },
   { label: "Docs", href: "/docs/" },
 ]
 

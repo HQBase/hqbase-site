@@ -5,6 +5,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
+const discussionsUrl = "https://github.com/orgs/HQBase/discussions"
+
 const questions = [
   {
     value: "deployment-requirements",
@@ -68,21 +70,27 @@ export function FaqSection() {
           <p>What to know before running HQBase in your Cloudflare account.</p>
         </div>
 
-        <Accordion
-          type="single"
-          collapsible
-          defaultValue="deployment-requirements"
-          className="faq-accordion"
-        >
-          {questions.map(({ value, question, answer }) => (
-            <AccordionItem value={value} key={value}>
-              <AccordionTrigger>
-                <span className="faq-question">{question}</span>
-              </AccordionTrigger>
-              <AccordionContent>{answer}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <div className="faq-body">
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="deployment-requirements"
+            className="faq-accordion"
+          >
+            {questions.map(({ value, question, answer }) => (
+              <AccordionItem value={value} key={value}>
+                <AccordionTrigger>
+                  <span className="faq-question">{question}</span>
+                </AccordionTrigger>
+                <AccordionContent>{answer}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+
+          <p className="faq-community">
+            Still have a question? <a href={discussionsUrl}>Ask the HQBase community on GitHub.</a>
+          </p>
+        </div>
       </div>
     </section>
   )

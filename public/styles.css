@@ -2308,6 +2308,32 @@ html.reveal-motion [data-reveal].is-revealed {
   text-underline-offset: 0.2em;
 }
 
+.faq-body {
+  display: grid;
+  min-width: 0;
+  gap: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+.faq-community {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.faq-community a {
+  color: var(--color-ink-2);
+  font-weight: 550;
+  text-decoration-color: color-mix(in oklch, var(--color-accent) 55%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+.faq-community a:hover {
+  color: var(--color-accent);
+}
+
 /* Footer */
 
 .site-footer {

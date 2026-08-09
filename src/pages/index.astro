@@ -36,6 +36,14 @@ const pageDescription =
     <meta property="og:url" content="https://hqbase.io/" />
     <meta name="twitter:card" content="summary" />
     <title>{pageTitle}</title>
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-Z2FRK5MFMR"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Z2FRK5MFMR');
+    </script>
     <script is:inline src="/theme.js"></script>
     <script is:inline src="/reveal.js" defer></script>
     <link
@@ -92,6 +100,7 @@ const pageDescription =
           <div class="footer-actions">
             <nav class="footer-links" aria-label="Footer">
               <a href="#features">Features</a>
+              <a href="#faq">FAQ</a>
               <a href="/docs/">Docs</a>
               <a href={sourceUrl}>GitHub</a>
               <a href={deployUrl}>Deploy</a>

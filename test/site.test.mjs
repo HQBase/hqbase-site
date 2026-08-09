@@ -51,6 +51,40 @@ test("Astro owns the landing and Starlight documentation routes", async () => {
   assert.notEqual(favicon, logo);
 });
 
+test("Google Analytics covers the landing and every Starlight documentation page", async () => {
+  const [page, config, headers, productUi, cloudflareOauth] = await Promise.all([
+    read("src/pages/index.astro"),
+    read("astro.config.mjs"),
+    read("public/_headers"),
+    read("src/content/docs/docs/specs/product-ui.md"),
+    read("src/content/docs/docs/specs/cloudflare-oauth.md"),
+  ]);
+
+  assert.equal((page.match(/G-Z2FRK5MFMR/g) ?? []).length, 2);
+  assert.match(
+    page,
+    /<script is:inline async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-Z2FRK5MFMR"><\/script>/,
+  );
+  assert.match(page, /window\.dataLayer = window\.dataLayer \|\| \[\];/);
+  assert.match(page, /function gtag\(\)\{dataLayer\.push\(arguments\);\}/);
+  assert.match(page, /gtag\('config', 'G-Z2FRK5MFMR'\);/);
+
+  assert.equal((config.match(/G-Z2FRK5MFMR/g) ?? []).length, 1);
+  assert.match(config, /const googleAnalyticsId = "G-Z2FRK5MFMR"/);
+  assert.match(config, /https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=\$\{googleAnalyticsId\}/);
+  assert.match(config, /tag: "script",[\s\S]*attrs: \{ async: true, src: googleTagUrl \}/);
+  assert.match(config, /tag: "script",[\s\S]*content: googleTagBootstrap/);
+  assert.match(config, /gtag\('config', '\$\{googleAnalyticsId\}'\);/);
+
+  assert.match(headers, /script-src[^;]*https:\/\/\*\.googletagmanager\.com/);
+  assert.match(headers, /img-src[^;]*https:\/\/\*\.google-analytics\.com/);
+  assert.match(headers, /connect-src[^;]*https:\/\/\*\.analytics\.google\.com/);
+  assert.match(productUi, /landing and every Starlight documentation page load Google Analytics/);
+  assert.match(productUi, /G-Z2FRK5MFMR/);
+  assert.match(productUi, /does not extend to the OAuth relay or customer-owned HQBase installations/);
+  assert.doesNotMatch(cloudflareOauth, /G-Z2FRK5MFMR|googletagmanager/);
+});
+
 test("the landing remains the compact HQBase product page", async () => {
   const [page, heroActions, header, styles, tokens] = await Promise.all([
     read("src/pages/index.astro"),
@@ -67,6 +101,7 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(header, /width="76"/);
   assert.match(header, /height="20"/);
   assert.match(header, /<GitHubStarWidget \/>/);
+  assert.match(header, /\{ label: "FAQ", href: "#faq" \}/);
   assert.doesNotMatch(header, /className="header-link" href={sourceUrl}>GitHub/);
   assert.doesNotMatch(header, /Get started|deployUrl|header-button|mobile-navigation-action/);
   assert.match(page, /<Header client:load \/>/);
@@ -74,6 +109,7 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(page, /<FeaturesBento \/>/);
   assert.match(page, /<CommunityJourney \/>/);
   assert.match(page, /<FaqSection client:load \/>/);
+  assert.match(page, /<nav class="footer-links" aria-label="Footer">[\s\S]*href="#faq">FAQ<\/a>/);
   assert.match(page, /Your team&apos;s email\./);
   assert.doesNotMatch(page, /Your team&apos;s workspace/);
   assert.match(page, /On your Cloudflare infrastructure\./);
@@ -315,6 +351,10 @@ test("the landing header exposes the real docs destination", async () => {
   ]);
 
   assert.match(header, /\{ label: "Docs", href: "\/docs\/" \}/);
+  assert.match(
+    header,
+    /\{ label: "Features", href: "#features" \}[\s\S]*\{ label: "FAQ", href: "#faq" \}[\s\S]*\{ label: "Docs", href: "\/docs\/" \}/,
+  );
   assert.match(header, /useScroll\(10\)/);
   assert.match(header, /document\.body\.style\.overflow = open \? "hidden" : ""/);
   assert.match(header, /aria-expanded={open}/);
@@ -322,6 +362,10 @@ test("the landing header exposes the real docs destination", async () => {
   assert.match(menuIcon, /stroke-dasharray/);
   assert.match(scrollHook, /window\.scrollY > threshold/);
   assert.match(styles, /\.site-header-scrolled \.site-header-nav,[\s\S]*border-radius: 999px/);
+  const productUi = await read("src/content/docs/docs/specs/product-ui.md");
+  assert.match(productUi, /compact navigation for[\s\S]*Features, FAQ, and Docs/);
+  assert.match(productUi, /compact menu exposes the same links/);
+  assert.match(productUi, /footer keeps brand context,[\s\S]*primary links including FAQ/);
 });
 
 test("features stay inside the documented product boundary", async () => {
@@ -505,6 +549,9 @@ test("the landing answers common questions with the native shadcn accordion", as
   assert.match(faq, /Workers Paid/);
   assert.match(faq, /active domain using[\s\S]*Cloudflare DNS/);
   assert.match(faq, /href="\/docs\/getting-started\/"/);
+  assert.match(faq, /Still have a question\?/);
+  assert.match(faq, /Ask the HQBase community on GitHub\./);
+  assert.match(faq, /https:\/\/github\.com\/orgs\/HQBase\/discussions/);
   assert.match(faq, /data-reveal="up"/);
   assert.match(faq, /suppressHydrationWarning/);
   assert.match(accordion, /data-open:animate-accordion-down/);
@@ -514,6 +561,7 @@ test("the landing answers common questions with the native shadcn accordion", as
   assert.match(styles, /\.faq-accordion \[data-slot="accordion-item"\]:not\(:last-child\)::after[\s\S]*mask-image: linear-gradient/);
   assert.match(styles, /\.faq-accordion \[data-slot="accordion-content"\] p\s*\{[^}]*max-width: none/);
   assert.match(styles, /\.faq-heading\s*\{[^}]*margin-inline: auto;[^}]*text-align: center/);
+  assert.match(styles, /\.faq-community\s*\{[^}]*text-align: center/);
   assert.doesNotMatch(faq, /faq-number|padStart/);
   assert.doesNotMatch(styles, /\.faq-number|\.faq-layout\s*\{[^}]*grid-template-columns/);
   assert.match(productUi, /FAQ follows the public journey[\s\S]*source-owned shadcn Accordion/);
@@ -533,6 +581,7 @@ test("the landing answers common questions with the native shadcn accordion", as
   assert.match(productUi, /answer copy use almost the full accordion width/);
   assert.match(productUi, /heading centered above the accordion[\s\S]*as one reading column/);
   assert.match(productUi, /without[\s\S]*question numbers or a split desktop layout/);
+  assert.match(productUi, /Below the accordion[\s\S]*HQBase GitHub Discussions community/);
 });
 
 test("the landing reveals content progressively without hiding reduced-motion visitors", async () => {
@@ -810,7 +859,10 @@ test("Cloudflare deploys the Astro build with the security baseline", async () =
   assert.match(license, /GNU AFFERO GENERAL PUBLIC LICENSE/);
   assert.match(headers, /Content-Security-Policy:/);
   assert.match(headers, /script-src[^;]*'wasm-unsafe-eval'/);
+  assert.match(headers, /script-src[^;]*https:\/\/\*\.googletagmanager\.com/);
   assert.match(headers, /img-src[^;]*https:\/\/deploy\.workers\.cloudflare\.com/);
+  assert.match(headers, /img-src[^;]*https:\/\/\*\.google-analytics\.com/);
+  assert.match(headers, /connect-src[^;]*https:\/\/\*\.google-analytics\.com/);
   assert.match(headers, /frame-ancestors 'none'/);
   assert.match(headers, /frame-src https:\/\/ghbtns\.com/);
   assert.match(headers, /Strict-Transport-Security:/);
