@@ -377,6 +377,9 @@ D1 changes, or deployed resources and is excluded from production.
 - Settings routes are `/settings/mailboxes`, `/settings/users`, `/settings/domains`,
   `/settings/notifications`, `/settings/updates`, and `/settings/debug`. `/` and unknown app paths
   normalize to `/inbox`.
+- Public authentication routes remain outside mailbox-route normalization. In particular,
+  `/set-password` preserves its path and query parameters while an invitation is validated and a
+  password is created; it must never normalize to `/inbox` or require an existing session.
 - Back and forward restore the represented route. Permission-gated Settings routes normalize only
   after the current role is known. Compose remains local UI state.
 - Desktop keeps list and reader side by side. Compact folder routes show only the list; selecting a
