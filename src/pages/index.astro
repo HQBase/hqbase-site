@@ -1,4 +1,6 @@
 ---
+import { CommunityJourney } from "@/components/community-journey"
+import { FaqSection } from "@/components/faq-section"
 import { HeroActions } from "@/components/hero-actions"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { FeaturesBento } from "@/components/ui/features-bento"
@@ -10,9 +12,9 @@ import "@/index.css"
 const deployUrl =
   "https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2FHQBase%2Fhqbase"
 const sourceUrl = "https://github.com/HQBase/hqbase"
-const pageTitle = "HQBase — your team’s workspace on Cloudflare"
+const pageTitle = "HQBase - your team's email on Cloudflare"
 const pageDescription =
-  "HQBase is your team’s workspace on your Cloudflare infrastructure, with shared mailboxes, team access, and workflows running in your account."
+  "HQBase gives your team email on your Cloudflare infrastructure, with shared mailboxes, team access, and workflows running in your account."
 ---
 
 <!doctype html>
@@ -34,7 +36,16 @@ const pageDescription =
     <meta property="og:url" content="https://hqbase.io/" />
     <meta name="twitter:card" content="summary" />
     <title>{pageTitle}</title>
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-Z2FRK5MFMR"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Z2FRK5MFMR');
+    </script>
     <script is:inline src="/theme.js"></script>
+    <script is:inline src="/reveal.js" defer></script>
     <link
       rel="preload"
       href="/fonts/Geist-Regular.woff2"
@@ -57,20 +68,23 @@ const pageDescription =
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="page-shell hero-shell">
-          <div class="hero-copy">
+          <div class="hero-copy" data-reveal="up">
             <h1 class="hero-title" id="hero-title">
-              Your team&apos;s workspace.
+              Your team&apos;s email.
               <span>On your Cloudflare infrastructure.</span>
             </h1>
-            <HeroActions />
+            <p class="hero-principles">Free. Open source. Self-hosted. Unlimited seats.</p>
+            <HeroActions client:load />
           </div>
           <WorkspaceMockup client:load />
         </div>
       </section>
       <FeaturesBento />
+      <CommunityJourney />
+      <FaqSection client:load />
     </main>
     <footer class="site-footer">
-      <div class="page-shell">
+      <div class="page-shell" data-reveal="up">
         <Separator />
         <div class="footer-content">
           <div class="footer-brand">
@@ -79,13 +93,14 @@ const pageDescription =
               <span>HQBase</span>
             </a>
             <p>
-              Your team&apos;s workspace, on your infrastructure. Free software under
+              Your team&apos;s email, on your infrastructure. Free software under
               AGPL-3.0-only.
             </p>
           </div>
           <div class="footer-actions">
             <nav class="footer-links" aria-label="Footer">
               <a href="#features">Features</a>
+              <a href="#faq">FAQ</a>
               <a href="/docs/">Docs</a>
               <a href={sourceUrl}>GitHub</a>
               <a href={deployUrl}>Deploy</a>

@@ -40,7 +40,7 @@ const threads: Thread[] = [
     initials: "PS",
     time: "11:42 AM",
     subject: "Launch assets for Friday",
-    count: 3,
+    count: 4,
     preview: "Final homepage copy is attached. Everything is ready for review.",
     unread: true,
     attachment: true,
@@ -89,6 +89,23 @@ const threads: Thread[] = [
     preview: "Could you add our operations lead to the shared mailbox?",
     tone: "rose",
   },
+  {
+    sender: "Jordan Lee",
+    initials: "JL",
+    time: "Jul 28",
+    subject: "Partner briefing",
+    preview: "Thursday afternoon works for everyone on our side.",
+    tone: "violet",
+  },
+  {
+    sender: "Amara Okafor",
+    initials: "AO",
+    time: "Jul 28",
+    subject: "Re: Support handoff",
+    count: 2,
+    preview: "I added the notes and assigned the remaining follow-ups.",
+    tone: "green",
+  },
 ]
 
 const folders: Array<{ label: string; icon: LucideIcon; count?: string; active?: boolean }> = [
@@ -114,14 +131,34 @@ function useWorkspaceScrollMotion(ref: React.RefObject<HTMLElement | null>) {
       animationFrame = 0
 
       const viewportHeight = window.innerHeight
+      const isMobile = window.innerWidth < 768
       const motionScale = Math.min(1, Math.max(0.62, window.innerWidth / 960))
-      const rawProgress = (window.scrollY - viewportHeight * 0.05) / (viewportHeight * 0.72)
+      const motionWindow = viewportHeight * (isMobile ? 0.34 : 0.72)
+      const rawProgress = (window.scrollY - viewportHeight * (isMobile ? 0.04 : 0.05)) / motionWindow
       const progress = reducedMotion.matches ? 0 : Math.min(1, Math.max(0, rawProgress))
       const easedProgress = progress * progress * (3 - 2 * progress)
+      const restingPitch = isMobile ? 27 : 24
+      const restingPhoneDepth = isMobile ? 2.5 : 3
+      const restingStageLift = isMobile ? -40 : -84
+      const rootStyles = window.getComputedStyle(document.documentElement)
+      const rootFontSize = Number.parseFloat(rootStyles.fontSize) || 16
+      const headerHeightToken = rootStyles.getPropertyValue("--header-height").trim()
+      const headerHeightValue = Number.parseFloat(headerHeightToken) || 4
+      const headerHeight = headerHeightToken.endsWith("rem")
+        ? headerHeightValue * rootFontSize
+        : headerHeightValue
+      const stageDocumentTop = element.getBoundingClientRect().top + window.scrollY
+      const finalScrollPosition = viewportHeight * 0.77
+      const finalViewportTop = headerHeight + 24
+      const finalFollowDistance = isMobile
+        ? 0
+        : Math.max(0, finalScrollPosition + finalViewportTop - stageDocumentTop)
 
       element.dataset.motion = reducedMotion.matches ? "reduced" : "scroll"
-      element.style.setProperty("--desktop-y", `${(easedProgress * -24 * motionScale).toFixed(2)}px`)
-      element.style.setProperty("--desktop-scale", (1 + easedProgress * 0.075).toFixed(4))
+      element.style.setProperty("--desktop-y", `${(easedProgress * finalFollowDistance).toFixed(2)}px`)
+      element.style.setProperty("--stage-pitch", `${(restingPitch * (1 - easedProgress)).toFixed(2)}deg`)
+      element.style.setProperty("--phone-depth", `${(restingPhoneDepth * (1 - easedProgress)).toFixed(2)}rem`)
+      element.style.setProperty("--stage-lift", `${(restingStageLift * (1 - easedProgress)).toFixed(2)}px`)
       element.style.setProperty("--dot-x", `${(easedProgress * -12 * motionScale).toFixed(2)}px`)
       element.style.setProperty("--dot-y", `${(easedProgress * 8 * motionScale).toFixed(2)}px`)
       element.style.setProperty("--dot-x-secondary", `${(easedProgress * 10 * motionScale).toFixed(2)}px`)
@@ -261,7 +298,7 @@ function WorkspaceReader() {
               <time>10:07 AM</time>
             </header>
             <p>Hi team,</p>
-            <p>The final launch assets are ready. I’ve included the revised homepage copy and the press folder below.</p>
+            <p>The final launch assets are ready. I've included the revised homepage copy and the press folder below.</p>
           </div>
         </article>
         <article className="workspace-message workspace-message-sent">
@@ -281,11 +318,21 @@ function WorkspaceReader() {
               <span><strong>Priya Shah</strong><small>to Support</small></span>
               <time>11:42 AM</time>
             </header>
-            <p>Perfect — here is the approved package for Friday.</p>
+            <p>Perfect - here is the approved package for Friday.</p>
             <span className="workspace-attachment">
               <span><Download aria-hidden="true" /></span>
               <span><strong>launch-assets.zip</strong><small>8.4 MB</small></span>
             </span>
+          </div>
+        </article>
+        <article className="workspace-message workspace-message-sent">
+          <span className="workspace-avatar workspace-avatar-blue">AB</span>
+          <div>
+            <header>
+              <span><strong>Alex Brown</strong><small>to Priya</small></span>
+              <time>11:51 AM</time>
+            </header>
+            <p>Got it - the launch is scheduled and the team has the final files.</p>
           </div>
         </article>
         <div className="workspace-reply-actions">
@@ -318,18 +365,48 @@ function DesktopWorkspace() {
   )
 }
 
+function MobileWorkspace() {
+  return (
+    <div className="workspace-live workspace-mobile">
+      <WorkspaceTopbar mobile />
+      <section className="workspace-mobile-list">
+        <header>
+          <span><strong>Inbox</strong><small>8 unread</small></span>
+          <span className="workspace-mobile-mailbox">
+            All mailboxes <ChevronDown aria-hidden="true" />
+          </span>
+        </header>
+        <ThreadRows mobile />
+      </section>
+    </div>
+  )
+}
+
 export function WorkspaceMockup() {
   const showcaseRef = React.useRef<HTMLElement>(null)
   useWorkspaceScrollMotion(showcaseRef)
 
   return (
-    <figure className="workspace-showcase" ref={showcaseRef}>
+    <figure
+      className="workspace-showcase"
+      data-reveal="fade"
+      ref={showcaseRef}
+      suppressHydrationWarning
+    >
       <CloudField />
-      <div className="browser-window" aria-hidden="true">
-        <div className="browser-screen"><DesktopWorkspace /></div>
+      <div className="workspace-perspective-stage" aria-hidden="true">
+        <div className="browser-window">
+          <div className="browser-screen"><DesktopWorkspace /></div>
+        </div>
+        <div className="mobile-preview">
+          <div className="phone-device">
+            <div className="phone-screen"><MobileWorkspace /></div>
+            <span className="phone-hardware" />
+          </div>
+        </div>
       </div>
       <figcaption className="mockup-caption">
-        The HQBase interface rendered live at a desktop layout with example data.
+        The HQBase interface rendered live at desktop and mobile layouts with example data.
       </figcaption>
     </figure>
   )

@@ -1,39 +1,32 @@
 import {
   AtSign,
   BellRing,
+  Bot,
   Cloud,
   KeyRound,
   RotateCcw,
-  SquareTerminal,
 } from "lucide-react"
-
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 
 const features = [
   {
-    icon: SquareTerminal,
-    title: "AI-ready mail",
-    description: "Connect trusted AI clients over OAuth to search, draft, reply, and send.",
+    icon: Bot,
+    title: "Email via MCP",
+    description: "Connect AI clients over OAuth to search, draft, reply, and send.",
   },
   {
     icon: AtSign,
-    title: "Every inbox, together",
-    description: "Run every domain and mailbox from one workspace.",
+    title: "Multiple domains and mailboxes",
+    description: "Bring all your domains and mailboxes into one place.",
   },
   {
     icon: KeyRound,
     title: "Access by mailbox",
-    description: "Give each person Read, Agent, or Manager access—nothing broader.",
+    description: "Give each team member access to their respective mailboxes.",
   },
   {
     icon: BellRing,
-    title: "Install anywhere",
-    description: "Use HQBase as a PWA with optional, privacy-conscious Web Push.",
+    title: "Access anywhere",
+    description: "Polished desktop and mobile PWA client with self hosted push notifications.",
   },
   {
     icon: Cloud,
@@ -51,29 +44,20 @@ export function FeaturesBento() {
   return (
     <section className="page-section features-section" id="features" aria-labelledby="features-title">
       <div className="page-shell">
-        <div className="features-heading">
-          <h2 id="features-title">One place for people, agents, and every inbox.</h2>
-          <p>Email, permissions, automation, and updates—running in your Cloudflare account.</p>
+        <div className="features-heading" data-reveal="up">
+          <h2 id="features-title">Email that works for the whole team</h2>
+          <p>Share inboxes, manage access, and connect AI tools, while your mail stays in your Cloudflare account.</p>
         </div>
 
         <div className="feature-grid">
           {features.map(({ icon: Icon, title, description }) => (
-            <Card className="feature-item" key={title} role="article">
-              <CardHeader className="feature-card-header">
-                <div className="feature-icon-field" aria-hidden="true">
-                  <span className="feature-icon-grid" />
-                  <Icon className="feature-icon-mark" />
-                </div>
-                <div className="feature-card-copy">
-                  <CardTitle className="feature-card-title">
-                    <h3>{title}</h3>
-                  </CardTitle>
-                  <CardDescription className="feature-card-description">
-                    <p>{description}</p>
-                  </CardDescription>
-                </div>
-              </CardHeader>
-            </Card>
+            <article className="feature-item" data-reveal="up" key={title}>
+              <header className="feature-item-heading">
+                <Icon className="feature-icon-mark" aria-hidden="true" />
+                <h3>{title}</h3>
+              </header>
+              <p>{description}</p>
+            </article>
           ))}
         </div>
       </div>

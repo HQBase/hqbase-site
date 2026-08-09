@@ -5,12 +5,12 @@ import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon"
 import { useScroll } from "@/components/ui/use-scroll"
 import { cn } from "@/lib/utils"
 
-const deployUrl =
-  "https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2FHQBase%2Fhqbase"
-const sourceUrl = "https://github.com/HQBase/hqbase"
+const githubButtonUrl =
+  "https://ghbtns.com/github-btn.html?user=HQBase&repo=hqbase&type=star&count=true"
 
 const links = [
   { label: "Features", href: "#features" },
+  { label: "FAQ", href: "#faq" },
   { label: "Docs", href: "/docs/" },
 ]
 
@@ -19,6 +19,18 @@ function Brand() {
     <a className="brand" href="/" aria-label="HQBase home">
       <img className="brand-logo" src="/logo.svg" alt="" width="168" height="132" />
     </a>
+  )
+}
+
+function GitHubStarWidget() {
+  return (
+    <iframe
+      className="github-star-widget"
+      src={githubButtonUrl}
+      width="76"
+      height="20"
+      title="Star HQBase on GitHub"
+    />
   )
 }
 
@@ -58,10 +70,7 @@ export function Header() {
           {links.map((link) => (
             <a className="header-link" href={link.href} key={link.href}>{link.label}</a>
           ))}
-          <a className="header-link" href={sourceUrl}>GitHub</a>
-          <Button asChild className="header-button" size="xs">
-            <a href={deployUrl}>Get started</a>
-          </Button>
+          <GitHubStarWidget />
         </div>
 
         <Button
@@ -90,14 +99,9 @@ export function Header() {
                 {link.label}
               </a>
             ))}
-            <a className="mobile-navigation-link" href={sourceUrl} onClick={closeMenu}>
-              GitHub
-            </a>
-          </div>
-          <div className="mobile-navigation-actions">
-            <Button asChild className="mobile-navigation-action">
-              <a href={deployUrl} onClick={closeMenu}>Get started</a>
-            </Button>
+            <div className="mobile-github-widget">
+              <GitHubStarWidget />
+            </div>
           </div>
         </div>
       ) : null}

@@ -131,7 +131,7 @@ for (const file of docsFiles) {
 
   const minimumWords = migratedContentFloors.get(relative);
   if (minimumWords) {
-    const wordCount = content.match(/[A-Za-z0-9][A-Za-z0-9'’-]*/g)?.length ?? 0;
+    const wordCount = content.match(/[A-Za-z0-9][A-Za-z0-9'-]*/g)?.length ?? 0;
     if (wordCount < minimumWords) {
       failures.push(
         `${relative}: ${wordCount} words is below the migrated-content floor of ${minimumWords}`,

@@ -9,6 +9,14 @@ import { defineConfig } from "astro/config"
 const root = path.dirname(fileURLToPath(import.meta.url))
 const repositoryUrl = "https://github.com/HQBase/hqbase"
 const docsSlug = (slug) => `docs/${slug}`
+const googleAnalyticsId = "G-Z2FRK5MFMR"
+const googleTagUrl = `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`
+const googleTagBootstrap = `
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${googleAnalyticsId}');
+`
 
 export default defineConfig({
   site: "https://hqbase.io",
@@ -35,6 +43,14 @@ export default defineConfig({
         {
           tag: "meta",
           attrs: { name: "theme-color", content: "#111113" },
+        },
+        {
+          tag: "script",
+          attrs: { async: true, src: googleTagUrl },
+        },
+        {
+          tag: "script",
+          content: googleTagBootstrap,
         },
       ],
       sidebar: [
