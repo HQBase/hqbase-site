@@ -49,6 +49,29 @@ pnpm check
 pnpm deploy:dry-run
 ```
 
+To work with a complete local demo workspace instead of the first-run setup flow, add a local-only
+`HQBASE_LOCAL_SEED_PASSWORD` of 8 to 128 characters to `.dev.vars`, then run:
+
+```sh
+pnpm db:migrate:local
+pnpm db:seed:local
+pnpm dev
+```
+
+Sign in at `http://localhost:8787/` as `owner@hqbase.test` with that password. The seed command
+writes directly to local D1 and does not add an application route, contact Cloudflare OAuth, or
+change production authentication behavior.
+
+To discard all local D1 data, rebuild the current schema, and recreate the demo workspace:
+
+```sh
+pnpm db:reset:local
+pnpm db:seed:local
+```
+
+`db:reset:local` is destructive. Both commands are local-only and must never be adapted to target a
+remote database.
+
 For `hqbase-site`, run:
 
 ```sh
