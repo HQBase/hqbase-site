@@ -1,25 +1,59 @@
 ---
-title: Connect AI tools with MCP
-description: Connect a compatible AI tool and choose what it can do with your mail.
+title: Connect AI agents
+description: Connect an AI agent through MCP or HQBase's deployment-local Mail API instructions.
 ---
 
-MCP is a standard that lets an AI tool work with other products. In HQBase, an MCP connection can
-search and read mail and, if you allow it, organize, draft, and send mail.
+HQBase gives AI agents two connection choices. A compatible client can connect directly through
+MCP, or a general-purpose agent can read the installation's generated `AGENTS.md` and use the
+public Mail API. Both choices use OAuth and the same mailbox access rules as the web app.
 
 The AI tool uses your existing HQBase account. It does not create another user or bypass your
 mailbox access.
 
-## Connect an AI tool
+## Connect an AI agent
 
-1. Open **Connect MCP** in the HQBase sidebar or compact navigation.
-2. Choose **Read-only** or **Mail actions**.
-3. Copy the connection URL into your MCP-compatible AI tool.
-4. Sign in to HQBase and approve the connection.
+1. Open **Connect AI agent** in the HQBase sidebar or compact navigation.
+2. Choose **MCP** or **AGENTS.md**.
+3. For MCP, choose **Read-only** or **Mail actions** and copy the connection URL into your
+   MCP-compatible client.
+4. For AGENTS.md, copy the guide URL into an agent that can fetch web documentation and make HTTP
+   requests.
+5. The agent should display the short code and verification URL without opening a remote or cloud
+   browser. Open the URL yourself in a browser you control, sign in to HQBase, confirm that the code
+   and requested access match, and choose **Allow**.
 
 Start with **Read-only** unless the AI tool genuinely needs to change or send mail. You can revoke
 the connection later.
 
-## Choose what the AI tool can do
+## Use AGENTS.md and the Mail API
+
+Every installation serves a guide at `/AGENTS.md`, for example
+`https://mail.example.com/AGENTS.md`. It contains that installation's exact API base URL, OAuth
+discovery URLs, token audience, permissions, operating rules, and compact method index. It links to
+the deployment-local OpenAPI document at `/api/v1/openapi.json` for exact parameters, request
+bodies, and response schemas.
+
+The guide is public and contains no token, account data, or mail content. Giving an agent the URL
+does not grant access; the connected person must still sign in and approve OAuth access. A remote
+`AGENTS.md` is an explicit instruction handoff rather than universal automatic discovery, so give
+the agent the copied URL when it does not fetch the guide on its own.
+
+For agents and command-line tools, the guide prefers OAuth Device Authorization. The agent requests
+a short-lived code, displays the verification URL and short code without opening a cloud, remote,
+automated, or agent-controlled browser, and waits while you approve in a browser you control. It
+polls automatically and resumes after approval, so there is no callback URL, local browser listener,
+or need to tell the agent to continue. The agent never receives your HQBase password or browser
+session. HQBase still requires sign-in and an explicit permission decision, and the chat or agent
+host may separately ask before it runs a command or contacts the installation.
+
+Authorization Code with PKCE remains supported for clients that can safely receive a browser
+callback, including compatible GUI clients and human API tools.
+
+The Mail API covers mailboxes, messages, conversations, attachments, drafts, sending, and replying.
+It does not manage people, mailbox access, domains, setup, updates, audits, sessions, notifications,
+app secrets, or Cloudflare credentials.
+
+## Choose what an MCP client can do
 
 - **Read-only** uses `/mcp`. It can see the mailboxes you can access, search mail, open
   conversations and messages, and download attachments.
@@ -78,8 +112,9 @@ can include the original attachments.
 
 ## Technical details
 
-HQBase supports Streamable HTTP and OAuth with discovery, dynamic client registration, the
-authorization-code flow with PKCE, sign-in, and consent. The relevant OAuth permissions are:
+HQBase supports Streamable HTTP and OAuth with discovery, dynamic client registration, Device
+Authorization Grant, Authorization Code with PKCE, sign-in, and consent. The relevant OAuth
+permissions are:
 
 | Permission | What it allows |
 | --- | --- |
@@ -89,7 +124,9 @@ authorization-code flow with PKCE, sign-in, and consent. The relevant OAuth perm
 | `offline_access` | Let a compatible tool request an optional refresh token. |
 
 New clients start with `mail:read`. The `/mcp` and `/mcp/full` profiles are separate OAuth
-connections, and a token works only with the profile that issued it.
+connections, and a token works only with the profile that issued it. The
+[versioned Mail API](/docs/specs/mail-api/) uses the same underlying mail services but has its own
+OAuth resource, so an API token and an MCP token are not interchangeable.
 
 Read actions are read-only. State and draft changes are safe to retry where applicable. Sending,
 replying, and forwarding can send more than once if a client repeats the same request, so clients
