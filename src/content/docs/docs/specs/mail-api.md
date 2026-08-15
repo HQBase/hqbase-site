@@ -22,12 +22,53 @@ OAuth clients discover the installation's authorization server at
 `/.well-known/oauth-authorization-server/api/auth` and this API's protected-resource metadata at
 `/.well-known/oauth-protected-resource/api/v1`. The protected resource and token audience are the
 installation origin followed by `/api/v1`, for example `https://mail.example.com/api/v1`.
+Protected-resource metadata identifies the API as **HQBase Mail API** and links its
+`resource_documentation` to the installation's generated `/AGENTS.md` guide.
 
-HQBase supports OAuth dynamic client registration and the authorization-code flow with PKCE. A
-public client registers with token endpoint authentication method `none`; it must not embed a
+HQBase supports OAuth dynamic client registration, Device Authorization Grant, and Authorization
+Code with PKCE. Device Authorization is the preferred flow for agents, command-line tools, and
+other clients that cannot safely receive a browser callback. PKCE remains available for clients
+that can receive one.
+
+A public client registers with token endpoint authentication method `none`; it must not embed a
 client secret. The authorization server's discovery document supplies the registration,
-authorization, and token endpoints. Clients request the API resource when registering and
-authorizing so the resulting token cannot be replayed against MCP or another service.
+authorization, device-authorization, and token endpoints. Clients request the API resource when
+registering and authorizing so the resulting token cannot be replayed against MCP or another
+service.
+
+### Device Authorization Grant
+
+The client registers `urn:ietf:params:oauth:grant-type:device_code`, requests a device code from
+`/api/auth/device/code`, shows the returned short `user_code` and `verification_uri` to the person,
+and polls `/api/auth/oauth2/token` at no less than the returned `interval`. An agent presents the
+verification URL as a clickable link but does not open it in Cloud Browser or another remote,
+automated, or agent-controlled browser. The person opens the verification URL in a browser they
+control, signs in to HQBase if necessary, verifies that the displayed code, client, permissions,
+and Mail API resource match the request, and chooses **Allow** or **Deny**. The client does not
+receive HQBase credentials, browser cookies, or a callback URL.
+
+The authorization request and token exchange both include the installation's `/api/v1` resource.
+Pending, denied, expired, and over-frequent polls use the standard `authorization_pending`,
+`access_denied`, `expired_token`, and `slow_down` OAuth errors. A device code is short-lived,
+single-use, bound to its registered client and resource, and cannot be approved by a different
+signed-in person after it has been claimed. The client stops polling after success, denial, or
+expiry and never logs the device code, user code, access token, refresh token, or mail content.
+
+User-code verification is limited to five attempts per connecting IP in each 15-minute window.
+HQBase stores the counter in the installation's D1 database so the limit applies across Worker
+isolates and restarts. The connecting IP is HMAC-hashed before storage; the user code is never used
+as a rate-limit key.
+
+Device Authorization removes the need for a callback or local browser listener. It does not remove
+the person's HQBase sign-in or explicit permission approval, and it does not bypass a host
+application's own confirmation before running commands or making network requests.
+
+### Authorization Code with PKCE
+
+A callback-capable public client registers `authorization_code`, opens the authorization endpoint
+with PKCE and the Mail API resource, receives the browser callback, and exchanges the one-time code
+at the token endpoint. PKCE clients follow the same permissions, resource binding, consent, and
+revocation rules as device clients.
 
 | Permission | What it allows |
 | --- | --- |
@@ -106,7 +147,18 @@ document the migration and deprecation window before removing a supported public
 unversioned `/api/*` routes are product-internal compatibility routes and are not covered by this
 stability promise.
 
-## OpenAPI and human testing
+## Agent instructions, OpenAPI, and human testing
+
+Every HQBase installation publishes a generated agent guide at `/AGENTS.md`. The guide contains
+the installation's canonical origin, OAuth discovery and audience URLs, permission rules, safety
+requirements, and a compact method index generated from the OpenAPI contract. The method index is
+for orientation; the OpenAPI document remains authoritative for parameters, payloads, schemas,
+content types, and errors.
+
+The same installation serves its instance-adjusted OpenAPI document at
+`/api/v1/openapi.json`. Its `servers` entry and external documentation link use the installation's
+canonical origin. Both discovery documents are public, contain no account data or credentials, and
+support `GET` and `HEAD`.
 
 The canonical machine-readable contract is the
 [OpenAPI 3.1 document](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v1.openapi.json).
@@ -122,8 +174,11 @@ Do not publish tokens, API responses, or mail content in a shared collection or 
 
 The checked-in collection and environment are generated from the OpenAPI contract. HQBase's test
 suite rejects artifact drift and verifies cookie authentication, bearer authentication, OAuth
-audience and permission enforcement, live mailbox access, stable error challenges, and the web
-app's use of the versioned routes.
+audience and permission enforcement, Device Authorization polling and approval boundaries, live
+mailbox access, stable error challenges, and the web app's use of the versioned routes. It also
+verifies that `/AGENTS.md`, the deployment-local OpenAPI document, authorization-server metadata,
+and protected-resource metadata agree on the canonical installation URLs and that the agent guide
+lists every public Mail API operation.
 
 ## Affected repositories
 

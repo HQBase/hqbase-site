@@ -706,7 +706,13 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(access, /Pre-launch schema consolidation/);
   assert.match(mcp, /Read-only[\s\S]*\/mcp/);
   assert.match(mcp, /Mail actions[\s\S]*\/mcp\/full/);
-  assert.match(mcp, /## Connect an AI tool/);
+  assert.match(mcp, /title: Connect AI agents/);
+  assert.match(mcp, /## Connect an AI agent/);
+  assert.match(mcp, /## Use AGENTS\.md and the Mail API/);
+  assert.match(mcp, /\/api\/v1\/openapi\.json/);
+  assert.match(mcp, /Device\s+Authorization Grant/);
+  assert.match(mcp, /no callback URL/);
+  assert.match(mcp, /polls automatically and resumes/);
   assert.match(mcp, /## Your mailbox access still applies/);
   assert.match(mcp, /## Technical details/);
   assert.match(mcp, /list_mailboxes/);

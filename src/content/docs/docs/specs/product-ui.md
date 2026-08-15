@@ -42,6 +42,14 @@ HQBase OAuth relay uses the product logo, typography, colors, focus treatment, a
 but remains a small confirmation page rather than a marketing page. Its actions stay intrinsic and
 do not become oversized or full-width on phones.
 
+The Device Authorization verification page follows the same small relay treatment. It accepts a
+short code from the URL or a labelled manual entry, preserves that code through sign-in, and never
+asks the person to paste credentials or tokens into an agent. Before approval it shows the signed-in
+identity, requesting client, requested permissions, Mail API resource, and exact short code. The
+primary **Allow** action and secondary **Deny** action remain distinct, keyboard accessible, and
+safe on compact screens. Invalid, expired, denied, and completed codes receive specific terminal
+states; the page never approves automatically and never reveals a device code or token.
+
 ## Public website and documentation
 
 The public site presents one free and open-source team email workspace running in the customer&apos;s
@@ -195,7 +203,7 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 
 - Use the complete HQBase logo. The header keeps bounded search on the left and mailbox selection
   plus Compose on the right.
-- The persistent sidebar lists folders first, then **Connect MCP**, Settings, and appearance. The
+- The persistent sidebar lists folders first, then **Connect AI agent**, Settings, and appearance. The
   account menu sits at the bottom behind a second quiet divider.
 - The installed app offers explicit Light and Dark modes. Dark is the initial mode until the person
   chooses otherwise. The choice updates browser chrome, persists locally, and does not follow later
@@ -209,8 +217,8 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 ### Phones and compact layouts
 
 - A hamburger immediately before search opens a left-side drawer; Compose remains the trailing
-  header action. The drawer shows workspace identity, mailbox selection, folders, **Connect MCP**,
-  Settings, appearance, and the account menu in that order.
+  header action. The drawer shows workspace identity, mailbox selection, folders, **Connect AI
+  agent**, Settings, appearance, and the account menu in that order.
 - The drawer keeps the current destination clear, uses touch-friendly targets, traps focus, returns
   focus to its trigger, and closes after selection, Escape, or backdrop dismissal.
 - **All mailboxes** and each accessible mailbox show their unread Inbox count, including zero. The
@@ -229,12 +237,16 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   double-tap zoom and focused-field zoom while keeping pinch zoom and operating-system
   magnification available.
 
-### MCP and Compose
+### AI agents and Compose
 
-**Connect MCP** opens a compact dialog that identifies the signed-in user and switches between the
-read-only `/mcp` and Mail actions `/mcp/full` profiles. It shows one explanation and absolute
-Streamable HTTP endpoint at a time, stays inside compact safe areas, and never asks for a manual
-token. See [Connect AI tools with MCP](/docs/mcp/) for authorization and tool behavior.
+**Connect AI agent** opens a compact dialog that identifies the signed-in user and first switches
+between **MCP** and **AGENTS.md**. MCP retains the nested read-only `/mcp` and Mail actions
+`/mcp/full` profile switcher and shows one absolute Streamable HTTP endpoint at a time. AGENTS.md
+shows the deployment-local `/AGENTS.md` URL and a copy action. An agent following that guide prefers
+Device Authorization, so the person opens a short-code verification URL in their own browser
+instead of handing an agent a password or coordinating a callback. The dialog stays inside compact
+safe areas and never asks for a manual token. See [Connect AI agents](/docs/mcp/) for authorization
+and behavior.
 
 New-message Compose is a non-modal bottom-right window on desktop with labelled minimize,
 expand/restore, and close controls. It becomes full-screen on compact layouts. Reply and Forward
