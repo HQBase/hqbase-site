@@ -89,7 +89,9 @@ authorization-code flow with PKCE, sign-in, and consent. The relevant OAuth perm
 | `offline_access` | Let a compatible tool request an optional refresh token. |
 
 New clients start with `mail:read`. The `/mcp` and `/mcp/full` profiles are separate OAuth
-connections, and a token works only with the profile that issued it.
+connections, and a token works only with the profile that issued it. The
+[versioned Mail API](/docs/specs/mail-api/) uses the same underlying mail services but has its own
+OAuth resource, so an API token and an MCP token are not interchangeable.
 
 Read actions are read-only. State and draft changes are safe to retry where applicable. Sending,
 replying, and forwarding can send more than once if a client repeats the same request, so clients
