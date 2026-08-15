@@ -4,8 +4,8 @@ description: Connect an AI agent through MCP or HQBase's deployment-local Mail A
 ---
 
 HQBase gives AI agents two connection choices. A compatible client can connect directly through
-MCP, or a general-purpose agent can read the installation's generated `AGENTS.md` and use the
-public Mail API. Both choices use OAuth and the same mailbox access rules as the web app.
+MCP, or a general-purpose agent can install or read the installation's generated Agent Skill and
+use the public Mail API. Both choices use OAuth and the same mailbox access rules as the web app.
 
 The AI tool uses your existing HQBase account. It does not create another user or bypass your
 mailbox access.
@@ -13,10 +13,10 @@ mailbox access.
 ## Connect an AI agent
 
 1. Open **Connect AI agent** in the HQBase sidebar or compact navigation.
-2. Choose **MCP** or **AGENTS.md**.
+2. Choose **MCP** or **Agent Skill**.
 3. For MCP, choose **Read-only** or **Mail actions** and copy the connection URL into your
    MCP-compatible client.
-4. For AGENTS.md, copy the guide URL into an agent that can fetch web documentation and make HTTP
+4. For Agent Skill, copy its URL or download `SKILL.md`, then give it to an agent that can make HTTP
    requests.
 5. The agent should display the short code and verification URL without opening a remote or cloud
    browser. Open the URL yourself in a browser you control, sign in to HQBase, confirm that the code
@@ -25,18 +25,19 @@ mailbox access.
 Start with **Read-only** unless the AI tool genuinely needs to change or send mail. You can revoke
 the connection later.
 
-## Use AGENTS.md and the Mail API
+## Use the Agent Skill and Mail API
 
-Every installation serves a guide at `/AGENTS.md`, for example
-`https://mail.example.com/AGENTS.md`. It contains that installation's exact API base URL, OAuth
-discovery URLs, token audience, permissions, operating rules, and compact method index. It links to
-the deployment-local OpenAPI document at `/api/v1/openapi.json` for exact parameters, request
-bodies, and response schemas.
+Every installation serves an Agent Skill at `/skills/hqbase-mail/SKILL.md`, for example
+`https://mail.example.com/skills/hqbase-mail/SKILL.md`. It contains the required skill metadata and
+that installation's exact API base URL, OAuth discovery URLs, token audience, permissions,
+operating rules, and compact method index. It links to the deployment-local OpenAPI document at
+`/api/v1/openapi.json` for exact parameters, request bodies, and response schemas.
 
-The guide is public and contains no token, account data, or mail content. Giving an agent the URL
-does not grant access; the connected person must still sign in and approve OAuth access. A remote
-`AGENTS.md` is an explicit instruction handoff rather than universal automatic discovery, so give
-the agent the copied URL when it does not fetch the guide on its own.
+The skill is public and contains no token, account data, or mail content. Giving an agent the URL or
+file does not grant access; the connected person must still sign in and approve OAuth access. A
+remote Agent Skill is not installed automatically by every client, so copy the URL or download the
+file when the client does not import it directly. The earlier `/AGENTS.md` and `/agents.md` paths
+redirect to the current Agent Skill URL.
 
 For agents and command-line tools, the guide prefers OAuth Device Authorization. The agent requests
 a short-lived code, displays the verification URL and short code without opening a cloud, remote,

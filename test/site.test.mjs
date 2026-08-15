@@ -708,7 +708,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(mcp, /Mail actions[\s\S]*\/mcp\/full/);
   assert.match(mcp, /title: Connect AI agents/);
   assert.match(mcp, /## Connect an AI agent/);
-  assert.match(mcp, /## Use AGENTS\.md and the Mail API/);
+  assert.match(mcp, /## Use the Agent Skill and Mail API/);
   assert.match(mcp, /\/api\/v1\/openapi\.json/);
   assert.match(mcp, /Device\s+Authorization Grant/);
   assert.match(mcp, /no callback URL/);
