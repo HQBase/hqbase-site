@@ -23,7 +23,8 @@ OAuth clients discover the installation's authorization server at
 `/.well-known/oauth-protected-resource/api/v1`. The protected resource and token audience are the
 installation origin followed by `/api/v1`, for example `https://mail.example.com/api/v1`.
 Protected-resource metadata identifies the API as **HQBase Mail API** and links its
-`resource_documentation` to the installation's generated `/AGENTS.md` guide.
+`resource_documentation` to the installation's generated Agent Skill at
+`/skills/hqbase-mail/SKILL.md`.
 
 HQBase supports OAuth dynamic client registration, Device Authorization Grant, and Authorization
 Code with PKCE. Device Authorization is the preferred flow for agents, command-line tools, and
@@ -147,13 +148,17 @@ document the migration and deprecation window before removing a supported public
 unversioned `/api/*` routes are product-internal compatibility routes and are not covered by this
 stability promise.
 
-## Agent instructions, OpenAPI, and human testing
+## Agent Skill, OpenAPI, and human testing
 
-Every HQBase installation publishes a generated agent guide at `/AGENTS.md`. The guide contains
-the installation's canonical origin, OAuth discovery and audience URLs, permission rules, safety
-requirements, and a compact method index generated from the OpenAPI contract. The method index is
-for orientation; the OpenAPI document remains authoritative for parameters, payloads, schemas,
-content types, and errors.
+Every HQBase installation publishes a generated, instruction-only Agent Skill at
+`/skills/hqbase-mail/SKILL.md`. The file starts with the required `name` and `description` YAML
+frontmatter. Its body contains the installation's canonical origin, OAuth discovery and audience
+URLs, permission rules, safety requirements, and a compact method index generated from the OpenAPI
+contract. The method index is for orientation; the OpenAPI document remains authoritative for
+parameters, payloads, schemas, content types, and errors.
+
+`/AGENTS.md` and `/agents.md` permanently redirect to the canonical Agent Skill URL for
+compatibility with the earlier generated guide.
 
 The same installation serves its instance-adjusted OpenAPI document at
 `/api/v1/openapi.json`. Its `servers` entry and external documentation link use the installation's
@@ -176,9 +181,9 @@ The checked-in collection and environment are generated from the OpenAPI contrac
 suite rejects artifact drift and verifies cookie authentication, bearer authentication, OAuth
 audience and permission enforcement, Device Authorization polling and approval boundaries, live
 mailbox access, stable error challenges, and the web app's use of the versioned routes. It also
-verifies that `/AGENTS.md`, the deployment-local OpenAPI document, authorization-server metadata,
-and protected-resource metadata agree on the canonical installation URLs and that the agent guide
-lists every public Mail API operation.
+verifies that the Agent Skill, deployment-local OpenAPI document, authorization-server metadata,
+and protected-resource metadata agree on the canonical installation URLs and that the Agent Skill
+lists every public Mail API operation. It also verifies both compatibility redirects.
 
 ## Affected repositories
 

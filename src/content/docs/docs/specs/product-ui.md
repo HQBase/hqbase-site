@@ -240,13 +240,13 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 ### AI agents and Compose
 
 **Connect AI agent** opens a compact dialog that identifies the signed-in user and first switches
-between **MCP** and **AGENTS.md**. MCP retains the nested read-only `/mcp` and Mail actions
-`/mcp/full` profile switcher and shows one absolute Streamable HTTP endpoint at a time. AGENTS.md
-shows the deployment-local `/AGENTS.md` URL and a copy action. An agent following that guide prefers
-Device Authorization, so the person opens a short-code verification URL in their own browser
-instead of handing an agent a password or coordinating a callback. The dialog stays inside compact
-safe areas and never asks for a manual token. See [Connect AI agents](/docs/mcp/) for authorization
-and behavior.
+between **MCP** and **Agent Skill**. MCP retains the nested read-only `/mcp` and Mail actions
+`/mcp/full` profile switcher and shows one absolute Streamable HTTP endpoint at a time. Agent Skill
+shows the deployment-local `/skills/hqbase-mail/SKILL.md` URL with **Copy** and **Download Skill**
+actions. An agent following the skill prefers Device Authorization, so the person opens a
+short-code verification URL in their own browser instead of handing an agent a password or
+coordinating a callback. The dialog stays inside compact safe areas and never asks for a manual
+token. See [Connect AI agents](/docs/mcp/) for authorization and behavior.
 
 New-message Compose is a non-modal bottom-right window on desktop with labelled minimize,
 expand/restore, and close controls. It becomes full-screen on compact layouts. Reply and Forward
