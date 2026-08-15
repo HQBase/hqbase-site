@@ -2,6 +2,9 @@
 
 Static public product and documentation site for `hqbase.io`.
 
+Always write in Simplified Technical English (ASD-STE100) and follow Zinsser's four principles of
+quality writing: Simplicity, Brevity, Clarity, Humanity.
+
 ## Boundaries
 
 - Present one free and open-source HQBase product for customer-owned Cloudflare infrastructure.
