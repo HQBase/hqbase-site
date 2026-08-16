@@ -200,6 +200,25 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 - Every link uses the pointer cursor on mouse-capable devices. Public pages keep visible focus,
   reduced-motion support, and readable layouts from 320px through desktop.
 
+## Authentication and account recovery
+
+- The sign-in page links to **Forgot password?** beside the password field. The recovery form asks
+  only for the person&apos;s Login email.
+- A recovery request always shows the same confirmation, whether or not the Login email exists.
+  The response must not reveal account existence, email delivery state, a password-reset token, or
+  an invitation link.
+- A valid recovery email opens `/reset-password`; an invitation continues to open `/set-password`.
+  Both routes require no existing session and stay outside mailbox-route normalization. Invalid,
+  expired, and used links show a specific recovery action without rendering password fields.
+- Password-reset and invitation links work once and expire after seven days. Issuing a new link
+  makes every older unused password link for that account invalid. After a successful password
+  setup or reset, no other password link for that account remains valid. A completed password reset
+  revokes the person&apos;s existing sessions and records a secret-free audit event.
+- Recovery preserves a safe same-origin return path so an OAuth or Device Authorization sign-in can
+  resume after the person changes their password. An untrusted external return URL is ignored.
+- New passwords use 8 to 128 characters and require confirmation. Success copy distinguishes an
+  accepted invitation from a recovered account, then returns the person to sign-in.
+
 ## Installed app layout
 
 ### Desktop
