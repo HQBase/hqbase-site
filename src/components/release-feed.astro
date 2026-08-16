@@ -1,0 +1,114 @@
+---
+import { getGitHubReleases } from "../lib/github-releases.mjs"
+
+const releases = await getGitHubReleases()
+const dateFormatter = new Intl.DateTimeFormat("en-CA", {
+  dateStyle: "long",
+  timeZone: "UTC",
+})
+---
+
+<div class="release-feed">
+  {
+    releases.map((release, index) => (
+      <article class="release-entry" id={release.tagName}>
+        <header class="release-header">
+          <div class="release-meta">
+            <time datetime={release.publishedAt}>
+              {dateFormatter.format(new Date(release.publishedAt))}
+            </time>
+            {index === 0 && !release.prerelease && <span class="release-label">Latest</span>}
+            {release.prerelease && <span class="release-label">Pre-release</span>}
+          </div>
+          <h2>
+            <a href={`#${release.tagName}`}>{release.name}</a>
+          </h2>
+        </header>
+        <div class="release-notes" set:html={release.bodyHtml} />
+        <a class="release-link" href={release.url}>
+          View {release.tagName} on GitHub <span aria-hidden="true">→</span>
+        </a>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .release-feed {
+    margin-block-start: 0;
+  }
+
+  .release-entry {
+    padding-block: 2rem 2.5rem;
+    border-block-start: 1px solid var(--sl-color-hairline);
+    scroll-margin-block-start: 6rem;
+  }
+
+  .release-entry:first-child {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+
+  .release-header {
+    margin-block-end: 1rem;
+  }
+
+  .release-meta {
+    display: flex;
+    min-height: 1.5rem;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--sl-color-gray-3);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+  }
+
+  .release-label {
+    padding: 0.22rem 0.55rem;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sl-color-white) 5%, transparent);
+    color: var(--sl-color-accent);
+    font-size: 0.66rem;
+    letter-spacing: 0.01em;
+  }
+
+  .release-header h2 {
+    margin-block: 0.55rem 0;
+    font-size: 1.25rem;
+  }
+
+  .release-header h2 a {
+    color: var(--sl-color-white);
+    text-decoration: none;
+  }
+
+  .release-header h2 a:hover {
+    color: var(--sl-color-accent-high);
+  }
+
+  :global(.release-notes ul) {
+    margin-block: 0;
+  }
+
+  :global(.release-notes li + li) {
+    margin-block-start: 0.75rem;
+  }
+
+  .release-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-block-start: 1rem;
+    color: var(--sl-color-gray-2);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .release-link:hover {
+    color: var(--sl-color-white);
+  }
+</style>

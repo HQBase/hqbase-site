@@ -22,6 +22,9 @@ test("Astro owns the landing and Starlight documentation routes", async () => {
   assert.match(config, /slug: "docs"/);
   assert.match(config, /\{ slug: "docs", label: "Overview" \}/);
   assert.match(config, /docsSlug\("getting-started"\)/);
+  assert.match(config, /\{ slug: docsSlug\("changelog"\), label: "Changelog" \}/);
+  assert.doesNotMatch(config, /label: "Product home"/);
+  assert.doesNotMatch(config, /label: "Source"/);
   assert.match(config, /label: "Using HQBase"/);
   assert.match(config, /label: "Product reference"/);
   assert.doesNotMatch(
@@ -35,6 +38,7 @@ test("Astro owns the landing and Starlight documentation routes", async () => {
   assert.match(config, /docsSlug\("maintainers\/staging-e2e"\)/);
   assert.match(config, /Sidebar: "\.\/src\/components\/starlight-sidebar\.astro"/);
   assert.match(config, /ThemeSelect: "\.\/src\/components\/starlight-theme-toggle\.astro"/);
+  assert.match(config, /\{ icon: "github", label: "GitHub", href: repositoryUrl \}/);
   assert.doesNotMatch(config, /blob\/main\/docs\/README\.md/);
   assert.match(contentConfig, /docsLoader\(\)/);
   assert.match(contentConfig, /docsSchema\(\)/);
@@ -49,6 +53,78 @@ test("Astro owns the landing and Starlight documentation routes", async () => {
   assert.match(pkg.devDependencies["@astrojs/starlight"], /^\^/);
   assert.match(logo, /<title>HQBase<\/title>/);
   assert.notEqual(favicon, logo);
+});
+
+test("the top-level Changelog uses a resilient GitHub Releases feed", async () => {
+  const [config, page, component, loader, workflow, readme, documentation] = await Promise.all([
+    read("astro.config.mjs"),
+    read("src/content/docs/docs/changelog.mdx"),
+    read("src/components/release-feed.astro"),
+    read("src/lib/github-releases.mjs"),
+    read(".github/workflows/ci.yml"),
+    read("README.md"),
+    read("src/content/docs/docs/maintainers/documentation.md"),
+  ]);
+  const { getGitHubReleases, releasesApiUrl } = await import(
+    "../src/lib/github-releases.mjs"
+  );
+
+  assert.match(config, /\{ slug: docsSlug\("changelog"\), label: "Changelog" \}/);
+  assert.doesNotMatch(config, /\{ label: "Product home", link: "\/" \}/);
+  assert.doesNotMatch(config, /\{ label: "Source", link: repositoryUrl \}/);
+  assert.match(page, /title: Changelog/);
+  assert.match(page, /<ReleaseFeed \/>/);
+  assert.match(component, /getGitHubReleases/);
+  assert.match(component, /set:html=\{release\.bodyHtml\}/);
+  assert.match(loader, /application\/vnd\.github\.html\+json/);
+  assert.match(loader, /using the checked-in snapshot/);
+  assert.equal(
+    releasesApiUrl,
+    "https://api.github.com/repos/HQBase/hqbase/releases?per_page=20",
+  );
+  assert.match(workflow, /cron: "23 \*\/6 \* \* \*"/);
+  assert.match(workflow, /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
+  assert.match(workflow, /https:\/\/hqbase\.io\/docs\/changelog\//);
+  assert.match(readme, /without a\s+browser-side API request/);
+  assert.match(documentation, /Keep the Changelog automatic/);
+
+  const liveReleases = await getGitHubReleases({
+    fetchImpl: async () => ({
+      ok: true,
+      status: 200,
+      json: async () => [
+        {
+          tag_name: "v9.0.0",
+          name: "HQBase 9.0.0",
+          html_url: "https://github.com/HQBase/hqbase/releases/tag/v9.0.0",
+          published_at: "2026-08-15T18:00:00Z",
+          prerelease: false,
+          draft: false,
+          body_html: "<ul><li>Safe release notes.</li></ul>",
+        },
+      ],
+    }),
+    token: "test-token",
+  });
+  assert.deepEqual(liveReleases, [
+    {
+      tagName: "v9.0.0",
+      name: "HQBase 9.0.0",
+      url: "https://github.com/HQBase/hqbase/releases/tag/v9.0.0",
+      publishedAt: "2026-08-15T18:00:00Z",
+      prerelease: false,
+      bodyHtml: "<ul><li>Safe release notes.</li></ul>",
+    },
+  ]);
+
+  const offlineReleases = await getGitHubReleases({
+    fetchImpl: async () => {
+      throw new Error("offline");
+    },
+    logger: { warn() {} },
+  });
+  assert.equal(offlineReleases[0].tagName, "v1.1.1");
+  assert.equal(offlineReleases.length >= 4, true);
 });
 
 test("Google Analytics covers the landing and every Starlight documentation page", async () => {
