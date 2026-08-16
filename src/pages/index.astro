@@ -12,6 +12,7 @@ import "@/index.css"
 const deployUrl =
   "https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2FHQBase%2Fhqbase"
 const sourceUrl = "https://github.com/HQBase/hqbase"
+const discordUrl = "https://discord.gg/U67PB663nf"
 const pageTitle = "HQBase - your team's email on Cloudflare"
 const pageDescription =
   "HQBase gives your team email on your Cloudflare infrastructure, with shared mailboxes, team access, and workflows running in your account."
@@ -103,6 +104,7 @@ const pageDescription =
               <a href="#faq">FAQ</a>
               <a href="/docs/">Docs</a>
               <a href={sourceUrl}>GitHub</a>
+              <a href={discordUrl}>Discord</a>
               <a href={deployUrl}>Deploy</a>
             </nav>
             <ThemeToggle client:load className="footer-theme-toggle" />

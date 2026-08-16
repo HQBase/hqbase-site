@@ -102,8 +102,9 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   same transparent outline treatment in the desktop and phone previews instead of a filled primary
   surface. Its border color matches the adjacent **All mailboxes** control exactly.
 - The header begins as a flat transparent row containing the logo and compact navigation for
-  Features, FAQ, and Docs, followed by the GitHub star control. After scrolling, it may become a
-  narrower translucent pill with a quiet border and shadow. The compact menu exposes the same links.
+  Features, FAQ, Docs, and Discord, followed by the GitHub star control. Discord links to
+  `https://discord.gg/U67PB663nf`. After scrolling, the header may become a narrower translucent
+  pill with a quiet border and shadow. The compact menu exposes the same links.
 - The hero deployment action and adjacent documentation action share the same height, two-pixel
   border weight, pill radius, type size, and horizontal padding. The deployment action adapts the
   official Cloudflare palette to the active theme: light mode uses an amber-to-coral surface with a
@@ -132,7 +133,7 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   It uses the same wide shell and generous spatial rhythm as the feature matrix, with substantial
   breathing room between the mission, timeline heading, and individual milestones.
   Completed, current, and planned steps are visually distinct without promising uncommitted
-  features. The mission is stated directly as **We&apos;re building the workspace OS on Cloudflare.**
+  features. The mission is stated directly as **Let&apos;s build Cloudflare Workspace together.**
   with **Team email today, with more of your team&apos;s work coming together.** beneath it, without a
   separate eyebrow label. Current feature claims remain grounded in the team email product.
   The product principles **Free. Open source. Self-hosted. Unlimited
@@ -144,8 +145,9 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   while remaining secondary to completed and current steps. The timeline has
   a current community step inviting people to share ideas, ask questions, and request features. It
   has separators between milestones but no top or bottom border. Each separator begins after the marker
-  column so it does not cross the vertical timeline and fades at both ends. Two compact actions link
-  to the public repository and the HQBase organization&apos;s GitHub Discussions forum.
+  column so it does not cross the vertical timeline and fades at both ends. One compact **Join our
+  Discord** action uses Discord&apos;s official Blurple symbol and links to
+  `https://discord.gg/U67PB663nf`.
   A decorative, low-contrast dotted world map sits behind the community. It remains the
   section background rather than extending the page below it. It uses an inline,
   theme-aware vector pattern rather than external imagery, remains hidden from assistive technology,
@@ -167,9 +169,10 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   at both ends. Let answer copy use almost the full accordion width instead of imposing a narrow
   reading measure. Present the heading centered above the accordion as one reading column at every
   viewport size, without question numbers or a split desktop layout. Below the accordion, center a
-  quiet text prompt that sends unanswered questions to the HQBase GitHub Discussions community.
-- The footer keeps brand context, licensing, primary links including FAQ, and the appearance control
-  in one band.
+  quiet **Join our Discord** prompt that sends unanswered questions to
+  `https://discord.gg/U67PB663nf`.
+- The footer keeps brand context, licensing, primary links including FAQ and Discord, and the
+  appearance control in one band. Its Discord link uses `https://discord.gg/U67PB663nf`.
 - Compact navigation has a labelled menu button, traps focus, closes after navigation, prevents
   background scrolling while open, and restores scrolling afterward.
 
@@ -190,10 +193,10 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
   direction labels with 18px titles and compact icons.
 - Landing links point only to real sections and public destinations. The hero&apos;s primary action
   starts the official Deploy to Cloudflare flow, its secondary action opens `/docs/`, and Getting
-  started uses Cloudflare&apos;s official deployment-button asset. The landing header replaces its static
-  GitHub link with the `HQBase/hqbase` star-count widget on desktop and mobile. Its iframe uses a
-  compact fixed width, receives a dark-mode treatment without showing a white field, and remains the
-  header's only call to action. The security policy permits frames only from `ghbtns.com`.
+  started uses Cloudflare&apos;s official deployment-button asset. The landing header places its Discord
+  navigation link before the `HQBase/hqbase` star-count widget on desktop and mobile. The widget&apos;s
+  iframe uses a compact fixed width and receives a dark-mode treatment without showing a white field.
+  The security policy permits frames only from `ghbtns.com`.
 - Every link uses the pointer cursor on mouse-capable devices. Public pages keep visible focus,
   reduced-motion support, and readable layouts from 320px through desktop.
 
