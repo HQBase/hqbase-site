@@ -39,6 +39,8 @@ test("Astro owns the landing and Starlight documentation routes", async () => {
   assert.match(config, /Sidebar: "\.\/src\/components\/starlight-sidebar\.astro"/);
   assert.match(config, /ThemeSelect: "\.\/src\/components\/starlight-theme-toggle\.astro"/);
   assert.match(config, /\{ icon: "github", label: "GitHub", href: repositoryUrl \}/);
+  assert.match(config, /\{ icon: "discord", label: "Discord", href: discordUrl \}/);
+  assert.match(config, /const discordUrl = "https:\/\/discord\.gg\/U67PB663nf"/);
   assert.doesNotMatch(config, /blob\/main\/docs\/README\.md/);
   assert.match(contentConfig, /docsLoader\(\)/);
   assert.match(contentConfig, /docsSchema\(\)/);
