@@ -27,7 +27,7 @@ function GitHubStarWidget() {
     <iframe
       className="github-star-widget"
       src={githubButtonUrl}
-      width="76"
+      width="150"
       height="20"
       title="Star HQBase on GitHub"
     />

@@ -98,7 +98,7 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(header, /ghbtns\.com\/github-btn\.html\?user=HQBase&repo=hqbase&type=star&count=true/);
   assert.match(header, /className="github-star-widget"/);
   assert.doesNotMatch(header, /frameBorder=|scrolling=/);
-  assert.match(header, /width="76"/);
+  assert.match(header, /width="150"/);
   assert.match(header, /height="20"/);
   assert.match(header, /<GitHubStarWidget \/>/);
   assert.match(header, /\{ label: "FAQ", href: "#faq" \}/);
@@ -142,7 +142,7 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(heroActions, /data-icon="inline-start"/);
   assert.match(page, /href="\/docs\/"/);
   assert.match(styles, /\.site-header-nav/);
-  assert.match(styles, /\.github-star-widget\s*\{[^}]*width: 4\.75rem[^}]*height: 1\.25rem[^}]*border: 0/);
+  assert.match(styles, /\.github-star-widget\s*\{[^}]*width: 9\.375rem[^}]*height: 1\.25rem[^}]*border: 0/);
   assert.match(styles, /\.desktop-navigation \.github-star-widget\s*\{[^}]*margin-inline-start: var\(--space-sm\)/);
   assert.match(styles, /\.dark \.github-star-widget\s*\{[^}]*filter: invert\(1\) hue-rotate\(180deg\)/);
   assert.doesNotMatch(styles, /\.site-header \.brand-logo\s*\{[^}]*translateY\(-1px\)/);
