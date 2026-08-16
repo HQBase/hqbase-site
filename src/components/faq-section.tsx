@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-const discussionsUrl = "https://github.com/orgs/HQBase/discussions"
+const discordUrl = "https://discord.gg/U67PB663nf"
 
 const questions = [
   {
@@ -88,7 +88,7 @@ export function FaqSection() {
           </Accordion>
 
           <p className="faq-community">
-            Still have a question? <a href={discussionsUrl}>Ask the HQBase community on GitHub.</a>
+            Still have a question? <a href={discordUrl}>Join our Discord.</a>
           </p>
         </div>
       </div>

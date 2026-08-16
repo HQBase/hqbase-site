@@ -7,11 +7,13 @@ import { cn } from "@/lib/utils"
 
 const githubButtonUrl =
   "https://ghbtns.com/github-btn.html?user=HQBase&repo=hqbase&type=star&count=true"
+const discordUrl = "https://discord.gg/U67PB663nf"
 
 const links = [
   { label: "Features", href: "#features" },
   { label: "FAQ", href: "#faq" },
   { label: "Docs", href: "/docs/" },
+  { label: "Discord", href: discordUrl },
 ]
 
 function Brand() {
@@ -27,7 +29,7 @@ function GitHubStarWidget() {
     <iframe
       className="github-star-widget"
       src={githubButtonUrl}
-      width="76"
+      width="150"
       height="20"
       title="Star HQBase on GitHub"
     />

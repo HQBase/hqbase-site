@@ -1,11 +1,11 @@
-import { Check, MessagesSquare, Star } from "lucide-react"
+import { Check } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { CommunityMap } from "@/components/community-map"
+import { DiscordIcon } from "@/components/discord-icon"
 
-const sourceUrl = "https://github.com/HQBase/hqbase"
-const discussionsUrl = "https://github.com/orgs/HQBase/discussions"
+const discordUrl = "https://discord.gg/U67PB663nf"
 
 const milestones = [
   {
@@ -44,26 +44,20 @@ export function CommunityJourney() {
       <div className="page-shell">
         <div className="journey-layout">
           <div className="journey-copy" data-reveal="left">
-            <h2 id="journey-title">We're building the workspace OS on Cloudflare.</h2>
+            <h2 id="journey-title">Let's build Cloudflare Workspace together.</h2>
             <p className="journey-description">
               Team email today, with more of your team's work coming together.
             </p>
             <div className="journey-actions">
-              <Button asChild className="journey-community-button" size="lg">
-                <a href={sourceUrl}>
-                  <Star data-icon="inline-start" />
-                  Star the repo
-                </a>
-              </Button>
               <Button
                 asChild
                 className="journey-community-button"
                 size="lg"
                 variant="outline"
               >
-                <a href={discussionsUrl}>
-                  <MessagesSquare data-icon="inline-start" />
-                  Join the discussion
+                <a href={discordUrl}>
+                  <DiscordIcon data-icon="inline-start" />
+                  Join our Discord
                 </a>
               </Button>
             </div>

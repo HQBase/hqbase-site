@@ -13,6 +13,11 @@ The public `HQBase/hqbase` repository remains the product implementation and sig
 channel. Both surfaces build into one static `dist` directory and share the canonical HQBase brand
 assets and self-hosted Geist fonts.
 
+The top-level Changelog reads published releases from the GitHub Releases API during each static
+build. A checked-in snapshot keeps builds available if GitHub cannot respond. The production
+workflow rebuilds and deploys the site every six hours, so a new product release appears without a
+browser-side API request.
+
 ## Local development
 
 ```sh
