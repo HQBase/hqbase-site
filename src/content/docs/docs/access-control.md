@@ -50,6 +50,12 @@ The login must remain available when HQBase is offline, so it cannot use a domai
 workspace. If your shared mailboxes use `example.com`, use a login on another domain. HQBase also
 blocks you from connecting a new domain if an existing person's login already uses it.
 
+If a person forgets their password, they can select **Forgot password?** on the sign-in page and
+enter their Login email. HQBase shows the same confirmation for every request, so it does not reveal
+whether an account exists. A valid link works once, expires after seven days, and ends the person's
+existing sessions when the password changes. Requesting a new link makes every older unused
+password link for that account stop working.
+
 ## Add people
 
 Owners and admins can add someone in either of these ways:
