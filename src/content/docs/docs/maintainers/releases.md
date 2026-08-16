@@ -25,6 +25,10 @@ The signing private key must exist only as an encrypted repository secret and in
 recovery copy. Never upload it, print it, or write it to a log. Applications and deployment tools
 contain only the public key used to verify a release.
 
+The Discord release webhook must exist as the `DISCORD_RELEASE_WEBHOOK_URL` Actions repository
+secret. Configure its public name, avatar, and destination channel in Discord. Treat the webhook
+URL as a credential because anyone who has it can post to that channel.
+
 ## Publish the release
 
 1. From `main`, start the signed-release workflow. The workflow reads the committed version from
@@ -37,9 +41,16 @@ contain only the public key used to verify a release.
    the exact candidate through the normal customer update path.
 6. Staging checks the deployed app, sign-in, mailbox access, diagnostics, backup, and restore.
 7. The workflow publishes the draft only if those checks pass.
+8. After the public signature and archive checks pass, the workflow posts the complete release
+   notes to Discord. It splits long notes into numbered messages without removing content.
 
 After publication, download `releases/latest/download/stable.json` directly, verify its signature,
 download the exact archive it names, confirm the checksum, and open the public release notes.
+
+The Discord message uses the name and avatar configured for the webhook. Its title links to the
+GitHub Release, and its body contains the complete release notes for that version. The workflow
+disables Discord mentions in release-note text. A Discord delivery failure creates a workflow
+warning but does not invalidate an otherwise verified signed release.
 
 Manual staging is still available for a reviewed commit, but the signed-release workflow is the
 only path that publishes an official customer release.
