@@ -63,3 +63,13 @@ It checks that every page has a title, every internal link resolves, every page 
 sidebar, and consolidated pages still contain the required information.
 
 Use Git history for dates. Do not add a manually maintained `updated` field.
+
+## Keep the Changelog automatic
+
+The top-level [Changelog](/docs/changelog/) reads published `HQBase/hqbase` releases from GitHub's
+Releases API during the static site build. It uses GitHub-rendered release-note HTML and does not
+make an API request from a reader's browser.
+
+The production workflow rebuilds the site every six hours. A checked-in release snapshot keeps the
+page available when GitHub cannot respond. Keep the snapshot aligned with the latest published
+release when you change the feed code.

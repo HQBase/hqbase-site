@@ -8,6 +8,7 @@ import { defineConfig } from "astro/config"
 
 const root = path.dirname(fileURLToPath(import.meta.url))
 const repositoryUrl = "https://github.com/HQBase/hqbase"
+const discordUrl = "https://discord.gg/U67PB663nf"
 const docsSlug = (slug) => `docs/${slug}`
 const googleAnalyticsId = "G-Z2FRK5MFMR"
 const googleTagUrl = `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`
@@ -98,10 +99,12 @@ export default defineConfig({
             { slug: docsSlug("maintainers/releases") },
           ],
         },
-        { label: "Product home", link: "/" },
-        { label: "Source", link: repositoryUrl },
+        { slug: docsSlug("changelog"), label: "Changelog" },
       ],
-      social: [{ icon: "github", label: "GitHub", href: repositoryUrl }],
+      social: [
+        { icon: "discord", label: "Discord", href: discordUrl },
+        { icon: "github", label: "GitHub", href: repositoryUrl },
+      ],
     }),
   ],
   vite: {

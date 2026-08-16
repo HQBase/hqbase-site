@@ -22,6 +22,9 @@ test("Astro owns the landing and Starlight documentation routes", async () => {
   assert.match(config, /slug: "docs"/);
   assert.match(config, /\{ slug: "docs", label: "Overview" \}/);
   assert.match(config, /docsSlug\("getting-started"\)/);
+  assert.match(config, /\{ slug: docsSlug\("changelog"\), label: "Changelog" \}/);
+  assert.doesNotMatch(config, /label: "Product home"/);
+  assert.doesNotMatch(config, /label: "Source"/);
   assert.match(config, /label: "Using HQBase"/);
   assert.match(config, /label: "Product reference"/);
   assert.doesNotMatch(
@@ -35,6 +38,9 @@ test("Astro owns the landing and Starlight documentation routes", async () => {
   assert.match(config, /docsSlug\("maintainers\/staging-e2e"\)/);
   assert.match(config, /Sidebar: "\.\/src\/components\/starlight-sidebar\.astro"/);
   assert.match(config, /ThemeSelect: "\.\/src\/components\/starlight-theme-toggle\.astro"/);
+  assert.match(config, /\{ icon: "github", label: "GitHub", href: repositoryUrl \}/);
+  assert.match(config, /\{ icon: "discord", label: "Discord", href: discordUrl \}/);
+  assert.match(config, /const discordUrl = "https:\/\/discord\.gg\/U67PB663nf"/);
   assert.doesNotMatch(config, /blob\/main\/docs\/README\.md/);
   assert.match(contentConfig, /docsLoader\(\)/);
   assert.match(contentConfig, /docsSchema\(\)/);
@@ -49,6 +55,78 @@ test("Astro owns the landing and Starlight documentation routes", async () => {
   assert.match(pkg.devDependencies["@astrojs/starlight"], /^\^/);
   assert.match(logo, /<title>HQBase<\/title>/);
   assert.notEqual(favicon, logo);
+});
+
+test("the top-level Changelog uses a resilient GitHub Releases feed", async () => {
+  const [config, page, component, loader, workflow, readme, documentation] = await Promise.all([
+    read("astro.config.mjs"),
+    read("src/content/docs/docs/changelog.mdx"),
+    read("src/components/release-feed.astro"),
+    read("src/lib/github-releases.mjs"),
+    read(".github/workflows/ci.yml"),
+    read("README.md"),
+    read("src/content/docs/docs/maintainers/documentation.md"),
+  ]);
+  const { getGitHubReleases, releasesApiUrl } = await import(
+    "../src/lib/github-releases.mjs"
+  );
+
+  assert.match(config, /\{ slug: docsSlug\("changelog"\), label: "Changelog" \}/);
+  assert.doesNotMatch(config, /\{ label: "Product home", link: "\/" \}/);
+  assert.doesNotMatch(config, /\{ label: "Source", link: repositoryUrl \}/);
+  assert.match(page, /title: Changelog/);
+  assert.match(page, /<ReleaseFeed \/>/);
+  assert.match(component, /getGitHubReleases/);
+  assert.match(component, /set:html=\{release\.bodyHtml\}/);
+  assert.match(loader, /application\/vnd\.github\.html\+json/);
+  assert.match(loader, /using the checked-in snapshot/);
+  assert.equal(
+    releasesApiUrl,
+    "https://api.github.com/repos/HQBase/hqbase/releases?per_page=20",
+  );
+  assert.match(workflow, /cron: "23 \*\/6 \* \* \*"/);
+  assert.match(workflow, /GITHUB_TOKEN: \$\{\{ github\.token \}\}/);
+  assert.match(workflow, /https:\/\/hqbase\.io\/docs\/changelog\//);
+  assert.match(readme, /without a\s+browser-side API request/);
+  assert.match(documentation, /Keep the Changelog automatic/);
+
+  const liveReleases = await getGitHubReleases({
+    fetchImpl: async () => ({
+      ok: true,
+      status: 200,
+      json: async () => [
+        {
+          tag_name: "v9.0.0",
+          name: "HQBase 9.0.0",
+          html_url: "https://github.com/HQBase/hqbase/releases/tag/v9.0.0",
+          published_at: "2026-08-15T18:00:00Z",
+          prerelease: false,
+          draft: false,
+          body_html: "<ul><li>Safe release notes.</li></ul>",
+        },
+      ],
+    }),
+    token: "test-token",
+  });
+  assert.deepEqual(liveReleases, [
+    {
+      tagName: "v9.0.0",
+      name: "HQBase 9.0.0",
+      url: "https://github.com/HQBase/hqbase/releases/tag/v9.0.0",
+      publishedAt: "2026-08-15T18:00:00Z",
+      prerelease: false,
+      bodyHtml: "<ul><li>Safe release notes.</li></ul>",
+    },
+  ]);
+
+  const offlineReleases = await getGitHubReleases({
+    fetchImpl: async () => {
+      throw new Error("offline");
+    },
+    logger: { warn() {} },
+  });
+  assert.equal(offlineReleases[0].tagName, "v1.1.1");
+  assert.equal(offlineReleases.length >= 4, true);
 });
 
 test("Google Analytics covers the landing and every Starlight documentation page", async () => {
@@ -98,10 +176,12 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(header, /ghbtns\.com\/github-btn\.html\?user=HQBase&repo=hqbase&type=star&count=true/);
   assert.match(header, /className="github-star-widget"/);
   assert.doesNotMatch(header, /frameBorder=|scrolling=/);
-  assert.match(header, /width="76"/);
+  assert.match(header, /width="150"/);
   assert.match(header, /height="20"/);
   assert.match(header, /<GitHubStarWidget \/>/);
   assert.match(header, /\{ label: "FAQ", href: "#faq" \}/);
+  assert.match(header, /\{ label: "Discord", href: discordUrl \}/);
+  assert.match(header, /const discordUrl = "https:\/\/discord\.gg\/U67PB663nf"/);
   assert.doesNotMatch(header, /className="header-link" href={sourceUrl}>GitHub/);
   assert.doesNotMatch(header, /Get started|deployUrl|header-button|mobile-navigation-action/);
   assert.match(page, /<Header client:load \/>/);
@@ -110,6 +190,7 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(page, /<CommunityJourney \/>/);
   assert.match(page, /<FaqSection client:load \/>/);
   assert.match(page, /<nav class="footer-links" aria-label="Footer">[\s\S]*href="#faq">FAQ<\/a>/);
+  assert.match(page, /href={discordUrl}>Discord<\/a>/);
   assert.match(page, /Your team&apos;s email\./);
   assert.doesNotMatch(page, /Your team&apos;s workspace/);
   assert.match(page, /On your Cloudflare infrastructure\./);
@@ -142,7 +223,7 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(heroActions, /data-icon="inline-start"/);
   assert.match(page, /href="\/docs\/"/);
   assert.match(styles, /\.site-header-nav/);
-  assert.match(styles, /\.github-star-widget\s*\{[^}]*width: 4\.75rem[^}]*height: 1\.25rem[^}]*border: 0/);
+  assert.match(styles, /\.github-star-widget\s*\{[^}]*width: 9\.375rem[^}]*height: 1\.25rem[^}]*border: 0/);
   assert.match(styles, /\.desktop-navigation \.github-star-widget\s*\{[^}]*margin-inline-start: var\(--space-sm\)/);
   assert.match(styles, /\.dark \.github-star-widget\s*\{[^}]*filter: invert\(1\) hue-rotate\(180deg\)/);
   assert.doesNotMatch(styles, /\.site-header \.brand-logo\s*\{[^}]*translateY\(-1px\)/);
@@ -351,9 +432,10 @@ test("the landing header exposes the real docs destination", async () => {
   ]);
 
   assert.match(header, /\{ label: "Docs", href: "\/docs\/" \}/);
+  assert.match(header, /\{ label: "Discord", href: discordUrl \}/);
   assert.match(
     header,
-    /\{ label: "Features", href: "#features" \}[\s\S]*\{ label: "FAQ", href: "#faq" \}[\s\S]*\{ label: "Docs", href: "\/docs\/" \}/,
+    /\{ label: "Features", href: "#features" \}[\s\S]*\{ label: "FAQ", href: "#faq" \}[\s\S]*\{ label: "Docs", href: "\/docs\/" \}[\s\S]*\{ label: "Discord", href: discordUrl \}/,
   );
   assert.match(header, /useScroll\(10\)/);
   assert.match(header, /document\.body\.style\.overflow = open \? "hidden" : ""/);
@@ -363,9 +445,9 @@ test("the landing header exposes the real docs destination", async () => {
   assert.match(scrollHook, /window\.scrollY > threshold/);
   assert.match(styles, /\.site-header-scrolled \.site-header-nav,[\s\S]*border-radius: 999px/);
   const productUi = await read("src/content/docs/docs/specs/product-ui.md");
-  assert.match(productUi, /compact navigation for[\s\S]*Features, FAQ, and Docs/);
+  assert.match(productUi, /compact navigation for[\s\S]*Features, FAQ, Docs, and Discord/);
   assert.match(productUi, /compact menu exposes the same links/);
-  assert.match(productUi, /footer keeps brand context,[\s\S]*primary links including FAQ/);
+  assert.match(productUi, /footer keeps brand context,[\s\S]*primary links including FAQ and Discord/);
 });
 
 test("features stay inside the documented product boundary", async () => {
@@ -440,16 +522,17 @@ test("features stay inside the documented product boundary", async () => {
 });
 
 test("the public journey links milestones to the HQBase community", async () => {
-  const [page, journey, map, styles, productUi] = await Promise.all([
+  const [page, journey, discordIcon, map, styles, productUi] = await Promise.all([
     read("src/pages/index.astro"),
     read("src/components/community-journey.tsx"),
+    read("src/components/discord-icon.tsx"),
     read("src/components/community-map.tsx"),
     read("public/styles.css"),
     read("src/content/docs/docs/specs/product-ui.md"),
   ]);
 
   assert.match(page, /<CommunityJourney \/>/);
-  assert.match(journey, /We're building the workspace OS on Cloudflare\./);
+  assert.match(journey, /Let's build Cloudflare Workspace together\./);
   assert.doesNotMatch(journey, /Our mission|journey-label|Free\. Open source\. Self-hosted\. Unlimited seats\./);
   assert.match(journey, /Team email today, with more of your team's work coming together\./);
   assert.match(journey, /Project started/);
@@ -458,14 +541,15 @@ test("the public journey links milestones to the HQBase community", async () => 
   assert.match(journey, /Community feedback/);
   assert.match(journey, /Share ideas, ask questions, and request features/);
   assert.match(journey, /Next release/);
-  assert.match(journey, /https:\/\/github\.com\/HQBase\/hqbase/);
-  assert.match(journey, /https:\/\/github\.com\/orgs\/HQBase\/discussions/);
-  assert.match(journey, /<Button asChild className="journey-community-button" size="lg">/);
-  assert.match(journey, /<Star data-icon="inline-start" \/>/);
-  assert.match(journey, /Star the repo/);
+  assert.match(journey, /https:\/\/discord\.gg\/U67PB663nf/);
+  assert.doesNotMatch(journey, /Star the repo|<Star|sourceUrl/);
+  assert.equal((journey.match(/journey-community-button/g) ?? []).length, 1);
   assert.match(journey, /variant="outline"/);
-  assert.match(journey, /<MessagesSquare data-icon="inline-start" \/>/);
-  assert.match(journey, /Join the discussion/);
+  assert.match(journey, /<DiscordIcon data-icon="inline-start" \/>/);
+  assert.match(discordIcon, /viewBox="0 0 65 48"/);
+  assert.match(discordIcon, /fill="#5865F2"/);
+  assert.match(discordIcon, /M41\.2351 0C40\.6164/);
+  assert.match(journey, /Join our Discord/);
   assert.match(journey, /<CommunityMap \/>/);
   assert.match(map, /id="community-map-dots"/);
   assert.match(map, /aria-hidden="true"/);
@@ -495,7 +579,9 @@ test("the public journey links milestones to the HQBase community", async () => 
   assert.match(styles, /\.journey-map \{[\s\S]*position: absolute;[\s\S]*inset: 0;[\s\S]*height: 100%;[\s\S]*color: var\(--color-accent\);[\s\S]*mask-image:/);
   assert.doesNotMatch(styles, /\[data-slot="card"\]\.journey-timeline-panel|\.journey-timeline-panel\s*\{[^}]*(?:background|box-shadow|border-radius)/);
   assert.match(productUi, /The public journey pairs an open, unframed milestone timeline with a concise mission statement/);
-  assert.match(productUi, /GitHub Discussions forum/);
+  assert.match(productUi, /One compact \*\*Join our[\s\S]*Discord\*\* action/);
+  assert.match(productUi, /official Blurple symbol/);
+  assert.match(productUi, /https:\/\/discord\.gg\/U67PB663nf/);
   assert.match(productUi, /product principles[\s\S]*sit directly below the hero title/);
   assert.match(productUi, /without a[\s\S]*separate eyebrow label/);
   assert.match(productUi, /sentence-case status badges all use quiet neutral backgrounds/);
@@ -550,8 +636,8 @@ test("the landing answers common questions with the native shadcn accordion", as
   assert.match(faq, /active domain using[\s\S]*Cloudflare DNS/);
   assert.match(faq, /href="\/docs\/getting-started\/"/);
   assert.match(faq, /Still have a question\?/);
-  assert.match(faq, /Ask the HQBase community on GitHub\./);
-  assert.match(faq, /https:\/\/github\.com\/orgs\/HQBase\/discussions/);
+  assert.match(faq, /Join our Discord\./);
+  assert.match(faq, /https:\/\/discord\.gg\/U67PB663nf/);
   assert.match(faq, /data-reveal="up"/);
   assert.match(faq, /suppressHydrationWarning/);
   assert.match(accordion, /data-open:animate-accordion-down/);
@@ -581,7 +667,8 @@ test("the landing answers common questions with the native shadcn accordion", as
   assert.match(productUi, /answer copy use almost the full accordion width/);
   assert.match(productUi, /heading centered above the accordion[\s\S]*as one reading column/);
   assert.match(productUi, /without[\s\S]*question numbers or a split desktop layout/);
-  assert.match(productUi, /Below the accordion[\s\S]*HQBase GitHub Discussions community/);
+  assert.match(productUi, /Below the accordion[\s\S]*Join our Discord/);
+  assert.match(productUi, /https:\/\/discord\.gg\/U67PB663nf/);
 });
 
 test("the landing reveals content progressively without hiding reduced-motion visitors", async () => {
