@@ -89,7 +89,7 @@ All paths below are relative to `/api/v1`.
 | Method and path | Permission | Purpose |
 | --- | --- | --- |
 | `GET /mailboxes` | `mail:read` | List mailboxes visible to the connected person. Owners and admins may see mailbox metadata for access management without receiving its mail. |
-| `GET /messages` | `mail:read` | List or search messages, optionally filtered by mailbox or folder. |
+| `GET /messages` | `mail:read` | List or search messages with cursor pagination, optionally filtered by mailbox or folder. |
 | `GET /messages/{id}` | `mail:read` | Get one message. |
 | `GET /messages/{id}/thread` | `mail:read` | Get the accessible messages in the same thread. |
 | `GET /messages/{id}/html` | `mail:read` | Get sanitized HTML rendering metadata for a message. |
@@ -113,11 +113,31 @@ content, Agent access is required for organization and sending actions, and Mana
 granted by this API. Owners retain Manager access to every mailbox. An admin without mailbox access
 can see mailbox metadata but cannot read, change, or send its mail.
 
+### Message pagination
+
+`GET /messages` returns one page of messages as a JSON array. `limit` sets the page size. It is an
+integer from 1 to 100 and defaults to 100. Messages are ordered by activity time, newest first,
+where activity time is the received time, then the sent time, then the creation time. Messages with
+the same activity time are ordered by descending identifier, so the order stays stable across a page
+boundary.
+
+When more messages follow the page, the response includes an RFC 8288 `Link` header of the form
+`<url>; rel="next"`. The URL keeps the `mailboxId`, `folder`, `search`, and `limit` values of the
+request and adds a `cursor`. A client follows that URL to read the next page. The last page has no
+`Link` header.
+
+A cursor is opaque and versioned. Clients must return it unchanged and must not construct, parse, or
+edit one. A cursor from another list, such as a conversation cursor, is not valid here. A cursor
+never widens mailbox access: every page is filtered by the mailboxes the connected person can read.
+
+A `limit` that is not an integer from 1 to 100 returns `400` with the error code `INVALID_LIMIT`. A
+malformed or foreign cursor returns `400` with the error code `INVALID_CURSOR`.
+
 ## Requests and errors
 
 JSON requests use `Content-Type: application/json`. Draft attachment uploads use
 `multipart/form-data`. List endpoints use the documented query parameters in the OpenAPI document;
-conversation cursors are opaque and clients must return them unchanged.
+message and conversation cursors are opaque and clients must return them unchanged.
 
 JSON errors have an `error` object with stable `code` and human-readable `message` fields. A missing
 or invalid token returns `401`. A valid token without the required permission returns `403`.
@@ -130,7 +150,7 @@ once and must not retry it blindly. State and draft operations should still use 
 or draft version to avoid overwriting newer work.
 
 HQBase does not currently provide a changes or delta feed. A client refreshes by listing messages
-or conversations again and can use conversation cursors for bounded pagination.
+or conversations again and can use their cursors for bounded pagination.
 
 ## Stability policy
 
