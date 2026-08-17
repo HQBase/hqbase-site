@@ -71,6 +71,11 @@ with PKCE and the Mail API resource, receives the browser callback, and exchange
 at the token endpoint. PKCE clients follow the same permissions, resource binding, consent, and
 revocation rules as device clients.
 
+Native desktop and mobile clients that use Authorization Code with PKCE must register with
+`application_type` set to `native`. HQBase accepts the native redirect forms defined by RFC 8252:
+app-claimed HTTPS, loopback HTTP, and private-use schemes. A private-use redirect must use a
+reverse-domain scheme with no authority component, for example `com.example.mail:/oauth/callback`.
+
 | Permission | What it allows |
 | --- | --- |
 | `mail:read` | List visible mailboxes and conversations, search and open mail, render message HTML, and download attachments. |
