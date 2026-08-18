@@ -230,11 +230,12 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 - The installed app offers explicit Light and Dark modes. Dark is the initial mode until the person
   chooses otherwise. The choice updates browser chrome, persists locally, and does not follow later
   operating-system changes.
-- A fine-pointer device keeps the desktop shell even when its window narrows. Below 1024 by 600 CSS
-  pixels, show a quiet request to enlarge the window rather than switching to the phone layout.
-- The sidebar may be hidden and restored without changing the route or draft. Sidebar/content and
-  conversation-list/reader dividers support pointer and keyboard resizing, useful limits,
-  double-activation reset, and locally remembered widths.
+- A fine-pointer device keeps the desktop shell even when its window narrows. Do not impose a
+  minimum window width or height, and do not cover the workspace with a request to enlarge the
+  window.
+- The sidebar may be hidden and restored without changing the route or draft. The sidebar and mail
+  content use fixed layout widths. Do not add draggable dividers, keyboard resizing, or locally
+  remembered panel widths.
 
 ### Phones and compact layouts
 
@@ -323,6 +324,9 @@ The original HTML remains in customer storage; sanitization happens when the mes
 
 ### Conversation reader
 
+- Selecting a conversation replaces the conversation list with a full-page reader that uses the
+  complete mail content area on desktop and compact layouts. A labelled Back action returns to the
+  same list, filters, loaded pages, and scroll position.
 - Show accessible messages in chronological order. Begin with the first and final message; when
   messages sit between them, one labelled divider reports the hidden count and expands or collapses
   them in place.
@@ -413,9 +417,10 @@ D1 changes, or deployed resources and is excluded from production.
   normalize to `/inbox`.
 - Back and forward restore the represented route. Permission-gated Settings routes normalize only
   after the current role is known. Compose remains local UI state.
-- Desktop keeps list and reader side by side. Compact folder routes show only the list; selecting a
-  conversation replaces it with the reader. Back returns to the same filters, loaded pages, and
-  scroll position. The compact list uses one header with the active folder and conversation count.
+- Desktop and compact folder routes show only the conversation list. Selecting a conversation
+  replaces the list with the full-page reader in the complete mail content area. Back returns to
+  the same filters, loaded pages, and scroll position. The compact list uses one header with the
+  active folder and conversation count.
 
 ## Audible feedback
 
