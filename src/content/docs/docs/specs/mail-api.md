@@ -95,6 +95,7 @@ All paths below are relative to `/api/v1`.
 | --- | --- | --- |
 | `GET /mailboxes` | `mail:read` | List mailboxes visible to the connected person. Owners and admins may see mailbox metadata for access management without receiving its mail. |
 | `GET /messages` | `mail:read` | List or search messages with cursor pagination, optionally filtered by mailbox or folder. |
+| `GET /changes` | `mail:read` | Read message upserts and deletion tombstones after a sync checkpoint. |
 | `GET /messages/{id}` | `mail:read` | Get one message. |
 | `GET /messages/{id}/thread` | `mail:read` | Get the accessible messages in the same thread. |
 | `GET /messages/{id}/html` | `mail:read` | Get sanitized HTML rendering metadata for a message. |
@@ -138,6 +139,66 @@ never widens mailbox access: every page is filtered by the mailboxes the connect
 A `limit` that is not an integer from 1 to 100 returns `400` with the error code `INVALID_LIMIT`. A
 malformed or foreign cursor returns `400` with the error code `INVALID_CURSOR`.
 
+### Message changes
+
+`GET /changes` returns message changes in journal order. It is a synchronization feed, not a
+message-history endpoint. The feed has no mailbox, folder, or search filter. This rule makes a
+folder move visible as one upsert with the message's current folder.
+
+The response is a JSON object:
+
+```json
+{
+  "changes": [
+    { "type": "upsert", "message": {} },
+    {
+      "type": "delete",
+      "messageId": "msg_example",
+      "mailboxId": "mbx_example"
+    }
+  ],
+  "nextCursor": "opaque-cursor",
+  "hasMore": false
+}
+```
+
+An `upsert` contains the current public message-summary shape used by `GET /messages`. It does not
+contain object-storage keys or other internal fields. A `delete` is a tombstone with only the
+deleted message and mailbox identifiers. A client applies the changes in their returned order.
+
+`limit` sets the maximum number of journal entries read for one page. It is an integer from 1 to
+100 and defaults to 100. HQBase can return fewer changes when an older upsert has been replaced by
+a later deletion. `hasMore` reports whether more journal entries remain in the bounded change
+cycle, not whether the `changes` array reached `limit`.
+
+The change cursor is opaque and versioned. Clients must return it unchanged and must not construct,
+parse, or edit it. HQBase orders the journal with a monotonic sequence, not with timestamps. This
+keeps two rapid changes distinct and keeps deletion records after the message row is removed.
+
+A request without `cursor` is a checkpoint request. It returns no historical changes,
+`hasMore: false`, and a `nextCursor` at the current journal high-water sequence. A new client uses
+this bootstrap order:
+
+1. Request a changes checkpoint and keep its `nextCursor`.
+2. Paginate the full message list.
+3. Request changes after the checkpoint until `hasMore` is `false`.
+
+When a change cycle starts, HQBase fixes its high-water sequence. Page cursors keep that upper
+bound. The last page advances `nextCursor` to the high-water sequence. Changes written during
+paging belong to the next cycle, so one cycle stays bounded.
+
+HQBase applies the connected person's current mailbox access to each journal entry. Before each
+change cycle, the client lists `GET /mailboxes`. It removes cached mail for mailboxes that are no
+longer readable and performs a new full bootstrap for each newly readable mailbox. Stored mailbox
+identifiers let HQBase authorize deletion tombstones after the message row is gone.
+
+HQBase keeps change-journal rows in this API version. A future release can add bounded retention,
+but it must return `410` with `CHANGE_CURSOR_EXPIRED` when a cursor is older than the retained
+journal. The client then starts a new full bootstrap. HQBase never silently skips an expired range.
+
+An invalid `limit` returns `400` with `INVALID_LIMIT`. A malformed or foreign change cursor returns
+`400` with `INVALID_CHANGE_CURSOR`.
+
 ## Requests and errors
 
 JSON requests use `Content-Type: application/json`. Draft attachment uploads use
@@ -154,8 +215,8 @@ Sending and replying are not idempotent. A client that repeats either request ca
 once and must not retry it blindly. State and draft operations should still use the returned state
 or draft version to avoid overwriting newer work.
 
-HQBase does not currently provide a changes or delta feed. A client refreshes by listing messages
-or conversations again and can use their cursors for bounded pagination.
+Clients use the changes feed for normal message synchronization. They still use full message and
+conversation listings for bootstrap, access changes, and recovery after an expired cursor.
 
 ## Stability policy
 
