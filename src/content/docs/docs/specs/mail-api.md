@@ -197,7 +197,8 @@ but it must return `410` with `CHANGE_CURSOR_EXPIRED` when a cursor is older tha
 journal. The client then starts a new full bootstrap. HQBase never silently skips an expired range.
 
 An invalid `limit` returns `400` with `INVALID_LIMIT`. A malformed or foreign change cursor returns
-`400` with `INVALID_CHANGE_CURSOR`.
+`400` with `INVALID_CHANGE_CURSOR`. A mailbox, folder, or search filter returns `400` with
+`INVALID_CHANGE_FILTER`.
 
 ## Requests and errors
 
