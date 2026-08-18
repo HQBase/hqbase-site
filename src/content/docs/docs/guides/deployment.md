@@ -21,6 +21,11 @@ pnpm run deploy
 The installer creates the required Cloudflare resources, applies database changes, checks the
 installed release, and saves a non-secret record that recovery and removal commands can use later.
 
+If provisioning stops after a resource is recorded, run the same command again. HQBase verifies
+the saved D1, R2, and queue identities and continues at the next step. It never claims an existing
+resource only because its name matches. If the saved state is incomplete or ambiguous, it stops
+without changing Cloudflare and keeps the record for investigation.
+
 It installs the current signed stable release from `HQBase/hqbase`, even when the checked-out source
 has the same version. HQBase will not overwrite a non-empty Worker unless it can verify that the
 Worker contains a valid HQBase release.
@@ -78,4 +83,5 @@ pnpm run hqbase -- destroy
 ```
 
 Choose the exact removal scope and confirm it. HQBase uses its saved deployment record to remove
-only resources it created; shared or unclear resources are preserved.
+only resources it created; shared or unclear resources are preserved. It saves progress after each
+successful removal, so you can correct a Cloudflare error and run the same command again.

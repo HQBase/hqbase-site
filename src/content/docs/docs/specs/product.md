@@ -29,4 +29,24 @@ description: What HQBase is, what it includes, and the boundaries the product ke
 - The paid business model is outside the application. Optional setup or support may be described
   separately without gating product behavior.
 
+## Operator provisioning recovery
+
+This contract applies to the terminal operator commands. It does not change the Deploy to
+Cloudflare button, the setup wizard, or the in-app update flow.
+
+- `pnpm hqbase install` records the Cloudflare account and the ownership of D1, R2, the primary
+  queue, and the dead-letter queue in `.hqbase/deployments/<name>/manifest.json`.
+- The installer records a `creating` state before each create request and records `created`
+  immediately after it verifies the new resource. A retry verifies every `created` or `reused`
+  resource before it continues.
+- A retry does not claim a resource only because its name matches. A `creating` state is ambiguous,
+  so the installer stops and keeps the manifest for manual investigation.
+- D1 identity is its UUID and name. Queue identity is its ID and name. R2 identity is its bucket
+  name in the recorded Cloudflare account.
+- Removal deletes only resources recorded as `created`. It preserves `reused` resources and saves
+  the manifest after each successful deletion. D1 removal always uses the recorded UUID.
+- A complete version 2 manifest can move to the current format only after live identity checks. A
+  version 1 manifest or an incomplete version 2 manifest is not safe to resume or remove and is
+  refused without changing Cloudflare.
+
 The legal text in each repository controls if this policy summary differs from it.

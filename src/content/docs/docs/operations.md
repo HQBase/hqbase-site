@@ -42,12 +42,13 @@ then moved to a separate queue for investigation if they keep failing.
 ## Remove HQBase safely
 
 HQBase keeps a small deployment record listing the Worker, D1 database, R2 bucket, queues, routes,
-and domain records it created. Removal uses that record - not a name or naming pattern - to decide what
-belongs to HQBase.
+and domain records it created. Removal uses that deployment record, not a name or naming pattern,
+together with its Cloudflare account and recorded resource identities. D1 removal uses its UUID,
+not its name.
 
 Resources reused from somewhere else are preserved. If ownership is missing or unclear, removal
 stops before making a change. If a resource cannot be removed, HQBase keeps the deployment record
-so you can fix the problem and retry.
+and its completed cleanup steps so you can fix the problem and retry.
 
 ## What logs contain
 
