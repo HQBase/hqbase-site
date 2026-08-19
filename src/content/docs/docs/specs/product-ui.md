@@ -331,13 +331,14 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - Collapse quoted reply history behind a labelled ellipsis while preserving safe formatting and the
   remote-image choice. A manually forwarded message remains visible as message content even when a
   sender wraps it in markup commonly used for reply quotes.
-- Keep subject, read/unread, star, archive, and Trash actions at the top. Put compact **Reply** and
-  **Forward** actions after every expanded message and larger conversation-level actions after the
-  final message.
+- Keep subject, read/unread, star, archive, and Trash actions at the top. In Trash, replace archive
+  and Trash with **Restore**. Put compact **Reply** and **Forward** actions after every expanded
+  message and larger conversation-level actions after the final message.
 - Opening an unread conversation marks its accessible unread inbound messages read. Star and unstar
   affect every accessible message in the thread. Archive moves accessible Inbox and Catch-all
   messages without moving Sent copies. Trash moves the accessible messages represented by the
-  active folder.
+  active folder. Restore returns inbound mail to Inbox, outbound mail to Sent, and unassigned mail
+  to Catch-all.
 - No list, reader, or conversation action may read or change a mailbox outside the person&apos;s current
   access. See [Mailbox access](/docs/access-control/) for the permission levels.
 
