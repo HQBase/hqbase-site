@@ -43,6 +43,9 @@ Cloudflare button, the setup wizard, or the in-app update flow.
   so the installer stops and keeps the manifest for manual investigation.
 - D1 identity is its UUID and name. Queue identity is its ID and name. R2 identity is its bucket
   name in the recorded Cloudflare account.
+- A deploy that uses the generated configuration records the Worker as deployed immediately after
+  Cloudflare accepts it. Full removal deletes that recorded Worker before it deletes the queues, so
+  Worker bindings cannot block queue removal.
 - Removal deletes only resources recorded as `created`. It preserves `reused` resources and saves
   the manifest after each successful deletion. D1 removal always uses the recorded UUID.
 - A complete version 2 manifest can move to the current format only after live identity checks. A
