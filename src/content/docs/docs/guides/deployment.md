@@ -88,6 +88,45 @@ the active Worker version.
 If an update fails, HQBase prints separate commands for restoring the Worker and D1. Restoring the
 database can discard newer mail or other writes, so it always remains a deliberate choice.
 
+## Move the workspace address
+
+Use the named deployment operator so the local deployment record, generated Wrangler configuration,
+and deployed Worker stay aligned. The hostname must be a zone in the same Cloudflare account, and
+the command needs `CLOUDFLARE_API_TOKEN` with Workers Scripts:Edit, Zone:Read, and DNS:Edit:
+
+```sh
+pnpm hqbase domain \
+  --name production \
+  --app-domain mail.example.com \
+  --keep-service-origin
+```
+
+The command attaches the new hostname, waits until it serves the installation, deploys the
+configuration, and then makes it the main portal address. The previous hostname stays attached
+and redirects people to the new address, so agents, webhooks, and mail discovery keep working.
+
+Use `--move-service-origin` instead of `--keep-service-origin` to move the machine-facing service
+origin to the new hostname. Every agent token, OAuth redirect URI, and webhook on the old origin
+must then be registered again.
+
+Validate the change without contacting Cloudflare, writing files, or deploying:
+
+```sh
+pnpm hqbase domain --name production --app-domain mail.example.com --dry-run
+```
+
+Remove the previous hostname after the move, or remove every custom hostname and serve from the
+default Worker address:
+
+```sh
+pnpm hqbase domain --name production --app-domain mail.example.com --detach-old --yes
+pnpm hqbase domain --name production --detach --move-service-origin --yes
+```
+
+Both commands delete a Cloudflare DNS record, so they need `--yes`. If a step fails, the command
+rolls the change back, keeps the saved deployment record, and prints how to continue. Run the same
+command again to resume.
+
 ## Remove HQBase
 
 Back up D1 and R2 data first. Then run:
