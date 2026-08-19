@@ -410,6 +410,8 @@ D1 changes, or deployed resources and is excluded from production.
 - Primary routes are `/inbox`, `/sent`, `/starred`, `/archived`, `/trash`, and `/catch-all`; a
   message ID appends to its folder route. Private drafts use `/drafts` and `/drafts/<draft-id>`.
   Drafts appears only when the person has drafts or is already on that page.
+- Catch-all contains unassigned inbound mail that did not match a mailbox. Only owners can see or
+  act on this mail. Its owner-only access stays in force after archive or trash actions.
 - Settings routes are `/settings/mailboxes`, `/settings/users`, `/settings/domains`,
   `/settings/notifications`, `/settings/updates`, and `/settings/debug`. `/` and unknown app paths
   normalize to `/inbox`.
@@ -466,6 +468,8 @@ unread experience without a dead control.
   service reports them expired or gone.
 - A new non-duplicate inbound message schedules notifications only for subscribed users who
   currently have read access. Delivery failure never delays or rolls back accepted mail.
+- A new unassigned catch-all message schedules notifications only for subscribed owners. A null
+  mailbox reference from any other cause does not make a message owner-visible.
 - Every push displays a visible notification. Its encrypted payload contains only an opaque app
   route, thread replacement tag, and the recipient&apos;s unread total - never sender, recipient, subject,
   snippet, body, attachment, session, or Cloudflare data.

@@ -119,6 +119,14 @@ content, Agent access is required for organization and sending actions, and Mana
 granted by this API. Owners retain Manager access to every mailbox. An admin without mailbox access
 can see mailbox metadata but cannot read, change, or send its mail.
 
+Inbound mail that did not match a mailbox is unassigned and has no mailbox grant. Only an owner can
+list, read, change, or download this mail through the REST API or MCP. The stored unassigned state
+stays authoritative after an owner archives or trashes the message. A null mailbox reference by
+itself does not grant catch-all access, and a missing message still returns `404`.
+
+The changes feed applies the same live rule. An unassigned deletion tombstone has a null
+`mailboxId`; only owners receive it.
+
 ### Message pagination
 
 `GET /messages` returns one page of messages as a JSON array. `limit` sets the page size. It is an
@@ -134,7 +142,8 @@ request and adds a `cursor`. A client follows that URL to read the next page. Th
 
 A cursor is opaque and versioned. Clients must return it unchanged and must not construct, parse, or
 edit one. A cursor from another list, such as a conversation cursor, is not valid here. A cursor
-never widens mailbox access: every page is filtered by the mailboxes the connected person can read.
+never widens message access: every page is filtered by the mailboxes the connected person can read
+and the owner-only rule for unassigned mail.
 
 A `limit` that is not an integer from 1 to 100 returns `400` with the error code `INVALID_LIMIT`. A
 malformed or foreign cursor returns `400` with the error code `INVALID_CURSOR`.
