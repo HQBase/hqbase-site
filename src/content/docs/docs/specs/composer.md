@@ -43,6 +43,12 @@ When you have saved drafts, navigation shows **Drafts** with your private draft 
 `/drafts` puts the most recently changed draft first. Opening `/drafts/<draft-id>` restores the
 recipients, content, attachments, and reply or forward context in the same composer.
 
+A saved reply or forward reopens with its accessible conversation. The composer identifies the
+exact saved target and stays attached to that message even if newer messages arrived after the
+draft was saved. HQBase does not silently change the target or convert the draft into a new
+message. If the target is missing or no longer accessible, HQBase blocks sending and explains that
+the draft context is unavailable.
+
 Mailbox and search filters also apply to the draft list. When the count reaches zero, **Drafts** is
 hidden unless you are already on that page; it remains visible there so sending or discarding the
 last draft does not leave you stranded.
@@ -119,8 +125,9 @@ The visible Send control is a circular liquid-glass icon button in every compose
 
 New messages use a separate window on desktop and a full-screen composer on compact screens.
 Replies and forwards appear after the conversation on desktop and above it in a focused editor on
-compact screens. Mobile headers stay below the top safe area, and the action footer clears the
-bottom safe area without losing normal padding on devices that have no inset.
+compact screens. Opening a saved reply or forward uses this same conversation-first layout instead
+of the new-message window. Mobile headers stay below the top safe area, and the action footer clears
+the bottom safe area without losing normal padding on devices that have no inset.
 
 ## Technical details
 
