@@ -94,8 +94,8 @@ Use the named deployment operator so the local deployment record, generated Wran
 and deployed Worker stay aligned. The hostname must be a zone in the same Cloudflare account, and
 the command needs `CLOUDFLARE_API_TOKEN` with Workers Scripts:Edit, Zone:Read, and DNS:Edit:
 
-```sh
-pnpm hqbase domain \
+```bash
+pnpm run hqbase -- domain \
   --name production \
   --app-domain mail.example.com \
   --keep-service-origin
@@ -111,16 +111,16 @@ must then be registered again.
 
 Validate the change without contacting Cloudflare, writing files, or deploying:
 
-```sh
-pnpm hqbase domain --name production --app-domain mail.example.com --dry-run
+```bash
+pnpm run hqbase -- domain --name production --app-domain mail.example.com --dry-run
 ```
 
 Remove the previous hostname after the move, or remove every custom hostname and serve from the
 default Worker address:
 
-```sh
-pnpm hqbase domain --name production --app-domain mail.example.com --detach-old --yes
-pnpm hqbase domain --name production --detach --move-service-origin --yes
+```bash
+pnpm run hqbase -- domain --name production --app-domain mail.example.com --detach-old --yes
+pnpm run hqbase -- domain --name production --detach --move-service-origin --yes
 ```
 
 Both commands delete a Cloudflare DNS record, so they need `--yes`. If a step fails, the command

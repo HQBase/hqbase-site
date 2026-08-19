@@ -19,7 +19,7 @@ recovery, or automation origin.
 This contract applies to the terminal operator command. It does not change the setup wizard or the
 in-app portal cutover.
 
-- `pnpm hqbase domain --name <name> --app-domain <host>` moves the canonical portal hostname with an
+- `pnpm run hqbase -- domain --name <name> --app-domain <host>` moves the canonical portal hostname with an
   attach, verify, cutover, redirect sequence. It never changes D1, R2, or queues.
 - The command records the proposed move in `.hqbase/deployments/<name>/manifest.json` before the
   first Cloudflare change, and saves the new hostname only after every step is verified. Other
