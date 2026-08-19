@@ -8,8 +8,9 @@ HQBase web app uses the same API, so external clients follow the same mailbox ac
 threading, attachment, and sending rules as the product UI.
 
 The current base path is `/api/v1`. It covers mailboxes, messages, conversations, attachments,
-drafts, sending, and replying. It does not expose workspace administration, people, invitations,
-domains, setup, updates, audits, sessions, notifications, app secrets, or Cloudflare credentials.
+drafts, sending, replying, and forwarding. It does not expose workspace administration, people,
+invitations, domains, setup, updates, audits, sessions, notifications, app secrets, or Cloudflare
+credentials.
 
 ## Authentication
 
@@ -79,13 +80,17 @@ reverse-domain scheme with no authority component, for example `com.example.mail
 | Permission | What it allows |
 | --- | --- |
 | `mail:read` | List visible mailboxes and conversations, search and open mail, render message HTML, and download attachments. |
-| `mail:write` | Trust a sender's remote media and mark mail read or unread, add or remove stars, archive mail, and move it to Trash. |
-| `mail:send` | Manage drafts and draft attachments, send new mail, and reply. |
+| `mail:write` | Trust a sender's remote media and mark mail read or unread, add or remove stars, archive or unarchive mail, move it to Trash, and restore it. |
+| `mail:send` | Manage drafts and draft attachments, send new mail, reply, and forward. |
 | `offline_access` | Ask the authorization server for an optional refresh token. It is not an API endpoint permission. |
 
 Tokens are further limited by the connected person's current account and mailbox access. The most
 limited result wins. Revoking consent, ending a session, banning a person, requiring password
 setup, or changing mailbox access takes effect on the next request.
+
+HQBase rotates refresh tokens. A second matching refresh request that uses the previous token
+within 30 seconds returns the same rotated token response. Reuse after that window remains a replay
+and invalidates the refresh-token family.
 
 ## Endpoints
 
@@ -102,7 +107,7 @@ All paths below are relative to `/api/v1`.
 | `GET /messages/{id}/inline/{attachmentId}` | `mail:read` | Render a safe inline image from a message. |
 | `GET /attachments/{id}` | `mail:read` | Download an attachment. |
 | `GET /conversations` | `mail:read` | List or search conversation summaries with cursor pagination. |
-| `POST /messages/{id}/{action}` | `mail:write` | Apply `read`, `unread`, `star`, `unstar`, `archive`, or `trash`. |
+| `POST /messages/{id}/{action}` | `mail:write` | Apply `read`, `unread`, `star`, `unstar`, `archive`, `unarchive`, `trash`, or `restore`. |
 | `POST /messages/{id}/remote-media/trust` | `mail:write` | Trust the message sender's remote images for the connected person. |
 | `POST /conversations/{id}/{action}` | `mail:write` | Apply a message action to the accessible part of a conversation. |
 | `GET /drafts` and `GET /drafts/{id}` | `mail:send` | List or get the connected person's drafts. |
@@ -113,6 +118,7 @@ All paths below are relative to `/api/v1`.
 | `DELETE /drafts/{draftId}/attachments/{id}` | `mail:send` | Remove a draft attachment. |
 | `POST /send` | `mail:send` | Send a new message. |
 | `POST /reply` | `mail:send` | Reply to an existing message. |
+| `POST /forward` | `mail:send` | Forward an existing message with optional staged and original attachments. |
 
 Mailbox access still applies after OAuth permission checks. Read access is required to receive mail
 content, Agent access is required for organization and sending actions, and Manager access is not
@@ -121,11 +127,34 @@ can see mailbox metadata but cannot read, change, or send its mail.
 
 Inbound mail that did not match a mailbox is unassigned and has no mailbox grant. Only an owner can
 list, read, change, or download this mail through the REST API or MCP. The stored unassigned state
-stays authoritative after an owner archives or trashes the message. A null mailbox reference by
-itself does not grant catch-all access, and a missing message still returns `404`.
+stays authoritative after an owner archives, unarchives, trashes, or restores the message. A null
+mailbox reference by itself does not grant catch-all access, and a missing message still returns
+`404`.
 
 The changes feed applies the same live rule. An unassigned deletion tombstone has a null
 `mailboxId`; only owners receive it.
+
+### Message actions
+
+`read`, `unread`, `star`, and `unstar` do not change the current folder. `trash` moves the selected
+message or the accessible messages represented by the active conversation folder to Trash.
+`unarchive` is valid only for mail in Archived. It clears the archive timestamp, then returns
+inbound mail to Inbox, outbound mail to Sent, and unassigned mail to Catch-all. `restore` is valid
+only for mail in Trash. It clears the trash and archive timestamps, then returns mail to the same
+active folders.
+
+At conversation level, `archive` moves accessible Inbox and Catch-all messages to Archived. It does
+not move Sent or Trash messages. `unarchive` applies only to accessible Archived messages
+represented by the active Archived folder. An action that does not match any message returns `200`
+with `affected: 0`. Clients must not remove a conversation optimistically when `affected` is zero.
+
+### Draft attachments
+
+`POST /drafts/{id}/attachments` accepts one `file` part. HQBase records the part's `Content-Type`.
+If the part has no type, HQBase records `application/octet-stream`. A file can be at most 25 MiB,
+and all attachments in one draft can total at most 25 MiB. An upload that exceeds either limit
+returns `413 ATTACHMENTS_TOO_LARGE`. Send, reply, and forward requests can name at most 20 staged
+attachments.
 
 ### Message pagination
 
@@ -221,9 +250,9 @@ Authentication errors include a `WWW-Authenticate` challenge containing the requ
 link to the protected-resource metadata. Every response includes `X-Request-Id`; API JSON responses
 are not stored by shared caches.
 
-Sending and replying are not idempotent. A client that repeats either request can send more than
-once and must not retry it blindly. State and draft operations should still use the returned state
-or draft version to avoid overwriting newer work.
+Sending, replying, and forwarding are not idempotent. A client that repeats any of these requests
+can send more than once and must not retry it blindly. State and draft operations should still use
+the returned state or draft version to avoid overwriting newer work.
 
 Clients use the changes feed for normal message synchronization. They still use full message and
 conversation listings for bootstrap, access changes, and recovery after an expired cursor.
