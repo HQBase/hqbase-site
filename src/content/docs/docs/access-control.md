@@ -40,6 +40,15 @@ Workspace roles control administration. Mailbox access controls email. They are 
 Owners and admins can see the list of mailboxes so they can manage access, but that list does not
 reveal messages or attachments.
 
+## Unassigned catch-all mail
+
+Mail sent to an address that does not match a mailbox is unassigned. It belongs to no mailbox, so
+only a workspace owner can read it, organize it, download its attachments, or receive a
+notification for it. Admins and members cannot access unassigned mail.
+
+HQBase keeps this rule when an owner archives or trashes the message. Mail from a mailbox that was
+later deleted does not become unassigned catch-all mail.
+
 ## Login accounts and shared mailboxes are separate
 
 Every person signs in with a unique login email. That address is used for invitations, sign-in, and
@@ -79,7 +88,8 @@ see or change mail that its connected user cannot access. You can give an MCP co
 abilities, but never more.
 
 Access changes take effect on the person's next request. With no mailbox access, messages,
-attachments, sender identities, exports, and mailbox details do not appear at all.
+attachments, sender identities, exports, and mailbox details do not appear at all. Unassigned mail
+appears only to owners.
 
 HQBase records who performs sensitive actions such as changing access, deleting data, recovering
 an account, or managing sessions. These audit records do not contain email content, passwords,
