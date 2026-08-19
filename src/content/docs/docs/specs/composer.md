@@ -115,6 +115,8 @@ the composer. Ordinary **Enter** does not send. The keyboard shortcut uses the s
 duplicate-send protection as the visible **Send** button, and does nothing while sending is
 disabled or an attachment is still uploading.
 
+The visible Send control is a circular liquid-glass icon button in every composer.
+
 New messages use a separate window on desktop and a full-screen composer on compact screens.
 Replies and forwards appear after the conversation on desktop and above it in a focused editor on
 compact screens. Mobile headers stay below the top safe area, and the action footer clears the
