@@ -26,15 +26,15 @@ important state or permissions.
 - Favicons use a transparent square canvas with a small optical inset. Apple touch and installable
   icons use a full-bleed near-black background with safe padding. Maskable icons keep the complete
   mark inside the platform safe zone. Every copy and derivative changes together.
-- Use self-hosted Geist Sans for product text and Geist Mono only for stable identifiers. The app
-  must not depend on Google Fonts, Vercel, or another remote font host.
+- Use self-hosted Inter for product text and the system monospace stack only for stable identifiers.
+  The app must not depend on Google Fonts, Vercel, or another remote font host.
 - Use near-black neutrals, quiet borders, compact type, visible focus, restrained shadows, 8px
   default corners, and 6px controls. Avoid decorative gradients in the installed app.
 - Use direct headings without eyebrow or overline copy. Keep labels visible and use badges only
   when they communicate useful status.
 - Cards group related secondary information. Alerts hold persistent feedback. Primary, outline,
   and ghost buttons express action priority.
-- Use the existing Lucide outline icons with a restrained stroke. Disclosure, selection, and
+- Use the existing Phosphor outline icons with a restrained stroke. Disclosure, selection, and
   account icons remain visually lighter than their labels.
 
 Cloudflare-owned deployment, authorization, and consent screens keep Cloudflare&apos;s design. The
@@ -224,23 +224,23 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 ### Desktop
 
 - Use the complete HQBase logo. The header keeps bounded search on the left and mailbox selection
-  plus Compose on the right.
-- The persistent sidebar lists folders first, then **Connect AI agent**, Settings, and appearance. The
-  account menu sits at the bottom behind a second quiet divider.
+  on the right. The persistent sidebar contains the **New email** action, mail folders, and Settings.
+  The account menu stays at the bottom.
 - The installed app offers explicit Light and Dark modes. Dark is the initial mode until the person
   chooses otherwise. The choice updates browser chrome, persists locally, and does not follow later
   operating-system changes.
-- A fine-pointer device keeps the desktop shell even when its window narrows. Below 1024 by 600 CSS
-  pixels, show a quiet request to enlarge the window rather than switching to the phone layout.
-- The sidebar may be hidden and restored without changing the route or draft. Sidebar/content and
-  conversation-list/reader dividers support pointer and keyboard resizing, useful limits,
-  double-activation reset, and locally remembered widths.
+- Use the desktop shell at viewport widths of 1024 CSS pixels and wider. At smaller widths, use the
+  compact shell on every input type. Do not impose a minimum window width or height, and do not
+  cover the workspace with a request to enlarge the window.
+- The sidebar may be hidden and restored without changing the route or draft. The sidebar and mail
+  content use fixed layout widths. Do not add draggable dividers, keyboard resizing, or locally
+  remembered panel widths.
 
 ### Phones and compact layouts
 
-- A hamburger immediately before search opens a left-side drawer; Compose remains the trailing
-  header action. The drawer shows workspace identity, mailbox selection, folders, **Connect AI
-  agent**, Settings, appearance, and the account menu in that order.
+- A hamburger immediately before search opens a left-side drawer. In mail views, the drawer shows
+  **New email**, mailbox selection, folders, Settings, and the account menu. In Settings, it shows
+  the permitted Settings destinations, an Inbox return action, and the account menu.
 - The drawer keeps the current destination clear, uses touch-friendly targets, traps focus, returns
   focus to its trigger, and closes after selection, Escape, or backdrop dismissal.
 - **All mailboxes** and each accessible mailbox show their unread Inbox count, including zero. The
@@ -261,14 +261,13 @@ Cloudflare account. One deployment owns both `/` and `/docs`.
 
 ### AI agents and Compose
 
-**Connect AI agent** opens a compact dialog that identifies the signed-in user and first switches
-between **MCP** and **Agent Skill**. MCP retains the nested read-only `/mcp` and Mail actions
-`/mcp/full` profile switcher and shows one absolute Streamable HTTP endpoint at a time. Agent Skill
-shows the deployment-local `/skills/hqbase-mail/SKILL.md` URL with **Copy** and **Download Skill**
-actions. An agent following the skill prefers Device Authorization, so the person opens a
-short-code verification URL in their own browser instead of handing an agent a password or
-coordinating a callback. The dialog stays inside compact safe areas and never asks for a manual
-token. See [Connect AI agents](/docs/mcp/) for authorization and behavior.
+Settings > **MCP** identifies the signed-in user and switches between **MCP** and **Agent Skill**.
+MCP retains the nested read-only `/mcp` and Mail actions `/mcp/full` profile switcher and shows one
+absolute Streamable HTTP endpoint at a time. Agent Skill shows the deployment-local
+`/skills/hqbase-mail/SKILL.md` URL with **Copy** and **Download Skill** actions. An agent following
+the skill prefers Device Authorization, so the person opens a short-code verification URL in their
+own browser instead of handing an agent a password or coordinating a callback. The page never asks
+for a manual token. See [Connect AI agents](/docs/mcp/) for authorization and behavior.
 
 New-message Compose is a non-modal bottom-right window on desktop with labelled minimize,
 expand/restore, and close controls. It becomes full-screen on compact layouts. Reply and Forward
@@ -278,8 +277,8 @@ do not create a pop-up or separate browser tab.
 Every layout preserves recipients, sending identity, reply or forward context, attachments,
 formatting, autosave, submission state, durable recovery, dismissal behavior, visible focus, and
 focus return. A reply prefers the exact authorized address that received the selected message and
-keeps labelled, editable **To**, **Cc**, and **Bcc** fields. Minimizing, resizing, or changing layout
-never recreates the draft. The complete persistence and sending rules live in
+keeps labelled, editable **To**, **Cc**, and **Bcc** fields. Minimizing, changing the window size, or
+changing layout never recreates the draft. The complete persistence and sending rules live in
 [Writing and sending mail](/docs/specs/composer/).
 
 ## Reading mail
@@ -323,6 +322,9 @@ The original HTML remains in customer storage; sanitization happens when the mes
 
 ### Conversation reader
 
+- Selecting a conversation replaces the conversation list with a full-page reader that uses the
+  complete mail content area on desktop and compact layouts. A labelled Back action returns to the
+  same list, filters, loaded pages, and scroll position.
 - Show accessible messages in chronological order. Begin with the first and final message; when
   messages sit between them, one labelled divider reports the hidden count and expands or collapses
   them in place.
@@ -413,9 +415,10 @@ D1 changes, or deployed resources and is excluded from production.
   normalize to `/inbox`.
 - Back and forward restore the represented route. Permission-gated Settings routes normalize only
   after the current role is known. Compose remains local UI state.
-- Desktop keeps list and reader side by side. Compact folder routes show only the list; selecting a
-  conversation replaces it with the reader. Back returns to the same filters, loaded pages, and
-  scroll position. The compact list uses one header with the active folder and conversation count.
+- Desktop and compact folder routes show only the conversation list. Selecting a conversation
+  replaces the list with the full-page reader in the complete mail content area. Back returns to
+  the same filters, loaded pages, and scroll position. The compact list uses one header with the
+  active folder and conversation count.
 
 ## Audible feedback
 
