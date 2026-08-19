@@ -272,7 +272,9 @@ for a manual token. See [Connect AI agents](/docs/mcp/) for authorization and be
 New-message Compose is a non-modal bottom-right window on desktop with labelled minimize,
 expand/restore, and close controls. It becomes full-screen on compact layouts. Reply and Forward
 open after the conversation on desktop and above the conversation context on compact layouts; they
-do not create a pop-up or separate browser tab.
+do not create a pop-up or separate browser tab. Opening a saved reply or forward from **Drafts**
+uses the same conversation-first layout, restores the exact saved target, and does not turn the
+draft into a new message.
 
 Every layout preserves recipients, sending identity, reply or forward context, attachments,
 formatting, autosave, submission state, durable recovery, dismissal behavior, visible focus, and
