@@ -47,14 +47,16 @@ details, and send the person back to their workspace to restart authorization af
 
 ## Change the database safely
 
-- Treat the Drizzle schema under `worker/db/` as the complete declaration of the current D1
-  tables, columns, constraints, and indexes.
+- Treat the Drizzle schema under `worker/db/` as the complete declaration of all
+  Drizzle-supported tables, columns, constraints, and indexes. Track unsupported schema objects in
+  `worker/db/schema-custom.ts`; `pnpm db:check` must require each object by name and table.
 - Do not rename or edit an applied migration. The original Wrangler SQL files remain immutable so
   an existing installation keeps the same migration history.
 - Generate a schema migration with `pnpm db:generate --name <short-name>`. Read the generated SQL
   before you commit it.
 - Use `pnpm db:generate:custom --name <short-name>` when a change needs a trigger, data backfill, or
   SQLite feature that Drizzle cannot declare. Keep the custom SQL in the same migration stream.
+  State and test the data invariants for each backfill.
 - Apply migrations only with the HQBase Wrangler commands. Do not use `drizzle-kit push` or
   `drizzle-kit migrate` against an HQBase installation; Wrangler owns the `d1_migrations` ledger
   used by installation, update, staging, and recovery workflows.
@@ -62,9 +64,12 @@ details, and send the person back to their workspace to restart authorization af
 - Test retry and failure behavior when they apply.
 - Before a destructive migration, write down the cutover and rollback plan.
 
-A migration must be safe if a deployment stops halfway through. Do not rely on an operator guessing
-which statements completed. `pnpm db:check` must also prove that the complete migration history and
-the current Drizzle declaration produce the same schema.
+A migration must be safe if a deployment stops halfway through. Inspect `d1_migrations`; never add
+or remove its rows by hand. If the migration is recorded, repair it with a new forward migration or
+use the documented restore procedure. If it is not recorded, retry it only when each custom
+statement and backfill is idempotent and its data invariants still hold; otherwise restore the D1
+checkpoint before retrying. `pnpm db:check` must also prove that the complete migration history,
+the current Drizzle declaration, and the custom-object manifest agree.
 
 ## Test the behavior you changed
 
