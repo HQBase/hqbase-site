@@ -66,10 +66,11 @@ details, and send the person back to their workspace to restart authorization af
 
 A migration must be safe if a deployment stops halfway through. Inspect `d1_migrations`; never add
 or remove its rows by hand. If the migration is recorded, repair it with a new forward migration or
-use the documented restore procedure. If it is not recorded, retry it only when each custom
-statement and backfill is idempotent and its data invariants still hold; otherwise restore the D1
-checkpoint before retrying. `pnpm db:check` must also prove that the complete migration history,
-the current Drizzle declaration, and the custom-object manifest agree.
+use the documented restore procedure. If it is not recorded, retry it only after a test proves the
+entire migration safe to rerun, including generated SQL, custom statements, and backfills with their
+data invariants. Otherwise restore the D1 checkpoint before retrying. `pnpm db:check` must also prove
+that the complete migration history, the current Drizzle declaration, and the custom-object manifest
+agree.
 
 ## Test the behavior you changed
 
