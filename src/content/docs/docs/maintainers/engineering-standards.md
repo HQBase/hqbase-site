@@ -47,13 +47,24 @@ details, and send the person back to their workspace to restart authorization af
 
 ## Change the database safely
 
-- Put every schema change in a numbered migration.
+- Treat the Drizzle schema under `worker/db/` as the complete declaration of the current D1
+  tables, columns, constraints, and indexes.
+- Do not rename or edit an applied migration. The original Wrangler SQL files remain immutable so
+  an existing installation keeps the same migration history.
+- Generate a schema migration with `pnpm db:generate --name <short-name>`. Read the generated SQL
+  before you commit it.
+- Use `pnpm db:generate:custom --name <short-name>` when a change needs a trigger, data backfill, or
+  SQLite feature that Drizzle cannot declare. Keep the custom SQL in the same migration stream.
+- Apply migrations only with the HQBase Wrangler commands. Do not use `drizzle-kit push` or
+  `drizzle-kit migrate` against an HQBase installation; Wrangler owns the `d1_migrations` ledger
+  used by installation, update, staging, and recovery workflows.
 - Test the migration against an empty database and a populated database.
 - Test retry and failure behavior when they apply.
 - Before a destructive migration, write down the cutover and rollback plan.
 
 A migration must be safe if a deployment stops halfway through. Do not rely on an operator guessing
-which statements completed.
+which statements completed. `pnpm db:check` must also prove that the complete migration history and
+the current Drizzle declaration produce the same schema.
 
 ## Test the behavior you changed
 
