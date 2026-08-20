@@ -38,7 +38,8 @@ URL as a credential because anyone who has it can post to that channel.
    channel.
 4. It uploads the records and archive to a draft GitHub Release named `vX.Y.Z`.
 5. Disposable staging installs the previous stable release, creates a workspace, and updates it to
-   the exact candidate through the normal customer update path.
+   the exact candidate through the normal customer update path. It waits until the public health
+   response reports that exact candidate version, so an old healthy Worker cannot pass the gate.
 6. Staging checks the deployed app, sign-in, mailbox access, diagnostics, backup, and restore.
 7. The workflow publishes the draft only if those checks pass.
 8. After the public signature and archive checks pass, the workflow posts the complete release
@@ -88,8 +89,8 @@ Local tests must cover:
 - failure handling and the recovery instructions shown to an operator.
 
 Release staging must install the previous stable signed release and apply the exact candidate
-through the normal updater before checking health, login, mailbox access, diagnostics, backup, and
-restore.
+through the normal updater. The public health response must report the exact candidate version
+before staging checks login, mailbox access, diagnostics, backup, and restore.
 
 Receiving real public email through Cloudflare Email Routing remains a separate candidate check
 until dedicated automation exists.

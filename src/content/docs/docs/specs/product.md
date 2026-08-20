@@ -26,6 +26,9 @@ description: What HQBase is, what it includes, and the boundaries the product ke
   domain and does not implicitly create a mailbox.
 - Installation and updates consume public, signed release assets from the canonical GitHub
   repository.
+- `/api/health` reports the Worker version that serves the request. It reports `null` when the
+  deployment has no release-version binding. Signed-release staging waits until this value matches
+  the exact candidate before it starts candidate checks.
 - The paid business model is outside the application. Optional setup or support may be described
   separately without gating product behavior.
 
