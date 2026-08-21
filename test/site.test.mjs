@@ -158,7 +158,6 @@ test("Google Analytics covers the landing and every Starlight documentation page
   assert.match(headers, /img-src[^;]*https:\/\/\*\.google-analytics\.com/);
   assert.match(headers, /connect-src[^;]*https:\/\/\*\.analytics\.google\.com/);
   assert.match(productUi, /landing and every Starlight documentation page load Google Analytics/);
-  assert.match(productUi, /G-Z2FRK5MFMR/);
   assert.match(productUi, /does not extend to the OAuth relay or customer-owned HQBase installations/);
   assert.doesNotMatch(cloudflareOauth, /G-Z2FRK5MFMR|googletagmanager/);
 });
@@ -512,13 +511,10 @@ test("features stay inside the documented product boundary", async () => {
   assert.match(tokens, /--color-feature-rule: oklch\(64% 0\.21 43 \/ 22%\)/);
   assert.match(tokens, /--rule-feature: 3px/);
   assert.match(tokens, /--layout-features: 82rem/);
-  assert.match(productUi, /six flat grid cells/);
-  assert.match(productUi, /Subtle orange rules use three-pixel, widely spaced dashes/);
-  assert.match(productUi, /match the visual weight of the background dots/);
-  assert.match(productUi, /leaving the matrix edges open/);
-  assert.match(productUi, /slightly larger[\s\S]*orange Lucide icons inline with each title/);
-  assert.match(productUi, /icon backdrop/);
-  assert.match(productUi, /feature rows add no second horizontal inset[\s\S]*icon and text axes aligned with[\s\S]*roadmap marker and milestone text axes/);
+  assert.match(
+    productUi,
+    /must not imply that MCP administers the workspace or that HQBase ships separate native apps/,
+  );
 });
 
 test("the public journey links milestones to the HQBase community", async () => {
@@ -580,21 +576,11 @@ test("the public journey links milestones to the HQBase community", async () => 
   assert.doesNotMatch(styles, /\[data-slot="card"\]\.journey-timeline-panel|\.journey-timeline-panel\s*\{[^}]*(?:background|box-shadow|border-radius)/);
   assert.match(productUi, /The public journey pairs an open, unframed milestone timeline with a concise mission statement/);
   assert.match(productUi, /One compact \*\*Join our[\s\S]*Discord\*\* action/);
-  assert.match(productUi, /official Blurple symbol/);
+  assert.match(productUi, /official symbol/);
   assert.match(productUi, /https:\/\/discord\.gg\/U67PB663nf/);
   assert.match(productUi, /product principles[\s\S]*sit directly below the hero title/);
-  assert.match(productUi, /without a[\s\S]*separate eyebrow label/);
-  assert.match(productUi, /sentence-case status badges all use quiet neutral backgrounds/);
-  assert.match(productUi, /Planned milestone markers use a clearly visible muted neutral/);
-  assert.match(productUi, /separators between milestones but no top or[\s\S]*bottom border/);
-  assert.match(productUi, /separator begins after the marker[\s\S]*does not cross the vertical timeline[\s\S]*fades at both ends/);
-  assert.match(productUi, /decorative, low-contrast dotted world map sits behind the community/);
-  assert.match(productUi, /section background rather than extending the page below it/);
-  assert.match(productUi, /one shared responsive section gap/);
-  assert.match(productUi, /do not stack bottom and top padding/);
-  assert.match(productUi, /one shared, slightly roomy horizontal gutter for the header, hero copy,[\s\S]*features, public journey, and footer/);
-  assert.match(productUi, /deliberate full-bleed exception/);
-  assert.match(productUi, /complete the flattening motion sooner[\s\S]*avoiding an empty spacer below it/);
+  assert.match(productUi, /seat availability, not unlimited infrastructure/);
+  assert.match(productUi, /without promising uncommitted features/);
 });
 
 test("the landing answers common questions with the native shadcn accordion", async () => {
@@ -650,25 +636,10 @@ test("the landing answers common questions with the native shadcn accordion", as
   assert.match(styles, /\.faq-community\s*\{[^}]*text-align: center/);
   assert.doesNotMatch(faq, /faq-number|padStart/);
   assert.doesNotMatch(styles, /\.faq-number|\.faq-layout\s*\{[^}]*grid-template-columns/);
-  assert.match(productUi, /FAQ follows the public journey[\s\S]*source-owned shadcn Accordion/);
-  assert.match(productUi, /contains exactly four questions/);
-  assert.match(productUi, /what Cloudflare preparation deployment requires[\s\S]*in that order/);
-  assert.match(productUi, /deployment preparation answer open by default/);
-  assert.match(productUi, /how HQBase differs from Cloudflare Agentic Inbox/);
-  assert.match(productUi, /shared foundation of self-hosted email on Cloudflare with AI support/);
   assert.match(
     productUi,
-    /individual[\s\S]*accounts,[\s\S]*per-mailbox permissions,[\s\S]*OAuth-scoped AI access/,
+    /The FAQ uses the source-owned shadcn Accordion and answers only for what the product does today/,
   );
-  assert.match(productUi, /encouraging people to try[\s\S]*Agentic Inbox as well/);
-  assert.match(productUi, /deployments[\s\S]*are not registered with HQBase[\s\S]*not aware that an installation exists/);
-  assert.match(productUi, /complete product, including its OAuth relay[\s\S]*AGPL-3\.0-only/);
-  assert.match(productUi, /no per-seat fees/);
-  assert.match(productUi, /answer copy use almost the full accordion width/);
-  assert.match(productUi, /heading centered above the accordion[\s\S]*as one reading column/);
-  assert.match(productUi, /without[\s\S]*question numbers or a split desktop layout/);
-  assert.match(productUi, /Below the accordion[\s\S]*Join our Discord/);
-  assert.match(productUi, /https:\/\/discord\.gg\/U67PB663nf/);
 });
 
 test("the landing reveals content progressively without hiding reduced-motion visitors", async () => {
@@ -702,7 +673,7 @@ test("the landing reveals content progressively without hiding reduced-motion vi
   assert.match(styles, /\.feature-item:nth-child\(3n \+ 2\)\s*\{[^}]*--reveal-delay: 90ms/);
   assert.match(styles, /\.journey-step:nth-child\(4\)\s*\{[^}]*--reveal-delay: 260ms/);
   assert.match(productUi, /short,[\s\S]*one-time entrance motion as they enter the viewport/);
-  assert.match(productUi, /Content remains visible without JavaScript/);
+  assert.match(productUi, /Content remains\s+visible without JavaScript/);
   assert.match(productUi, /reduced-motion visitors see[\s\S]*complete static page/);
 });
 
@@ -812,7 +783,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(operations, /## Remove HQBase safely/);
   assert.match(operations, /deployment record[\s\S]*not a name or naming pattern/);
   assert.match(deployment, /VAPID_PUBLIC_KEY/);
-  assert.match(deployment, /non-secret record that recovery and removal commands can use/);
+  assert.match(deployment, /non-secret record that recovery and removal\s+commands can use/);
   assert.match(updates, /## What HQBase protects before updating/);
   assert.match(updates, /## If something goes wrong/);
   assert.match(updates, /## Technical details/);

@@ -15,20 +15,34 @@ From the official public repository, run:
 
 ```bash
 pnpm install
-pnpm run deploy
+pnpm hqbase install --name production
 ```
 
-The installer creates the required Cloudflare resources, applies database changes, checks the
-installed release, and saves a non-secret record that recovery and removal commands can use later.
+Choose a short name for the deployment; this example uses `production`. Keep that name for later
+operator commands. The installer creates the required Cloudflare resources, applies database
+changes, checks the installed release, and saves a non-secret record that recovery and removal
+commands can use later.
 
-If provisioning stops after a resource is recorded, run the same command again. HQBase verifies
-the saved D1, R2, and queue identities and continues at the next step. It never claims an existing
-resource only because its name matches. If the saved state is incomplete or ambiguous, it stops
-without changing Cloudflare and keeps the record for investigation.
+If provisioning stops after a resource is recorded, run the same install command again with the
+same name and options. HQBase resumes from its saved record - see
+[The deployment record](#the-deployment-record) for the exact rules.
 
 It installs the current signed stable release from `HQBase/hqbase`, even when the checked-out source
 has the same version. HQBase will not overwrite a non-empty Worker unless it can verify that the
 Worker contains a valid HQBase release.
+
+## The deployment record
+
+`pnpm hqbase install --name <name>` records the Cloudflare account and the resources it owns in
+`.hqbase/deployments/<name>/manifest.json`. Each create request first records a `creating` state,
+then `created` once the new resource is verified. A retry re-verifies every recorded identity
+before it continues: D1 by UUID and name, queues by ID and name, R2 by bucket name. A `creating`
+entry is ambiguous, so the installer stops and keeps the record for investigation instead of
+claiming a resource by name alone.
+
+Removal deletes only resources recorded as `created`, preserves anything recorded as `reused`,
+saves progress after each deletion, and deletes the Worker before its queues so Worker bindings
+cannot block queue removal. Old or incomplete records are refused without changing Cloudflare.
 
 ## App secrets
 
@@ -56,11 +70,11 @@ deployment commands.
 
 By default, HQBase creates:
 
-- Worker: `hqbase`
-- D1 database: `hqbase`
-- R2 bucket: `hqbase-mail`
-- Queue: `hqbase-jobs`
-- Failed-job queue: `hqbase-jobs-dlq`
+- Worker: `hqbase-<name>`
+- D1 database: `hqbase-<name>`
+- R2 bucket: `hqbase-<name>-mail`
+- Queue: `hqbase-<name>-jobs`
+- Failed-job queue: `hqbase-<name>-jobs-dlq`
 
 You can override these names in installer configuration. A fresh installation creates fresh
 resources and supports a custom Worker name.

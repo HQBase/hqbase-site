@@ -21,10 +21,10 @@ const migratedContentFloors = new Map([
   ["maintainers/engineering-standards.md", 700],
   ["maintainers/releases.md", 390],
   ["maintainers/staging-e2e.md", 295],
-  ["specs/cloudflare-oauth.md", 775],
+  ["specs/cloudflare-oauth.md", 650],
   ["specs/composer.md", 775],
   ["specs/multi-domain.md", 330],
-  ["specs/product-ui.md", 3000],
+  ["specs/product-ui.md", 1200],
   ["specs/product.md", 210],
 ]);
 

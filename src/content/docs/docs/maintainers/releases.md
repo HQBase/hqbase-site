@@ -56,15 +56,11 @@ warning but does not invalidate an otherwise verified signed release.
 Manual staging is still available for a reviewed commit, but the signed-release workflow is the
 only path that publishes an official customer release.
 
-## What customers see
+## What customers receive
 
-- Owners and admins see **Update available** only when a newer compatible signed release exists.
-- **Settings → Updates** explains the installed version, target version, compatibility, recovery
-  checkpoint, and rollback options.
-- The customer approves a short-lived Cloudflare permission for the specific Workers Build. HQBase
-  revokes it after the build starts.
-- The build reads the installed version from the active production Worker and verifies the public
-  release record and archive. It never labels unsigned source as a released version.
+Customers install and update through the normal product flow described in
+[Updates](/docs/guides/updates/): the app verifies every signature before it changes anything,
+records a recovery checkpoint first, and keeps rollback as a separate deliberate action.
 
 ## If the candidate fails
 
@@ -72,8 +68,6 @@ only path that publishes an official customer release.
 - After the recovery checkpoint but before deployment, leave the existing Worker active.
 - After a deployment failure, show the recorded Worker-version and D1-bookmark recovery commands.
 - Restore the D1 bookmark only after confirming a data problem; it can discard newer writes.
-- Stop before extraction or migration when a signature or checksum is wrong, the product does not
-  match, the installed version is unsupported, or a required file is unavailable.
 
 Fix the cause and create a new candidate. Do not publish a failed draft or quietly replace files in
 an existing candidate.
@@ -88,9 +82,6 @@ Local tests must cover:
 - bad signatures and checksum mismatches; and
 - failure handling and the recovery instructions shown to an operator.
 
-Release staging must install the previous stable signed release and apply the exact candidate
-through the normal updater. The public health response must report the exact candidate version
-before staging checks login, mailbox access, diagnostics, backup, and restore.
-
-Receiving real public email through Cloudflare Email Routing remains a separate candidate check
-until dedicated automation exists.
+Release staging must run the candidate through the normal customer update path from the previous
+stable release and pass the full check list of step 6 above. Receiving real public email through
+Cloudflare Email Routing remains a separate candidate check until dedicated automation exists.
