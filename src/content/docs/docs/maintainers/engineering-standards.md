@@ -47,13 +47,23 @@ details, and send the person back to their workspace to restart authorization af
 
 ## Change the database safely
 
-- Put every schema change in a numbered migration.
+- Put every schema change in a numbered SQL migration and review the SQL before you commit it.
+- Apply migrations only with the HQBase Wrangler commands. Wrangler owns the `d1_migrations`
+  ledger used by installation, update, staging, and recovery workflows.
+- Keep the Drizzle table definitions under `worker/db/` aligned with the resulting database schema.
+  Drizzle provides runtime types and queries; it does not generate or apply HQBase migrations.
+- Do not rename or edit an applied migration. Existing installations must keep the same migration
+  history.
+- State and test the data invariants for each backfill.
 - Test the migration against an empty database and a populated database.
 - Test retry and failure behavior when they apply.
 - Before a destructive migration, write down the cutover and rollback plan.
 
-A migration must be safe if a deployment stops halfway through. Do not rely on an operator guessing
-which statements completed.
+A migration must be safe if a deployment stops halfway through. Inspect `d1_migrations`; never add
+or remove its rows by hand. If the migration is recorded, repair it with a new forward migration or
+use the documented restore procedure. If it is not recorded, retry it only after a test proves the
+entire SQL migration safe to rerun, including schema statements and backfills with their data
+invariants. Otherwise restore the D1 checkpoint before retrying.
 
 ## Test the behavior you changed
 
