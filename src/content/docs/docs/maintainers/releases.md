@@ -41,8 +41,12 @@ URL as a credential because anyone who has it can post to that channel.
    the exact candidate through the normal customer update path. It waits until the public health
    response reports that exact candidate version, so an old healthy Worker cannot pass the gate.
 6. Staging checks the deployed app, sign-in, mailbox access, diagnostics, backup, and restore.
-7. The workflow publishes the draft only if those checks pass.
-8. After the public signature and archive checks pass, the workflow posts the complete release
+7. The workflow advances the `deploy` branch to the exact validated candidate commit. If
+   publication fails while the release is still a draft, it restores the previous branch commit.
+8. The workflow publishes the draft only if those checks and the branch update pass.
+9. It verifies that `deploy`, the public release, and the signed stable manifest identify the same
+   candidate.
+10. After the public signature and archive checks pass, the workflow posts the complete release
    notes to Discord. It splits long notes into numbered messages without removing content.
 
 After publication, download `releases/latest/download/stable.json` directly, verify its signature,
@@ -55,6 +59,11 @@ warning but does not invalidate an otherwise verified signed release.
 
 Manual staging is still available for a reviewed commit, but the signed-release workflow is the
 only path that publishes an official customer release.
+
+The official Deploy to Cloudflare button targets `HQBase/hqbase` at the `deploy` branch. Do not
+move that branch by hand. Moving it before publication fails closed because its committed product
+version is newer than the previous stable release. Publishing first would expose a new signed
+artifact to an older deployment configuration.
 
 ## What customers receive
 
@@ -70,7 +79,8 @@ records a recovery checkpoint first, and keeps rollback as a separate deliberate
 - Restore the D1 bookmark only after confirming a data problem; it can discard newer writes.
 
 Fix the cause and create a new candidate. Do not publish a failed draft or quietly replace files in
-an existing candidate.
+an existing candidate. If a canceled workflow leaves `deploy` on an unpublished candidate, move it
+back to the commit named by the latest published release tag before accepting new installations.
 
 ## Evidence required
 

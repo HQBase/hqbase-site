@@ -195,6 +195,7 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(page, /On your Cloudflare infrastructure\./);
   assert.match(page, /Free\. Open source\. Self-hosted\. Unlimited seats\./);
   assert.match(page, /<HeroActions client:load \/>/);
+  assert.match(page, /HQBase%2Fhqbase%2Ftree%2Fdeploy/);
   assert.doesNotMatch(page, /<Button asChild/);
   assert.match(heroActions, /<DialogTrigger asChild>/);
   assert.match(heroActions, /className="hero-button hero-deploy-trigger"/);
@@ -210,6 +211,7 @@ test("the landing remains the compact HQBase product page", async () => {
   assert.match(heroActions, /Add a domain/);
   assert.match(heroActions, /<DialogClose asChild>[\s\S]*Cancel/);
   assert.match(heroActions, /href={deployUrl}>[\s\S]*Confirm/);
+  assert.match(heroActions, /HQBase%2Fhqbase%2Ftree%2Fdeploy/);
   assert.match(heroActions, /className="hero-deploy-label">Deploy to Cloudflare/);
   assert.match(heroActions, /variant="outline"/);
   assert.match(heroActions, /href={deployUrl}/);
@@ -732,6 +734,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
     gettingStarted,
     /\[!\[Deploy to Cloudflare\]\(https:\/\/deploy\.workers\.cloudflare\.com\/button\)\]\(https:\/\/deploy\.workers\.cloudflare\.com\/\?url=/,
   );
+  assert.match(gettingStarted, /HQBase%2Fhqbase%2Ftree%2Fdeploy/);
   assert.match(
     gettingStarted,
     /## What you need[\s\S]*Workers Paid[\s\S]*R2 subscription[\s\S]*Cloudflare DNS[\s\S]*## Install HQBase/,
@@ -800,6 +803,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(composer, /<summary>Automated and manual checks<\/summary>/);
   assert.doesNotMatch(composer, /## Acceptance|optimistic revision|bounded quoted copy/);
   assert.doesNotMatch(product, /Status:|Visibility:|text: Active/);
+  assert.match(product, /button clones the canonical repository's `deploy` branch/);
   assert.match(productUi, /## At a glance/);
   assert.match(productUi, /## Public website and documentation/);
   assert.match(productUi, /## Installed app layout/);
@@ -835,6 +839,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(engineering, /## Before you call it done/);
   assert.match(releases, /## Publish the release/);
   assert.match(releases, /previous stable release/);
+  assert.match(releases, /advances the `deploy` branch to the exact validated candidate commit/);
   assert.match(releases, /## Evidence required/);
   assert.match(
     releases,

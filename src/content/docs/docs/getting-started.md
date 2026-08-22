@@ -29,10 +29,10 @@ you give it permission during setup.
 
 Use the official **Deploy to Cloudflare** button:
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2FHQBase%2Fhqbase)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2FHQBase%2Fhqbase%2Ftree%2Fdeploy)
 
-Cloudflare will ask you to choose an account and approve the resources HQBase needs. It then opens
-HQBase's setup page.
+The button always uses the source commit of the latest signed HQBase release. Cloudflare will ask
+you to choose an account and approve the resources HQBase needs. It then opens HQBase's setup page.
 
 You can safely leave and return to setup later. HQBase remembers where you stopped.
 

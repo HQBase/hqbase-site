@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 
 const deployUrl =
-  "https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2FHQBase%2Fhqbase"
+  "https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2FHQBase%2Fhqbase%2Ftree%2Fdeploy"
 const workersPlansUrl = "https://developers.cloudflare.com/workers/platform/pricing/"
 const addSiteUrl = "https://developers.cloudflare.com/fundamentals/manage-domains/add-site/"
 
