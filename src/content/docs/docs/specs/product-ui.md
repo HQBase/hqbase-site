@@ -336,12 +336,13 @@ The original HTML remains in customer storage; sanitization happens when the mes
   visible and in its original order. Keep a signature after the quote visible. When an established
   client uses a divider or header as the quote marker, include the following previous-message
   siblings in the quoted block.
-- Treat Gmail's `gmail_quote_container` as a forward wrapper, not as quoted reply history. Collapse
-  its inner `gmail_quote` only when one exists. Do not infer quote structure from the message
-  subject.
-- For plain text, recognize a conventional attribution line that contains a sender email address,
-  ends with a colon, and is followed by one or more `>` quoted lines. Permit blank lines between the
-  attribution and quoted text, and do not depend on the English words `On` or `wrote`.
+- Collapse a complete Gmail reply `gmail_quote_container`, including its attribution. Keep the
+  complete container visible when its `gmail_attr` contains Gmail's forwarded-message divider, and
+  do not collapse nested quote markup inside that visible forward. Do not infer quote structure
+  from the message subject.
+- For plain text, recognize a conventional attribution block that contains a sender email address,
+  ends with a colon, and is followed by one or more `>` quoted lines. Permit wrapped attribution
+  lines and blank lines before the quoted text. Do not depend on the English words `On` or `wrote`.
 - When content before a recognized quote is empty, show the quote without an ellipsis. Printing and
   other full-content views include every safe fragment without changing the stored original.
 - Keep subject, read/unread, star, archive, and Trash actions at the top. In Archived, replace
