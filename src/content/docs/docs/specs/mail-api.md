@@ -134,6 +134,13 @@ mailbox reference by itself does not grant catch-all access, and a missing messa
 The changes feed applies the same live rule. An unassigned deletion tombstone has a null
 `mailboxId`; only owners receive it.
 
+### Message search
+
+The `search` value is one literal substring. HQBase searches the subject, sender address, To
+recipients, snippet, and plain-text body. The characters `%`, `_`, and `\` are ordinary search
+text. They do not enable wildcards or escapes. Mailbox access and the requested mailbox and folder
+filters still apply, and search does not change the activity-time order used by pagination.
+
 ### Message actions
 
 `read`, `unread`, `star`, and `unstar` do not change the current folder. `trash` moves the selected
