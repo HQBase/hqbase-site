@@ -4,8 +4,8 @@ description: See what HQBase configures and fix common sending or receiving prob
 ---
 
 HQBase needs a domain whose DNS is managed by Cloudflare. The domain can be registered anywhere.
-If setup finishes successfully, there is no separate Email Routing or Email Sending step for you
-to complete.
+For a send-and-receive workspace, there is no separate Email Routing or Email Sending step for you
+to complete. Outbound sending is optional and requires Workers Paid for external recipients.
 
 ## What you need to do
 
@@ -27,8 +27,10 @@ After deployment, HQBase opens `/setup`:
 
 1. Approve the Cloudflare account, zones, and permissions HQBase requests.
 2. Choose the primary email domain and the subdomain where the HQBase app will live.
-3. Select **Connect domain and continue**.
-4. Wait while HQBase configures Cloudflare and checks the result.
+3. Leave **Enable outbound sending** on for a full send-and-receive workspace, or turn it off for a
+   receive-only workspace.
+4. Select **Connect domain and continue**.
+5. Wait while HQBase configures Cloudflare and checks the result.
 
 HQBase continues to owner setup only after the required checks pass. The owner's login email must
 remain available when HQBase is offline, so it cannot use a domain connected to this workspace.
@@ -40,8 +42,12 @@ With the temporary Cloudflare permission approved during setup, HQBase:
 - connects the chosen app hostname to the Worker;
 - enables Email Routing DNS for each selected domain;
 - sends all incoming mail for the domain to the HQBase Worker;
-- enables Email Sending when the account has Workers Paid; and
-- checks that receiving and sending are ready before continuing.
+- enables Email Sending when selected and the account has Workers Paid; and
+- checks that receiving is ready, plus sending when selected, before continuing.
+
+In receive-only mode, HQBase records sending as disabled. It does not offer the domain's addresses
+as sending identities and does not require a default From mailbox. Sending remains blocked until an
+owner or admin enables it from **Settings → Domains** and Cloudflare reports it ready.
 
 The deployment flow has already created the Worker, D1 database, R2 bucket, queues, and bindings.
 The temporary Cloudflare access token is stored only as a masked Worker secret. HQBase deletes and
@@ -69,6 +75,13 @@ Check these items if HQBase cannot send:
 
 If attachments are missing, confirm that the `MAIL_OBJECTS` R2 bucket exists and is bound to the
 Worker.
+
+## Enable sending after setup
+
+An owner or admin can open **Settings → Domains** and select **Enable sending** for a receive-only
+domain. HQBase requests fresh Cloudflare authorization, enables Email Sending, checks the result,
+and changes the domain to ready only after the check passes. Choose a default From mailbox in
+**Settings → Mailboxes** after the first sending domain becomes ready.
 
 ## Technical details
 
