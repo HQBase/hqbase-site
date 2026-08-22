@@ -45,11 +45,12 @@ deliberate confirmation click. Content-Length is optional and checked when prese
 byte count enforces the limit. Invalid, expired, or incomplete handoffs render a bounded HQBase
 error page instead of raw JSON.
 
-The confirmation response preserves an origin-only referrer policy so the form POST carries its
-origin for CSRF validation without forwarding the authorization URL, query, signed state, or PKCE
-challenge. Its `form-action` policy permits only the relay origin and Cloudflare&apos;s dashboard
-origin. Relay HTML is `no-store, no-transform`: Cloudflare edge features must not inject analytics
-or any other script into authorization and error pages.
+The confirmation response uses `Referrer-Policy: strict-origin`, so its `Referer` header reveals
+only the relay origin and not the authorization path, query, signed state, or PKCE challenge. The
+continuation POST separately requires the exact relay `Origin` for CSRF validation. Its
+`form-action` policy permits only the relay origin and Cloudflare&apos;s dashboard origin. Relay HTML is
+`no-store, no-transform`: Cloudflare edge features must not inject analytics or any other script
+into authorization and error pages.
 
 ## Permissions and recovery
 

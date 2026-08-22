@@ -7,9 +7,10 @@ HQBase should feel like one calm, practical product everywhere. The public site 
 gets a workspace running, and the installed app helps people work with shared mail without hiding
 important state or permissions.
 
-This specification records behavior, content, and accessibility contracts. It does not record
-implementation values such as exact sizes, colors, timings, or markup. Code, design reviews, and
-tests own those details. Specialized topics live in their own specifications: sending in
+This specification records behavior, content, and accessibility contracts. It records exact
+thresholds only when they define an accessibility or responsive behavior contract. Code, design
+reviews, and tests own other implementation values such as colors, timings, and markup.
+Specialized topics live in their own specifications: sending in
 [Writing and sending mail](/docs/specs/composer/), Cloudflare authorization in
 [Cloudflare access](/docs/specs/cloudflare-oauth/), permissions in
 [Mailbox access](/docs/access-control/), and AI connections in [Connect AI agents](/docs/mcp/).
@@ -37,11 +38,12 @@ tests own those details. Specialized topics live in their own specifications: se
 
 ## Authorization surfaces
 
-Cloudflare-owned deployment, authorization, and consent screens keep Cloudflare&apos;s design. The
-OAuth relay and Device Authorization verification pages use the product brand but remain small
-confirmation screens, not marketing pages. The verification page accepts a short code from the URL
-or manual entry, shows the signed-in identity, requesting client, requested permissions, and exact
-code before approval, never approves automatically, and never reveals a device code or token.
+Cloudflare-hosted deployment, authorization, and consent screens keep Cloudflare&apos;s design. The
+resulting HQBase deployment remains in the customer&apos;s Cloudflare account. The OAuth relay and
+Device Authorization verification pages use the product brand but remain small confirmation
+screens, not marketing pages. The verification page accepts a short code from the URL or manual
+entry, shows the signed-in identity, requesting client, requested permissions, and exact code before
+approval, never approves automatically, and never reveals a device code or token.
 
 ## Public website and documentation
 

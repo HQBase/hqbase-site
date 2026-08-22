@@ -35,10 +35,10 @@ Worker contains a valid HQBase release.
 
 `pnpm hqbase install --name <name>` records the Cloudflare account and the resources it owns in
 `.hqbase/deployments/<name>/manifest.json`. Each create request first records a `creating` state,
-then `created` once the new resource is verified. A retry re-verifies every recorded identity
-before it continues: D1 by UUID and name, queues by ID and name, R2 by bucket name. A `creating`
-entry is ambiguous, so the installer stops and keeps the record for investigation instead of
-claiming a resource by name alone.
+then `created` once the new resource is verified. A retry re-verifies each created or reused D1,
+queue, and R2 identity before it continues: D1 by UUID and name, queues by ID and name, and R2 by
+bucket name. A `creating` entry is ambiguous, so the installer stops and keeps the record for
+investigation instead of claiming a resource by name alone.
 
 Removal deletes only resources recorded as `created`, preserves anything recorded as `reused`,
 saves progress after each deletion, and deletes the Worker before its queues so Worker bindings

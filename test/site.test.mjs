@@ -576,7 +576,7 @@ test("the public journey links milestones to the HQBase community", async () => 
   assert.doesNotMatch(styles, /\[data-slot="card"\]\.journey-timeline-panel|\.journey-timeline-panel\s*\{[^}]*(?:background|box-shadow|border-radius)/);
   assert.match(productUi, /The public journey pairs an open, unframed milestone timeline with a concise mission statement/);
   assert.match(productUi, /One compact \*\*Join our[\s\S]*Discord\*\* action/);
-  assert.match(productUi, /official symbol/);
+  assert.match(productUi, /Discord&apos;s official symbol/);
   assert.match(productUi, /https:\/\/discord\.gg\/U67PB663nf/);
   assert.match(productUi, /product principles[\s\S]*sit directly below the hero title/);
   assert.match(productUi, /seat availability, not unlimited infrastructure/);

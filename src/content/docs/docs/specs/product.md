@@ -30,9 +30,9 @@ multi-domain administration.
 
 ## Product rules
 
-- Every person signs in with a unique login email. The workspace owner&apos;s login is an
-  authentication and recovery identity: it may use any valid email domain and never implicitly
-  becomes a shared mailbox.
+- Every person signs in with a unique login email that does not use a domain connected to the
+  workspace. The workspace owner&apos;s login is an authentication and recovery identity; it never
+  implicitly becomes a shared mailbox.
 - Mailbox access is explicit and never inherited from role, domain ownership, or inference. The one
   exception is stated directly: workspace owners can reach every mailbox so the workspace stays
   recoverable.
