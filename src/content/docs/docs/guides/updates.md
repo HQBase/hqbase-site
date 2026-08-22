@@ -25,11 +25,17 @@ mail interface; owners and admins can still see the failed check in Settings.
 HQBase revokes the temporary Cloudflare permission after the build starts. The replacement app
 never refreshes the page without asking you first.
 
-The in-app action works only with a repository-root Workers Builds production trigger that runs
-`pnpm deploy`. HQBase refuses the action if the trigger runs Wrangler directly, uses another root,
-or enables `HQBASE_FORCE_SOURCE_DEPLOY`. These settings define a custom-source deployment. Update
-that source with its own review and deployment process instead of presenting it as a signed HQBase
-release.
+To keep updates safe, HQBase installs only the version you reviewed. It does not silently switch to
+a newer release while the update starts. Future automatic builds also stay on that version until
+you approve another update.
+
+In-app updates require the standard HQBase build setup: the repository root and the `pnpm deploy`
+command. If your production build enables `HQBASE_FORCE_SOURCE_DEPLOY`, uses another directory, or
+runs another deploy command, update it the same way you deploy your own source changes. This is
+usually your CI pipeline or a trusted local checkout.
+
+Only one update can start at a time. If an update is already starting, wait a moment and check
+again.
 
 ## What HQBase protects before updating
 
@@ -65,12 +71,9 @@ app.
 
 The production build downloads the immutable archive from the official public repository, records
 the recovery checkpoint, applies compatible forward database changes, deploys, checks Cloudflare's
-deployment status, and records the installed release. HQBase stores the reviewed version as a
-plain Workers Builds variable before it starts the build. The deploy command refuses a different
-signed version if the stable channel changes between the check and the build. The production
-trigger keeps the reviewed version until you confirm another update, so a later automatic build
-cannot install an unreviewed stable release. If another update is already starting, wait and check
-for updates again.
+deployment status, and records the installed release. Before the build starts, HQBase records the
+exact signed version that you reviewed. The deploy command refuses a different version. HQBase
+keeps the reviewed version for later automatic builds until you approve another update.
 
 Release archives, signed records, checksums, and notes are public GitHub Release assets. See
 [Publishing a release](/docs/maintainers/releases/) for the maintainer workflow.

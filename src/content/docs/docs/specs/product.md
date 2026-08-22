@@ -16,13 +16,11 @@ multi-domain administration.
 - One signed public release channel. Installation and updates consume release artifacts from the
   canonical repository only, and every artifact is verified by a signed manifest with SHA-256
   digests before it changes anything.
-- The in-app updater runs only the production Workers Builds trigger at the repository root with
-  the managed `pnpm deploy` command. It refuses a custom-source trigger or explicit source-deploy
-  mode. Before it starts a build, it pins the exact signed version that the user reviewed. The
-  deploy command must receive that version and refuses a different release. The production trigger
-  keeps this pin until the user reviews another update. Thus, a later automatic build cannot install
-  a different stable release without that review. HQBase permits only one update-start operation at
-  a time, so concurrent requests cannot replace the shared pin before a build starts.
+- The in-app updater works only with the standard HQBase production build: the repository root and
+  the managed `pnpm deploy` command. When a user approves an update, HQBase locks the exact signed
+  version they reviewed. The build cannot silently switch to another release, and later automatic
+  builds stay on the approved version until the user approves another update. A custom-source setup
+  must use its own CI or CLI deployment path. Only one update can start at a time.
 - The legal text in each repository controls if this summary differs from it.
 
 ## Boundaries
