@@ -328,11 +328,23 @@ The original HTML remains in customer storage; sanitization happens when the mes
   complete mail content area on desktop and compact layouts. A labelled Back action returns to the
   same list, filters, loaded pages, and scroll position.
 - Show accessible messages in chronological order. Begin with the first and final message; when
-  messages sit between them, one labelled divider reports the hidden count and expands or collapses
-  them in place.
-- Collapse quoted reply history behind a labelled ellipsis while preserving safe formatting and the
-  remote-image choice. A manually forwarded message remains visible as message content even when a
-  sender wraps it in markup commonly used for reply quotes.
+  messages sit between them, one labelled divider reports the hidden count and reveals them in
+  place. Remove the divider after expansion and keep the messages visible until the reader closes,
+  including when synchronization adds another message to the open thread.
+- Use the structural quote markers used by established mail clients. Split HTML into content before
+  the quote, the quoted block, and content after the quote. Keep content before and after the quote
+  visible and in its original order. Keep a signature after the quote visible. When an established
+  client uses a divider or header as the quote marker, include the following previous-message
+  siblings in the quoted block.
+- Collapse a complete Gmail reply `gmail_quote_container`, including its attribution. Keep the
+  complete container visible when its `gmail_attr` contains Gmail's forwarded-message divider, and
+  do not collapse nested quote markup inside that visible forward. Do not infer quote structure
+  from the message subject.
+- For plain text, recognize a conventional attribution block that contains a sender email address,
+  ends with a colon, and is followed by one or more `>` quoted lines. Permit wrapped attribution
+  lines and blank lines before the quoted text. Do not depend on the English words `On` or `wrote`.
+- When content before a recognized quote is empty, show the quote without an ellipsis. Printing and
+  other full-content views include every safe fragment without changing the stored original.
 - Keep subject, read/unread, star, archive, and Trash actions at the top. In Archived, replace
   archive with **Unarchive**. In Trash, replace archive and Trash with **Restore**. Put compact
   **Reply** and **Forward** actions after every expanded message and larger conversation-level
