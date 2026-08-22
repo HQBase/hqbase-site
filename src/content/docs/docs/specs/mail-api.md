@@ -110,7 +110,8 @@ All paths below are relative to `/api/v1`.
 | `POST /messages/{id}/{action}` | `mail:write` | Apply `read`, `unread`, `star`, `unstar`, `archive`, `unarchive`, `trash`, or `restore`. |
 | `POST /messages/{id}/remote-media/trust` | `mail:write` | Trust the message sender's remote images for the connected person. |
 | `POST /conversations/{id}/{action}` | `mail:write` | Apply a message action to the accessible part of a conversation. |
-| `GET /drafts` and `GET /drafts/{id}` | `mail:send` | List or get the connected person's drafts. |
+| `GET /drafts` and `GET /drafts/{id}` | `mail:send` | List one cursor page or get one of the connected person's drafts. |
+| `GET /drafts/changes` | `mail:send` | Read draft upserts and deletion tombstones after a sync checkpoint. |
 | `POST /drafts` | `mail:send` | Create a draft. |
 | `PATCH /drafts/{id}` | `mail:send` | Update a draft using its current version. |
 | `DELETE /drafts/{id}` | `mail:send` | Delete a draft and its stored attachments. |
@@ -162,6 +163,44 @@ If the part has no type, HQBase records `application/octet-stream`. A file can b
 and all attachments in one draft can total at most 25 MiB. An upload that exceeds either limit
 returns `413 ATTACHMENTS_TOO_LARGE`. Send, reply, and forward requests can name at most 20 staged
 attachments.
+
+### Draft pagination and changes
+
+`GET /drafts` returns one page as a JSON array. Drafts are ordered by `updatedAt`, newest first,
+then by descending identifier. `limit` is an integer from 1 to 100 and defaults to 100. When more
+draft rows follow, the response includes an RFC 8288 `Link` header with `rel="next"`. The last page
+has no `Link` header. The cursor is opaque and is valid only for the draft list.
+
+`GET /drafts/changes` is a separate synchronization feed for private drafts. It uses the same
+checkpoint, bounded high-water cycle, `limit`, `nextCursor`, and `hasMore` rules as the message
+changes feed. Its cursor is separate from message and list cursors. An upsert contains the current
+public `Draft` object. A delete is a tombstone:
+
+```json
+{ "type": "delete", "draftId": "drf_example" }
+```
+
+Creating or editing a draft, adding or removing an attachment, sending a saved draft, and deleting
+a draft all write to the draft journal. The monotonic sequence keeps rapid changes distinct and
+keeps deletion records after the draft row is removed. HQBase applies the connected person's
+current ownership and mailbox access before it returns an upsert. When mailbox access changes, a
+client repeats the full draft bootstrap so drafts that became hidden or visible are reconciled.
+
+A new client uses this bootstrap order:
+
+1. Request a draft-changes checkpoint without a cursor and keep its `nextCursor`.
+2. Paginate the full draft list.
+3. Request draft changes after the checkpoint until `hasMore` is `false`.
+
+HQBase keeps draft-journal rows in this API version. Future bounded retention must return `410`
+with `DRAFT_CHANGE_CURSOR_EXPIRED` instead of silently skipping changes. Invalid list cursors
+return `400 INVALID_DRAFT_CURSOR`. Invalid change cursors return
+`400 INVALID_DRAFT_CHANGE_CURSOR`. An invalid limit returns `400 INVALID_LIMIT`.
+
+Drafts are not message rows. HQBase keeps `drafts` in the v1 message-folder enum for compatibility,
+but current write paths do not store messages in that folder. Clients use `/drafts` and
+`/drafts/changes` for a Drafts folder. The conversation-folder enum omits `drafts` because drafts
+are private composer state, not conversations.
 
 ### Message pagination
 
