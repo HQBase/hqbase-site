@@ -85,13 +85,17 @@ and changes the domain to ready only after the check passes. Choose a default Fr
 
 ## Technical details
 
-Setup requests these Cloudflare permissions:
+Cloudflare authorization happens before you choose whether to enable outbound sending. The fixed
+setup grant therefore requests these permissions:
 
 - Account / Email Sending / Edit
 - Account / Workers Scripts / Edit
 - Zone / Zone / Read
 - Zone / Zone Settings / Edit
 - Zone / Email Routing Rules / Edit
+
+In receive-only mode, HQBase does not use the Email Sending permission to enable sending. Enabling
+sending later requests a fresh domain-operation grant.
 
 Cloudflare separates Email Routing rules from Email Routing zone settings. The catch-all Worker
 route uses Email Routing Rules permission, while enabling Email Routing DNS and settings requires

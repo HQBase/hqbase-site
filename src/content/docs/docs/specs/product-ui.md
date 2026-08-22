@@ -187,7 +187,13 @@ The original HTML remains in customer storage; sanitization happens when the mes
 
 Setup is one quiet, resumable page. After temporary Cloudflare access is verified, progress
 becomes **Domain → Owner account → Mailboxes**, with Mailboxes owning the final action. The
-development-only `/__ui/setup` gallery uses deterministic fixtures and never reaches production.
+Domain step offers outbound sending as an explicit option. Receive-only setup does not ask for a
+default From mailbox and explains how to enable sending later. Only a direct browser request with a
+Cloudflare client IP can submit the final action. HQBase rate-limits it by client IP and serializes
+bootstrap work with one renewable lock. The lock holder rechecks setup state before it creates an
+owner. An active bootstrap renews its claim. An abandoned claim becomes recoverable after the
+bounded lease. The development-only `/__ui/setup` gallery uses deterministic fixtures and never
+reaches production.
 
 - Settings contains only active workspace and infrastructure destinations, and gains search,
   sorting, or pagination only when the behavior needs it.
