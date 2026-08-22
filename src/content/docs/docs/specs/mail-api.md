@@ -14,10 +14,11 @@ credentials.
 
 ## Authentication
 
-HQBase accepts two forms of authentication on `/api/v1`:
+HQBase accepts three forms of authentication on `/api/v1`:
 
 - The web app uses its HTTP-only HQBase session cookie.
 - External clients use an OAuth bearer token issued by the same HQBase installation.
+- Trusted scripts and automations can use a personal access token created by an HQBase user.
 
 OAuth clients discover the installation's authorization server at
 `/.well-known/oauth-authorization-server/api/auth` and this API's protected-resource metadata at
@@ -91,6 +92,60 @@ setup, or changing mailbox access takes effect on the next request.
 HQBase rotates refresh tokens. A second matching refresh request that uses the previous token
 within 30 seconds returns the same rotated token response. Reuse after that window remains a replay
 and invalidates the refresh-token family.
+
+### Personal access tokens
+
+Every user can also create a personal access token for trusted scripts and automations. Its plaintext
+starts with `hqb_pat_` and appears once at creation. A PAT has every Mail API capability, has no
+selectable scope, and remains limited by its token owner’s current role and mailbox access. A PAT never
+authenticates workspace administration, Better Auth, setup, MCP, or another HQBase installation.
+
+Owners, admins, and members can continue to use OAuth with the Mail API. OAuth scopes and each
+user's current role and mailbox grants still limit access.
+
+Use OAuth Device Authorization for delegated or interactive connections. Use a PAT only when a user
+intentionally supplies it to trusted automation. Never log, publish, store in a generated
+artifact, or send a PAT to a different origin.
+
+An `Authorization` bearer value that starts with `hqb_pat_` selects PAT authentication. Other
+bearer values keep the OAuth path. An invalid Authorization header does not fall back to a valid
+session cookie. A malformed, unknown, expired, revoked, or inactive PAT returns `401
+INVALID_PERSONAL_ACCESS_TOKEN` with `Bearer token is invalid or inactive.`
+
+Creation requires a web session created within the last 10 minutes. Each user can make five create
+attempts in one hour and can have no more than ten active PATs. A PAT can have an optional expiry.
+Every user can list and revoke their own active PATs. Every current owner can list and revoke all
+active PATs in the workspace. The management endpoint returns all active workspace PATs to owners
+and only self-owned active PATs to admins and members. It has no pagination. It excludes expired
+and revoked PATs, and audit events keep the lifecycle history.
+
+Creation is not idempotent. A client must not automatically retry creation after an ambiguous
+failure.
+
+#### Public contract
+
+A PAT contains the `hqb_pat_` prefix and a 256-bit Base64url secret. HQBase shows the plaintext
+once and stores only its hash and a four-character suffix for recognition. The user can select an
+optional expiry. Revocation makes the PAT inactive for the next request.
+
+The `hqb_pat_` bearer-prefix rule applies only to `/api/v1`. A PAT has every Mail API capability
+without a selected scope, while the token owner's live role and mailbox access still apply. A
+rejected PAT returns the same generic error for every inactive state and includes the required
+`WWW-Authenticate` challenge. OAuth remains available with its current scopes.
+
+The OpenAPI contract adds `personalAccessToken` as an authentication alternative on every
+operation without changing OAuth scopes. The public Agent Skill tells clients to use OAuth for
+delegated or interactive access and a PAT only for trusted automation.
+
+Lifecycle management requires recent authentication for creation, enforces five create attempts
+per user per hour and ten active PATs per user, and returns one active-only list without pagination.
+If a lifecycle statement fails, its state change and audit event do not partially commit.
+
+#### Security guarantees
+
+Deleting a token owner or making the owner inactive stops PAT authentication. Plaintext PATs do not
+enter logs, audits, telemetry, browser storage, shared caches, service-worker caches, URLs, or
+generated artifacts.
 
 ## Endpoints
 

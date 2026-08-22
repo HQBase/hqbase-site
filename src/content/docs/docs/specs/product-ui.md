@@ -372,6 +372,20 @@ D1 changes, or deployed resources and is excluded from production.
 
 ### Settings areas
 
+- **API** is visible to owners, admins, and members. It lists every active workspace personal access
+  token for owners and only the signed-in user's active personal access tokens for admins and
+  members. The list shows the name, token owner, four-character suffix, creation time, and expiry;
+  the token-owner column can be omitted when every listed token belongs to the signed-in user.
+  It states that personal access tokens can call every Mail API operation, subject to the token
+  owner's current role and mailbox grants, and warns that they cannot access workspace
+  administration or MCP. Each row has a revoke action. Its
+  confirmation names the token and explains that active clients will fail on their next request.
+  Creation defaults to a 90-day expiry and permits no expiry. It requires recent authentication.
+  HQBase shows the plaintext once with **Copy** and the message **Copy this token now. HQBase
+  cannot show it again.** Closing the modal, leaving the page, or signing out clears the plaintext.
+  Back navigation cannot restore the modal or plaintext. The create response is not cached, and
+  creation is never retried automatically. After an ambiguous network result, the UI refreshes the
+  metadata list so the user can find and revoke a token that might have been created.
 - **Notifications** explains current-device support, subscription state, cross-device effects, and
   privacy before one explicit enable or disable action. Permission is requested only after the
   person activates **Enable notifications**, never on load, sign-in, navigation, or incoming mail.
@@ -418,8 +432,8 @@ D1 changes, or deployed resources and is excluded from production.
 - Catch-all contains unassigned inbound mail that did not match a mailbox. Only owners can see or
   act on this mail. Its owner-only access stays in force after archive or trash actions.
 - Settings routes are `/settings/mailboxes`, `/settings/users`, `/settings/domains`,
-  `/settings/notifications`, `/settings/updates`, and `/settings/debug`. `/` and unknown app paths
-  normalize to `/inbox`.
+  `/settings/notifications`, `/settings/updates`, `/settings/api`, and `/settings/debug`. `/` and
+  unknown app paths normalize to `/inbox`.
 - Back and forward restore the represented route. Permission-gated Settings routes normalize only
   after the current role is known. Compose remains local UI state.
 - Desktop and compact folder routes show only the conversation list. Selecting a conversation
