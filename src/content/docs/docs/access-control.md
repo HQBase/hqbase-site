@@ -61,9 +61,15 @@ blocks you from connecting a new domain if an existing person's login already us
 
 If a person forgets their password, they can select **Forgot password?** on the sign-in page and
 enter their Login email. HQBase shows the same confirmation for every request, so it does not reveal
-whether an account exists. A valid link works once, expires after seven days, and ends the person's
-existing sessions when the password changes. Requesting a new link makes every older unused
-password link for that account stop working.
+whether an account exists, an email delivery state, or a reset link. A valid link works once,
+expires after seven days, and ends the person's existing sessions when the password changes.
+Requesting a new link makes every older unused password link for that account stop working.
+
+A valid reset link opens `/reset-password`, and an invitation opens `/set-password`. Both work
+without a session. Invalid, expired, and used links show a specific recovery action instead of
+password fields. New passwords use 8 to 128 characters and require confirmation. After recovery,
+a safe same-origin return path lets a pending sign-in resume; untrusted external return addresses
+are ignored.
 
 ## Add people
 

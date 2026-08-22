@@ -18,19 +18,14 @@ right to license it under these terms.
 
 ## Choose the repository
 
-Start with the repository that owns the change:
+Start with the repository that owns the change - see
+[the ownership table](/docs/maintainers/engineering-standards/#find-the-owner). Some changes need
+pull requests in more than one repository. For example, a new mailbox rule may need implementation
+and tests in `hqbase` plus an update to the public docs in `hqbase-site`.
 
-| Repository | Change it when you are working on… |
-| --- | --- |
-| `HQBase/hqbase` | The installed app, mail behavior, setup, recovery, updates, or Cloudflare resources. |
-| `HQBase/hqbase-site` | The public website, reader documentation, product reference, or maintainer guides. |
-| `HQBase/hqbase-cloudflare-auth` | The public Cloudflare OAuth redirect relay. |
-
-Some changes need pull requests in more than one repository. For example, a new mailbox rule may
-need implementation and tests in `hqbase` plus an update to the public docs in `hqbase-site`.
-
-When product behavior changes, update the existing product-reference page first. Keep the related
-reader guide consistent with it.
+When product behavior changes, follow
+[the documentation rules](/docs/maintainers/documentation/#when-product-behavior-changes) and keep
+every affected repository consistent.
 
 ## Work on your change
 

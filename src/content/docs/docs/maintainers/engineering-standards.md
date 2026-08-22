@@ -15,8 +15,8 @@ repository, test, and public page agrees.
 | `hqbase-cloudflare-auth` | Only the public, stateless Cloudflare OAuth redirect relay. |
 
 Cloudflare owns its own repository-cloning, resource-selection, consent, and security screens.
-HQBase should explain when one of those screens is coming, but should not pretend it controls the
-screen itself.
+HQBase explains when one of those screens is coming, but never pretends to control the screen
+itself.
 
 Installation and first-time setup can affect all three HQBase repositories. Adding people to an
 existing workspace belongs to `hqbase` only.
@@ -27,10 +27,10 @@ existing workspace belongs to `hqbase` only.
 - Keep business rules independent from React, HTTP transport, and Cloudflare bindings when
   practical.
 - Make dependencies explicit. Avoid circular imports and reaching through one feature to use
-  another feature's internals.
+  another feature&apos;s internals.
 - Prefer small, typed, direct code over a generic framework built for imagined future needs.
-- Treat 250-300 lines as a reason to look for a cleaner split. Implementation files should normally
-  stay below 400 lines; a narrow exception needs an allowlist entry and an explanation.
+- File-size guidance lives in the architecture check configuration; treat a limit as a prompt to
+  look for a cleaner split, not as a target to fill.
 
 ## Protect customer data and credentials
 
@@ -65,6 +65,9 @@ use the documented restore procedure. If it is not recorded, retry it only after
 entire SQL migration safe to rerun, including schema statements and backfills with their data
 invariants. Otherwise restore the D1 checkpoint before retrying.
 
+Every schema change lands with fresh-install and update tests. See
+[For maintainers](/docs/maintainers/) for where those checks run.
+
 ## Test the behavior you changed
 
 Add the smallest useful test for every business rule, access boundary, API validation path,
@@ -76,9 +79,10 @@ migration, and fixed bug.
   local test proves a deployed environment.
 - **End-to-end tests** mean tests against deployed staging.
 
-MCP changes must cover both connection profiles, OAuth defaults and challenges, token audiences,
-permissions, tool registration, mailbox access, draft versions, attachment transfer,
-conversations, threads, and representative sending actions.
+Coverage inventories rot; principles do not. A change to MCP covers both connection profiles and
+every access boundary it touches. A change to notifications or setup covers permission, ownership,
+access changes, failure paths, and unsupported devices. Derive the concrete list from the change,
+not from this page.
 
 Tests that use credentials must disable request tracing and video. Do not upload HTML reports or
 other artifacts that might retain request headers, bodies, cookies, or secrets.
@@ -89,48 +93,28 @@ the minimum over time; do not add empty tests merely to improve a percentage.
 ## Check the interface as a person would use it
 
 Cover success, loading, invalid, error, and completed states. Then check the behavior in a browser,
-not only in source code.
-
-For desktop and mobile, verify:
-
-- Light and Dark mode persistence;
-- message presentation, wide-message scrolling, and embedded-content sizing;
-- drawer focus, Compose state, tables, dialogs, and setup screens; and
-- sounds that inform without blocking work.
+not only in source code, on desktop and mobile widths, in both themes.
 
 Use message fixtures to check sanitization, embedded content-ID images, remote-image choices, and
-attachments that belong to one specific message.
-
-For the installable web app, verify the manifest identity, icons, service-worker registration,
-public-only caching, offline fallback, old-cache cleanup, update prompts, notifications, safe
-notification navigation, and background badge updates.
+attachments that belong to one specific message. For installable-app changes, verify the manifest,
+service-worker lifecycle, offline fallback, update prompts, and notification navigation by hand.
 
 Notification changes must cover permission, ownership, multiple devices, current mailbox access,
-unread totals, duplicate prevention, expired subscriptions, isolated delivery failures, read-state
-refresh, and unsupported devices. Setup changes must cover Cloudflare authorization boundaries,
+and delivery-failure isolation. Setup changes must cover Cloudflare authorization boundaries,
 deployment triggers, and redirects.
 
 ## Before you call it done
 
-- Run the repository's full local check. CI and local development use the same primary commands.
+- Run the repository&apos;s full local check. CI and local development use the same primary commands.
 - TypeScript repositories must pass formatting, linting, strict type checking, tests, coverage,
   architecture checks, build, and deployment dry-run.
 - If several repositories own the behavior, all of them must pass before the change is complete.
 - Run deployed staging for behavior that crosses systems.
 
-Every executable repository runs its full check on pull requests and pushes to `main` through the
-`CI` workflow and required `quality` check, sometimes shown as `CI / quality` in GitHub.
-
-The site and OAuth relay deploy from successful `main` CI through the protected `production`
-Environment. The HQBase app does not: pushes to `main` stop after the quality check and deployment
-dry-run. Publishing a signed app release is a separate action that installs the previous stable
-version in disposable staging, updates it to the exact candidate, and publishes only that tested
-candidate.
-
 Release and staging credentials belong in separate protected GitHub Environments. A local
-production deployment is for recovery only and must record its source commit. Where the GitHub plan
-supports it, protect `main` from force pushes and deletion and require resolved review conversations
-plus the `quality` check.
+production deployment is for recovery only and must record its source commit. The site and OAuth
+relay deploy from successful `main` CI; the app itself publishes only through the signed-release
+workflow described in [Publishing a release](/docs/maintainers/releases/).
 
 Next: [Check a deployed change](/docs/maintainers/staging-e2e/) or
 [publish a release](/docs/maintainers/releases/).
