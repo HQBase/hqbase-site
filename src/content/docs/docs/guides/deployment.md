@@ -91,8 +91,11 @@ database can discard newer mail or other writes, so it always remains a delibera
 ## Move the workspace address
 
 Use the named deployment operator so the local deployment record, generated Wrangler configuration,
-and deployed Worker stay aligned. The hostname must be a zone in the same Cloudflare account, and
-the command needs `CLOUDFLARE_API_TOKEN` with Workers Scripts:Edit, Zone:Read, and DNS:Edit:
+and deployed Worker stay aligned. The hostname must belong to a zone in the same Cloudflare account.
+For example, `mail.example.com` belongs to the `example.com` zone. The command needs a short-lived
+`HQBASE_DOMAIN_API_TOKEN` with Workers Scripts:Edit and Zone:Read.
+Set it only in the terminal that runs the command, and unset it when the command finishes. Wrangler
+continues to use its own login:
 
 ```bash
 pnpm run hqbase -- domain \
@@ -100,6 +103,12 @@ pnpm run hqbase -- domain \
   --app-domain mail.example.com \
   --keep-service-origin
 ```
+
+If Cloudflare Access protects the portal, also set
+`HQBASE_DOMAIN_ACCESS_CLIENT_ID` and `HQBASE_DOMAIN_ACCESS_CLIENT_SECRET` to an Access service
+token. Keep these credentials short-lived. HQBase sends them as `CF-Access-Client-Id` and
+`CF-Access-Client-Secret` headers only for health probes. It never stores or logs them. Unset both
+values when the command finishes.
 
 The command attaches the new hostname, waits until it serves the installation, deploys the
 configuration, and then makes it the main portal address. The previous hostname stays attached
@@ -112,20 +121,43 @@ must then be registered again.
 Validate the change without contacting Cloudflare, writing files, or deploying:
 
 ```bash
-pnpm run hqbase -- domain --name production --app-domain mail.example.com --dry-run
+pnpm run hqbase -- domain \
+  --name production \
+  --app-domain mail.example.com \
+  --keep-service-origin \
+  --dry-run
 ```
 
-Remove the previous hostname after the move, or remove every custom hostname and serve from the
-default Worker address:
+To remove the previous hostname during the move, move the service origin in the same command. Use
+this form instead of the earlier `--keep-service-origin` example. You must then replace the old
+agent tokens and webhook URLs, and register the OAuth callbacks on the new origin:
 
 ```bash
-pnpm run hqbase -- domain --name production --app-domain mail.example.com --detach-old --yes
+pnpm run hqbase -- domain \
+  --name production \
+  --app-domain mail.example.com \
+  --move-service-origin \
+  --detach-old \
+  --yes
+```
+
+To remove every custom hostname and serve from the default Worker address:
+
+```bash
 pnpm run hqbase -- domain --name production --detach --move-service-origin --yes
 ```
 
-Both commands delete a Cloudflare DNS record, so they need `--yes`. If a step fails, the command
-rolls the change back, keeps the saved deployment record, and prints how to continue. Run the same
-command again to resume.
+Both commands delete a Cloudflare DNS record, so they need `--yes`. The command never takes a
+hostname from another Worker. Move or remove a conflicting hostname in Cloudflare first.
+
+If a step fails, the command restores the previous Worker configuration, main portal record,
+and domain attachments. It clears the move record only after it verifies the restored state. If
+rollback is incomplete, it locks other lifecycle commands and prints the failed recovery steps.
+Correct the reported problem, then run the same domain command again. Do not replace agent tokens
+or webhook URLs until the command commits. A rollback restores the old service origin and its old
+integrations. Discard credentials or OAuth flows created against the temporary new origin. A new
+customer-managed OAuth callback registration is external to HQBase; remove it separately if the
+move does not commit and you no longer need it.
 
 ## Remove HQBase
 

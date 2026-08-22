@@ -29,8 +29,9 @@ code problem does not unexpectedly replace current data.
   update channel. It reports problems without changing anything unless you run it with
   `--repair --yes`.
 - **`domain`** moves the main portal address. It attaches the new hostname, verifies it,
-  deploys configuration, and then redirects the previous hostname. It does not change mail data,
-  storage, or queues, and it refuses to continue while a previous move is unfinished.
+  deploys configuration, and then updates the main portal record. It does not change mail data or
+  the identities of D1, R2, or queue resources. It refuses to continue while a previous move is
+  unfinished.
 
 For example, if a database migration fails after an update checkpoint, HQBase prints the commands
 needed to inspect or restore the recorded state. It does not silently roll the database back while
