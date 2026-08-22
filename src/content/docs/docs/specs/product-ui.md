@@ -103,6 +103,10 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
   operating-system changes.
 - **All mailboxes** and each accessible mailbox show their unread Inbox count, including zero.
   Catch-all remains an owner-only, unfiltered workspace count.
+- A small status indicator follows **Mail** in the sidebar. It starts gray, turns green when live
+  events are connected, turns yellow while HTTP fallback synchronization is working, and turns red
+  when neither connection works. Its accessible label and tooltip state the same meaning without
+  relying on color.
 - New-message Compose is a non-modal window on desktop and full-screen on compact layouts. Reply
   and Forward open within the conversation, never as a pop-up or separate browser tab. A saved
   draft reopens attached to its exact saved target. See

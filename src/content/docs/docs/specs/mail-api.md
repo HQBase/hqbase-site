@@ -325,11 +325,22 @@ Clients reconnect with bounded exponential backoff. The server can close a conne
 including for deployment, authentication renewal, or resource control. An `Upgrade` request that
 does not request `websocket` returns `426 WEBSOCKET_UPGRADE_REQUIRED`.
 
+A connected client can send the exact text frame `ping`; the server replies with the exact text
+frame `pong`. Clients can use this application heartbeat to detect a connection that stopped
+delivering data. The heartbeat carries no mail or authentication data. A client closes and
+reconnects a socket that does not answer within its heartbeat deadline.
+
+The web app polls only while its event socket is unavailable. A successful fallback refresh keeps
+the app usable while it reconnects. A failed fallback refresh means that neither live events nor
+the HTTP API is available. Opening a socket stops fallback polling and drains the synchronization
+feeds again.
+
 HQBase routes authenticated connections through a hibernating Durable Object. Successful message,
 draft, mailbox, and mailbox-access mutations notify it after the durable database write.
 Notification failure never rolls back accepted mail or a completed mutation because the journals
 remain the recovery path. The Durable Object does not poll D1 and does not use timers to keep
-connections open.
+connections open. It answers the application heartbeat through the runtime's hibernating
+WebSocket auto-response.
 
 ## Requests and errors
 
