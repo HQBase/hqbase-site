@@ -101,6 +101,7 @@ All paths below are relative to `/api/v1`.
 | `GET /mailboxes` | `mail:read` | List mailboxes visible to the connected person. Owners and admins may see mailbox metadata for access management without receiving its mail. |
 | `GET /messages` | `mail:read` | List or search messages with cursor pagination, optionally filtered by mailbox or folder. |
 | `GET /changes` | `mail:read` | Read message upserts and deletion tombstones after a sync checkpoint. |
+| `GET /events` | `mail:read` | Open a WebSocket that wakes clients when a synchronization feed can have new work. |
 | `GET /messages/{id}` | `mail:read` | Get one message. |
 | `GET /messages/{id}/thread` | `mail:read` | Get the accessible messages in the same thread. |
 | `GET /messages/{id}/html` | `mail:read` | Get sanitized HTML rendering metadata, including visible content before and after any separately returned quoted reply history. |
@@ -284,6 +285,45 @@ An invalid `limit` returns `400` with `INVALID_LIMIT`. A malformed or foreign ch
 `400` with `INVALID_CHANGE_CURSOR`. A mailbox, folder, or search filter returns `400` with
 `INVALID_CHANGE_FILTER`.
 
+### Change notifications
+
+`GET /events` upgrades an authenticated HTTP request to a WebSocket. It is a wake-up channel, not a
+second data API. A bearer token needs `mail:read`. The web app can use its same-origin HQBase session
+cookie.
+
+The server sends JSON text frames in this form:
+
+```json
+{ "type": "changed", "topic": "messages" }
+```
+
+The topic is one of:
+
+- `messages` — read `/changes` from the client's last message cursor until `hasMore` is `false`.
+- `drafts` — read `/drafts/changes` from the client's last draft cursor until `hasMore` is `false`.
+- `mailboxes` — list `/mailboxes` again and apply the documented access-change bootstrap rules.
+
+The server sends only topics permitted by the connection. A bearer connection always needs
+`mail:read`; it receives the `drafts` topic only when its token also has `mail:send`. A session
+connection can receive all three topics. Events contain no mail content, identifiers, counts,
+cursor values, or mailbox names.
+
+Events can be repeated, combined by the client, delayed, or lost when a connection closes. After
+opening or reopening a connection, the client drains each synchronization feed that it uses before
+it waits for an event. After an event, it drains the named feed again. This rule closes the race
+between the last checkpoint and WebSocket setup. A client that does not use WebSockets continues to
+converge by polling the journals.
+
+Clients reconnect with bounded exponential backoff. The server can close a connection at any time,
+including for deployment, authentication renewal, or resource control. An `Upgrade` request that
+does not request `websocket` returns `426 WEBSOCKET_UPGRADE_REQUIRED`.
+
+HQBase routes authenticated connections through a hibernating Durable Object. Successful message,
+draft, mailbox, and mailbox-access mutations notify it after the durable database write.
+Notification failure never rolls back accepted mail or a completed mutation because the journals
+remain the recovery path. The Durable Object does not poll D1 and does not use timers to keep
+connections open.
+
 ## Requests and errors
 
 JSON requests use `Content-Type: application/json`. Draft attachment uploads use
@@ -300,8 +340,9 @@ Sending, replying, and forwarding are not idempotent. A client that repeats any 
 can send more than once and must not retry it blindly. State and draft operations should still use
 the returned state or draft version to avoid overwriting newer work.
 
-Clients use the changes feed for normal message synchronization. They still use full message and
-conversation listings for bootstrap, access changes, and recovery after an expired cursor.
+Clients use the changes feed for normal message synchronization and the event WebSocket only to
+wake that process sooner. They still use full message and conversation listings for bootstrap,
+access changes, and recovery after an expired cursor.
 
 ## Stability policy
 
