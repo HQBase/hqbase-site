@@ -19,11 +19,17 @@ mail interface; owners and admins can still see the failed check in Settings.
 1. In **Settings → Updates**, review the installed and target versions.
 2. Confirm that the update is supported, then start it.
 3. Approve the temporary Cloudflare permission needed to run the production build.
-4. Leave the page open while HQBase verifies, installs, and checks the release.
+4. Leave the page open while HQBase pins, verifies, installs, and checks that exact release.
 5. When the new app is ready, choose when to reload it.
 
 HQBase revokes the temporary Cloudflare permission after the build starts. The replacement app
 never refreshes the page without asking you first.
+
+The in-app action works only with a repository-root Workers Builds production trigger that runs
+`pnpm deploy`. HQBase refuses the action if the trigger runs Wrangler directly, uses another root,
+or enables `HQBASE_FORCE_SOURCE_DEPLOY`. These settings define a custom-source deployment. Update
+that source with its own review and deployment process instead of presenting it as a signed HQBase
+release.
 
 ## What HQBase protects before updating
 
@@ -59,7 +65,9 @@ app.
 
 The production build downloads the immutable archive from the official public repository, records
 the recovery checkpoint, applies compatible forward database changes, deploys, checks Cloudflare's
-deployment status, and records the installed release.
+deployment status, and records the installed release. HQBase stores the reviewed version as a
+plain Workers Builds variable before it starts the build. The deploy command refuses a different
+signed version if the stable channel changes between the check and the build.
 
 Release archives, signed records, checksums, and notes are public GitHub Release assets. See
 [Publishing a release](/docs/maintainers/releases/) for the maintainer workflow.
