@@ -108,21 +108,78 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
 
 ## Reading mail
 
-- Untrusted HTML is sanitized server-side and rendered in a sandboxed iframe that feels native to
-  the reader: no card, border, or extra padding around the message. Remote media stays blocked
-  until the person chooses **Load images**; **Always load from this sender** is a per-user,
-  per-address preference. The original message remains untouched in customer storage.
-- Each conversation list contains at most one row per accessible thread, newest first. The header
-  shows the exact total for the active filters, and it does not change as older pages load. Paging
-  cursors stay opaque and never bypass mailbox access.
-- Selecting a conversation replaces the list with a full-page reader. Back returns to the same
-  filters, loaded pages, and scroll position. Messages appear chronologically behind one labelled
-  divider for hidden middle messages. Quoted reply history collapses behind a labelled ellipsis
-  while keeping safe formatting and the remote-image choice; genuinely forwarded content stays
-  visible even when the sender wrapped it in quote markup. Actions adapt to the folder
-  (**Unarchive** in Archived, **Restore** in Trash). No action may read or change a mailbox outside
-  the person&apos;s current access. See [Mailbox access](/docs/access-control/) for the permission
-  levels.
+### HTML messages
+
+HQBase displays a message&apos;s HTML version when available and falls back to plain text. Untrusted HTML
+is sanitized and rendered in a sandboxed iframe.
+
+- Preserve safe formatting, tables, links, and a limited inline-style set.
+- Make the message feel native to the reader: no extra card, border, corner radius, background,
+  inner padding, or minimum iframe height.
+- Keep the document transparent. Apply HQBase theme colors only where the sender did not provide a
+  safe explicit color or background.
+- Fit the iframe to its content without an internal vertical scrollbar. Preserve safe authored
+  widths and allow horizontal scrolling for content wider than the reader.
+- Remove scripts, forms, frames, objects, active controls, redirects, event handlers, unsafe URLs,
+  and CSS that can load resources.
+- Resolve `cid:` images only to allowed raster attachments from the same message.
+- Block remote media until the person chooses **Load images**. **Always load from this sender** is a
+  per-user, per-address preference and does not restore other removed content.
+
+The original HTML remains in customer storage; sanitization happens when the message is displayed.
+
+### Conversation lists
+
+- Each list contains at most one row per accessible thread. The latest matching accessible message
+  provides the sender, subject, snippet, and time. The row also shows a thread count above one,
+  whether any accessible message has an attachment, and unread state when any accessible inbound
+  message remains unread.
+- A new inbound or outbound reply updates and moves the existing row instead of creating another
+  row.
+- Load the newest 50 matching threads first. Approaching the end loads the next page, while **Load
+  more conversations** remains as a keyboard-accessible fallback, loading label, retry action, or
+  disappears at the final page.
+- The header always shows the exact total for the active folder, mailbox, and search filters. That
+  total does not change as older pages load.
+- Changing a filter returns to the newest page. Opening a conversation and returning preserves
+  loaded pages and scroll position. Background refresh updates the newest page without discarding
+  older loaded pages. Paging cursors stay opaque and never bypass mailbox access.
+
+### Conversation reader
+
+- Selecting a conversation replaces the conversation list with a full-page reader that uses the
+  complete mail content area on desktop and compact layouts. A labelled Back action returns to the
+  same list, filters, loaded pages, and scroll position.
+- Show accessible messages in chronological order. Begin with the first and final message; when
+  messages sit between them, one labelled divider reports the hidden count and reveals them in
+  place. Remove the divider after expansion and keep the messages visible until the reader closes,
+  including when synchronization adds another message to the open thread.
+- Use the structural quote markers used by established mail clients. Split HTML into content before
+  the quote, the quoted block, and content after the quote. Keep content before and after the quote
+  visible and in its original order. Keep a signature after the quote visible. When an established
+  client uses a divider or header as the quote marker, include the following previous-message
+  siblings in the quoted block.
+- Collapse a complete Gmail reply `gmail_quote_container`, including its attribution. Keep the
+  complete container visible when its `gmail_attr` contains Gmail's forwarded-message divider, and
+  do not collapse nested quote markup inside that visible forward. Do not infer quote structure
+  from the message subject.
+- For plain text, recognize a conventional attribution block that contains a sender email address,
+  ends with a colon, and is followed by one or more `>` quoted lines. Permit wrapped attribution
+  lines and blank lines before the quoted text. Do not depend on the English words `On` or `wrote`.
+- When content before a recognized quote is empty, show the quote without an ellipsis. Printing and
+  other full-content views include every safe fragment without changing the stored original.
+- Keep subject, read/unread, star, archive, and Trash actions at the top. In Archived, replace
+  archive with **Unarchive**. In Trash, replace archive and Trash with **Restore**. Put compact
+  **Reply** and **Forward** actions after every expanded message and larger conversation-level
+  actions after the final message.
+- Opening an unread conversation marks its accessible unread inbound messages read. Star and unstar
+  affect every accessible message in the thread. Archive moves accessible Inbox and Catch-all
+  messages without moving Sent copies. Trash moves the accessible messages represented by the
+  active folder. Unarchive and Restore return inbound mail to Inbox, outbound mail to Sent, and
+  unassigned mail to Catch-all. Unarchive applies only in Archived, and Restore applies only in
+  Trash.
+- No list, reader, or conversation action may read or change a mailbox outside the person&apos;s current
+  access. See [Mailbox access](/docs/access-control/) for the permission levels.
 
 ## Setup and Settings
 
