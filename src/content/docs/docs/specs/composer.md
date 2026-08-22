@@ -110,6 +110,11 @@ Forward opens the same editable To, Cc, and Bcc fields and includes a limited pl
 selected message as forwarded context. It uses your default From mailbox rather than assuming the
 address that received the original message.
 
+When you send from the web composer, HQBase includes the selected message's original attachments
+and any files that you added to the draft. The combined files must meet the normal attachment count
+and size limits. If an original attachment is unavailable or the combined files exceed a limit,
+HQBase does not send the message and keeps the draft.
+
 ## Use the composer on desktop and mobile
 
 The composer supports common email formatting, links, lists, quotes, cleaned paste, undo and redo,
