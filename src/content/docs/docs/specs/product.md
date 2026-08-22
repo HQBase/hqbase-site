@@ -21,7 +21,8 @@ multi-domain administration.
   mode. Before it starts a build, it pins the exact signed version that the user reviewed. The
   deploy command must receive that version and refuses a different release. The production trigger
   keeps this pin until the user reviews another update. Thus, a later automatic build cannot install
-  a different stable release without that review.
+  a different stable release without that review. HQBase permits only one update-start operation at
+  a time, so concurrent requests cannot replace the shared pin before a build starts.
 - The legal text in each repository controls if this summary differs from it.
 
 ## Boundaries

@@ -69,7 +69,8 @@ deployment status, and records the installed release. HQBase stores the reviewed
 plain Workers Builds variable before it starts the build. The deploy command refuses a different
 signed version if the stable channel changes between the check and the build. The production
 trigger keeps the reviewed version until you confirm another update, so a later automatic build
-cannot install an unreviewed stable release.
+cannot install an unreviewed stable release. If another update is already starting, wait and check
+for updates again.
 
 Release archives, signed records, checksums, and notes are public GitHub Release assets. See
 [Publishing a release](/docs/maintainers/releases/) for the maintainer workflow.
