@@ -16,6 +16,9 @@ multi-domain administration.
 - One signed public release channel. Installation and updates consume release artifacts from the
   canonical repository only, and every artifact is verified by a signed manifest with SHA-256
   digests before it changes anything.
+- The official Deploy to Cloudflare button clones the canonical repository's `deploy` branch. That
+  branch identifies the exact source commit of the latest signed public release and never follows
+  unreleased changes on `main`. Only the signed-release workflow can advance it.
 - The in-app updater works only with the standard HQBase production build: the repository root and
   the managed `pnpm deploy` command. When a user approves an update, HQBase locks the exact signed
   version they reviewed. The build cannot silently switch to another release, and later automatic
