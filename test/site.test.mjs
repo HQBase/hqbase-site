@@ -686,6 +686,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
     cloudflareEmail,
     architecture,
     access,
+    communityClients,
     mcp,
     operations,
     deployment,
@@ -706,6 +707,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
     read("src/content/docs/docs/guides/cloudflare-email-setup.md"),
     read("src/content/docs/docs/architecture.md"),
     read("src/content/docs/docs/access-control.md"),
+    read("src/content/docs/docs/community-clients.md"),
     read("src/content/docs/docs/mcp.md"),
     read("src/content/docs/docs/operations.md"),
     read("src/content/docs/docs/guides/deployment.md"),
@@ -727,6 +729,8 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(overview, /## What do you want to do\?/);
   assert.match(overview, /Install HQBase/);
   assert.match(overview, /Manage mailbox access/);
+  assert.match(overview, /Explore community clients/);
+  assert.match(overview, /\/docs\/community-clients\//);
   assert.match(overview, /Connect AI tools/);
   assert.match(overview, /Back up or recover/);
   assert.match(overview, /## Building or maintaining HQBase\?/);
@@ -765,6 +769,13 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(access, /audit records do not contain email content/);
   assert.match(access, /never a password or invitation link/);
   assert.match(access, /Pre-launch schema consolidation/);
+  assert.match(communityClients, /title: Made by the community/);
+  assert.match(communityClients, /We love seeing people build around HQBase/);
+  assert.match(communityClients, /https:\/\/github\.com\/awizemann\/herald/);
+  assert.match(communityClients, /native macOS email client/);
+  assert.match(communityClients, /HQBase has tested Herald for compatibility/);
+  assert.match(communityClients, /remain in their care rather than HQBase's/);
+  assert.doesNotMatch(communityClients, /unsupported|use at your own risk/i);
   assert.match(mcp, /Read-only[\s\S]*\/mcp/);
   assert.match(mcp, /Mail actions[\s\S]*\/mcp\/full/);
   assert.match(mcp, /title: Connect AI agents/);
