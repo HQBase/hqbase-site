@@ -287,9 +287,9 @@ An invalid `limit` returns `400` with `INVALID_LIMIT`. A malformed or foreign ch
 
 ### Change notifications
 
-`GET /events` upgrades an authenticated HTTP request to a WebSocket. It is a wake-up channel, not a
-second data API. A bearer token needs `mail:read`. The web app can use its same-origin HQBase session
-cookie.
+`GET /api/v1/events` upgrades an authenticated HTTP request to a WebSocket. It is a wake-up channel,
+not a second data API. A bearer token needs `mail:read`. The web app can use its same-origin HQBase
+session cookie.
 
 The server sends JSON text frames in this form:
 
@@ -307,6 +307,13 @@ The server sends only topics permitted by the connection. A bearer connection al
 `mail:read`; it receives the `drafts` topic only when its token also has `mail:send`. A session
 connection can receive all three topics. Events contain no mail content, identifiers, counts,
 cursor values, or mailbox names.
+
+The authorization decision at upgrade is an event-delivery lease for 10 minutes. Revoking a bearer
+token or consent, ending its session, or ending a web session does not close the existing socket
+immediately. The server closes the socket when the lease ends. Reconnection must use current
+credentials and permissions. Mailbox visibility is checked for each message event. After a mailbox
+grant is removed, the connection can receive the `mailboxes` wake-up needed to reconcile its cache,
+but it receives no later `messages` event for mail that is no longer visible.
 
 Events can be repeated, combined by the client, delayed, or lost when a connection closes. After
 opening or reopening a connection, the client drains each synchronization feed that it uses before
