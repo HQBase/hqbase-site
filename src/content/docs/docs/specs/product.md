@@ -19,7 +19,9 @@ multi-domain administration.
 - The in-app updater runs only the production Workers Builds trigger at the repository root with
   the managed `pnpm deploy` command. It refuses a custom-source trigger or explicit source-deploy
   mode. Before it starts a build, it pins the exact signed version that the user reviewed. The
-  deploy command must receive that version and refuses a different release.
+  deploy command must receive that version and refuses a different release. The production trigger
+  keeps this pin until the user reviews another update. Thus, a later automatic build cannot install
+  a different stable release without that review.
 - The legal text in each repository controls if this summary differs from it.
 
 ## Boundaries

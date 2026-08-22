@@ -67,7 +67,9 @@ The production build downloads the immutable archive from the official public re
 the recovery checkpoint, applies compatible forward database changes, deploys, checks Cloudflare's
 deployment status, and records the installed release. HQBase stores the reviewed version as a
 plain Workers Builds variable before it starts the build. The deploy command refuses a different
-signed version if the stable channel changes between the check and the build.
+signed version if the stable channel changes between the check and the build. The production
+trigger keeps the reviewed version until you confirm another update, so a later automatic build
+cannot install an unreviewed stable release.
 
 Release archives, signed records, checksums, and notes are public GitHub Release assets. See
 [Publishing a release](/docs/maintainers/releases/) for the maintainer workflow.
