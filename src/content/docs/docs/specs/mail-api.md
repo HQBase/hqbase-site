@@ -341,11 +341,12 @@ a reconnect; the next successful connection drains all feeds. The green connecti
 reports WebSocket transport health; it does not prove that every wake-up arrived.
 
 HQBase routes authenticated connections through a hibernating Durable Object. Successful message,
-draft, mailbox, and mailbox-access mutations notify it after the durable database write.
-Notification failure never rolls back accepted mail or a completed mutation because the journals
-remain the recovery path. The Durable Object does not poll D1 and does not use timers to keep
-connections open. It answers the application heartbeat through the runtime's hibernating
-WebSocket auto-response.
+draft, mailbox, and mailbox-access mutations notify it after the durable database write. If a
+notification attempt fails, the publisher waits 100 milliseconds and then 200 milliseconds before
+up to two retries. Duplicate wake-ups are safe. Failure after all three attempts never rolls back
+accepted mail or a completed mutation because the journals and lease reconnect remain the recovery
+path. The Durable Object does not poll D1 and does not use timers to keep connections open. It
+answers the application heartbeat through the runtime's hibernating WebSocket auto-response.
 
 ## Requests and errors
 
