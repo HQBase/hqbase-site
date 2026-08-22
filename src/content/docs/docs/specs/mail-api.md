@@ -112,12 +112,13 @@ bearer values keep the OAuth path. An invalid Authorization header does not fall
 session cookie. A malformed, unknown, expired, revoked, or inactive PAT returns `401
 INVALID_PERSONAL_ACCESS_TOKEN` with `Bearer token is invalid or inactive.`
 
-Creation requires a web session created within the last 10 minutes. Each user can make five create
-attempts in one hour and can have no more than ten active PATs. A PAT can have an optional expiry.
-Every user can list and revoke their own active PATs. Every current owner can list and revoke all
-active PATs in the workspace. The management endpoint returns all active workspace PATs to owners
-and only self-owned active PATs to admins and members. It has no pagination. It excludes expired
-and revoked PATs, and audit events keep the lifecycle history.
+Create, view, and revoke personal access tokens in **Settings > API**. These actions require a
+signed-in browser session. Creation requires a web session created within the last 10 minutes. Each
+user can make five create attempts in one hour and can have no more than ten active PATs. A PAT can
+have an optional expiry. Every user can list and revoke their own active PATs. Every current owner
+can list and revoke all active PATs in the workspace. **Settings > API** shows all active workspace
+PATs to owners and only self-owned active PATs to admins and members. It has no pagination. It
+excludes expired and revoked PATs, and audit events keep the lifecycle history.
 
 Creation is not idempotent. A client must not automatically retry creation after an ambiguous
 failure.
