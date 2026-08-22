@@ -19,11 +19,23 @@ mail interface; owners and admins can still see the failed check in Settings.
 1. In **Settings → Updates**, review the installed and target versions.
 2. Confirm that the update is supported, then start it.
 3. Approve the temporary Cloudflare permission needed to run the production build.
-4. Leave the page open while HQBase verifies, installs, and checks the release.
+4. Leave the page open while HQBase pins, verifies, installs, and checks that exact release.
 5. When the new app is ready, choose when to reload it.
 
 HQBase revokes the temporary Cloudflare permission after the build starts. The replacement app
 never refreshes the page without asking you first.
+
+To keep updates safe, HQBase installs only the version you reviewed. It does not silently switch to
+a newer release while the update starts. Future automatic builds also stay on that version until
+you approve another update.
+
+In-app updates require the standard HQBase build setup: the repository root and the `pnpm deploy`
+command. If your production build enables `HQBASE_FORCE_SOURCE_DEPLOY`, uses another directory, or
+runs another deploy command, update it the same way you deploy your own source changes. This is
+usually your CI pipeline or a trusted local checkout.
+
+Only one update can start at a time. If an update is already starting, wait a moment and check
+again.
 
 ## What HQBase protects before updating
 
@@ -59,7 +71,9 @@ app.
 
 The production build downloads the immutable archive from the official public repository, records
 the recovery checkpoint, applies compatible forward database changes, deploys, checks Cloudflare's
-deployment status, and records the installed release.
+deployment status, and records the installed release. Before the build starts, HQBase records the
+exact signed version that you reviewed. The deploy command refuses a different version. HQBase
+keeps the reviewed version for later automatic builds until you approve another update.
 
 Release archives, signed records, checksums, and notes are public GitHub Release assets. See
 [Publishing a release](/docs/maintainers/releases/) for the maintainer workflow.
