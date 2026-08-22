@@ -3,8 +3,8 @@ title: Cloudflare access and security
 description: How HQBase asks Cloudflare for temporary access during setup and updates.
 ---
 
-HQBase setup, domain changes, and signed updates use Cloudflare OAuth Authorization Code with PKCE.
-Customers do not create, paste, or delete Cloudflare API tokens in HQBase product flows.
+HQBase in-product setup, domain changes, and signed updates use Cloudflare OAuth Authorization Code
+with PKCE. Customers do not create, paste, or delete Cloudflare API tokens in HQBase product flows.
 
 ## Supported clients
 
@@ -20,6 +20,18 @@ Both modes use Authorization Code with PKCE and token endpoint authentication me
 Customer-managed clients register the exact setup, domain, and update callback URLs for their
 canonical HTTPS HQBase origin. Customer-managed configuration contains a non-secret client ID and
 canonical origin only. HQBase never asks for an OAuth client secret or Cloudflare API token.
+
+## Terminal operator command
+
+The local `pnpm run hqbase -- domain` command is an operator tool, not a browser product flow. It
+uses a short-lived `HQBASE_DOMAIN_API_TOKEN` with Workers Scripts:Edit and Zone:Read to inspect,
+attach, and remove Worker custom domains. The token stays in the operator's terminal environment.
+HQBase does not store or log it, send it to the customer Worker, or use it for Wrangler commands.
+Wrangler uses its own authenticated login. The operator unsets the token after the command.
+
+This exception does not add a manual token fallback to the setup wizard, in-app domain flow, or
+signed update flow. Those product flows continue to use OAuth and fail closed when OAuth is not
+available.
 
 ## Official relay
 
