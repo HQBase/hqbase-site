@@ -289,7 +289,9 @@ An invalid `limit` returns `400` with `INVALID_LIMIT`. A malformed or foreign ch
 
 `GET /api/v1/events` upgrades an authenticated HTTP request to a WebSocket. It is a wake-up channel,
 not a second data API. A bearer token needs `mail:read`. The web app can use its same-origin HQBase
-session cookie.
+session cookie. A cookie-authenticated upgrade must include an `Origin` header that exactly matches
+the HQBase installation origin. A missing or different origin returns `403 ORIGIN_FORBIDDEN`.
+Bearer-token connections do not depend on the `Origin` header and can omit it.
 
 The server sends JSON text frames in this form:
 
@@ -333,7 +335,10 @@ reconnects a socket that does not answer within its heartbeat deadline.
 The web app polls only while its event socket is unavailable. A successful fallback refresh keeps
 the app usable while it reconnects. A failed fallback refresh means that neither live events nor
 the HTTP API is available. Opening a socket stops fallback polling and drains the synchronization
-feeds again.
+feeds again. A connected socket can miss a wake-up if notification delivery fails. Another event
+can recover the change sooner. The lease expires no later than 10 minutes after upgrade and forces
+a reconnect; the next successful connection drains all feeds. The green connection indicator
+reports WebSocket transport health; it does not prove that every wake-up arrived.
 
 HQBase routes authenticated connections through a hibernating Durable Object. Successful message,
 draft, mailbox, and mailbox-access mutations notify it after the durable database write.

@@ -106,7 +106,8 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
 - A small status indicator follows **Mail** in the sidebar. It starts gray, turns green when live
   events are connected, turns yellow while HTTP fallback synchronization is working, and turns red
   when neither connection works. Its accessible label and tooltip state the same meaning without
-  relying on color.
+  relying on color. Green reports WebSocket transport health, not synchronization completeness;
+  the event lease reconnect remains the bounded recovery path for a missed wake-up.
 - New-message Compose is a non-modal window on desktop and full-screen on compact layouts. Reply
   and Forward open within the conversation, never as a pop-up or separate browser tab. A saved
   draft reopens attached to its exact saved target. See
