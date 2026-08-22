@@ -35,23 +35,22 @@ an installation grant as a masked Worker secret through initial setup. HQBase re
 removes temporary credentials after the authorized operation completes. No refresh token is stored.
 
 The relay presents an HQBase-owned confirmation screen before redirecting to Cloudflare. The form
-posts only the signed relay state. Continuation always requires a same-origin form POST, the exact
+posts only the signed relay state. Continuation requires a same-origin form POST with the exact
 `Origin`, valid signed and unexpired relay state, an allowed operation and callback, and a bounded
-form body. A short-lived HTTP-only host-bound cookie is defense in depth: when the browser returns
-one it must match the confirmation nonce, but suppressing that cookie under browser privacy policy
-must not break a deliberate confirmation click. The cookie-less path additionally requires Fetch
-Metadata for a same-origin, user-activated document navigation. Neither a cookie nor request
-metadata alone authorizes continuation. Request bodies are capped by their actual streamed byte
-count; `Content-Length` is optional transport metadata and is never required for a valid browser
-submission. Invalid, expired, or incomplete browser handoffs render a bounded HQBase error screen
-with a safe return action instead of raw JSON.
+form body. Neither a cookie nor Fetch Metadata authorizes continuation by itself: along with those
+requirements, HQBase accepts either a matching confirmation cookie or, when the cookie is
+unavailable, same-origin user-activated Fetch Metadata navigation. A short-lived HTTP-only
+host-bound cookie is defense in depth; suppressing it under browser privacy policy must not break a
+deliberate confirmation click. Content-Length is optional and checked when present; the streamed
+byte count enforces the limit. Invalid, expired, or incomplete handoffs render a bounded HQBase
+error page instead of raw JSON.
 
-The confirmation response preserves an origin-only referrer policy so a same-origin browser form
-submission carries its origin for CSRF validation without forwarding the authorization URL, query,
-signed state, or PKCE challenge. Its form policy permits only the relay origin and Cloudflare's
-dashboard origin so browsers that apply `form-action` across the redirect chain can complete the
-server-controlled redirect to Cloudflare. Relay HTML is `no-store, no-transform`: Cloudflare edge
-features must not inject analytics or any other script into authorization and error pages.
+The confirmation response uses `Referrer-Policy: strict-origin`, so its `Referer` header reveals
+only the relay origin and not the authorization path, query, signed state, or PKCE challenge. The
+continuation POST separately requires the exact relay `Origin` for CSRF validation. Its
+`form-action` policy permits only the relay origin and Cloudflare&apos;s dashboard origin. Relay HTML is
+`no-store, no-transform`: Cloudflare edge features must not inject analytics or any other script
+into authorization and error pages.
 
 ## Permissions and recovery
 

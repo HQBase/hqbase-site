@@ -35,7 +35,7 @@ work that has not reached the server yet. If two browser tabs edit the same draf
 cannot overwrite the newer version without a conflict.
 
 Returning an empty editor to its last saved state cancels any pending save and shows **Draft
-saved**. It does not remain stuck on **Saving draft…**.
+saved**.
 
 ### Find a draft again
 
@@ -43,11 +43,10 @@ When you have saved drafts, navigation shows **Drafts** with your private draft 
 `/drafts` puts the most recently changed draft first. Opening `/drafts/<draft-id>` restores the
 recipients, content, attachments, and reply or forward context in the same composer.
 
-A saved reply or forward reopens with its accessible conversation. The composer identifies the
-exact saved target and stays attached to that message even if newer messages arrived after the
-draft was saved. HQBase does not silently change the target or convert the draft into a new
-message. If the target is missing or no longer accessible, HQBase blocks sending and explains that
-the draft context is unavailable.
+A saved reply or forward reopens with its accessible conversation. The composer attaches the draft
+to its exact saved target even if newer messages arrived after the save, and never repoints it at a
+different message. If the target is missing or no longer accessible, HQBase blocks sending and
+explains that the draft context is unavailable.
 
 Mailbox and search filters also apply to the draft list. When the count reaches zero, **Drafts** is
 hidden unless you are already on that page; it remains visible there so sending or discarding the
@@ -117,25 +116,19 @@ The composer supports common email formatting, links, lists, quotes, cleaned pas
 and plain-text generation alongside email-compatible HTML.
 
 Press **Command+Enter** on macOS or **Control+Enter** elsewhere to send while focus is anywhere in
-the composer. Ordinary **Enter** does not send. The keyboard shortcut uses the same validation and
-duplicate-send protection as the visible **Send** button, and does nothing while sending is
+the composer. Ordinary **Enter** never sends. The keyboard shortcut uses the same validation and
+duplicate-send protection as the visible **Send** button, and stays inactive while sending is
 disabled or an attachment is still uploading.
-
-The visible Send control is a circular liquid-glass icon button in every composer.
 
 New messages use a separate window on desktop and a full-screen composer on compact screens.
 Replies and forwards appear after the conversation on desktop and above it in a focused editor on
 compact screens. Opening a saved reply or forward uses this same conversation-first layout instead
-of the new-message window. Mobile headers stay below the top safe area, and the action footer clears
-the bottom safe area without losing normal padding on devices that have no inset.
+of the new-message window. Composer chrome respects device safe areas.
 
 ## Technical details
 
 <details>
 <summary>Editor, storage, and send behavior</summary>
-
-The React composer uses the MIT-licensed Tiptap core with HQBase-owned controls. It loads as a
-separate browser chunk so opening the inbox does not also load the rich editor.
 
 Autosave is debounced, serialized, revision-aware, and backed by local crash recovery. Sending and
 reply context are assembled and validated on the server. Successful sends remove the private draft
@@ -146,15 +139,8 @@ only after delivery is accepted.
 <details>
 <summary>Automated and manual checks</summary>
 
-Automated tests cover:
-
-- server persistence, version conflicts, and crash-recovery selection;
-- multiple-domain From selection and each person's saved default;
-- attachment ownership and size limits;
-- send authorization and fresh-install database migrations;
-- Command+Enter, Control+Enter, ordinary Enter, and disabled sending;
-- conditional Drafts navigation, list routing, and reopening drafts; and
-- Reply and Forward targeting for an exact message.
+Automated tests cover the persistence, access, attachment, targeting, and keyboard rules stated in
+this specification.
 
 The deployed staging suite does not automate the full rich-editor and email-rendering matrix. Gmail,
 Apple Mail, Thunderbird, Outlook, and mobile web rendering remain human release-candidate checks;
