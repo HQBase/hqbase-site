@@ -66,6 +66,7 @@ export default defineConfig({
           items: [
             { slug: docsSlug("architecture") },
             { slug: docsSlug("access-control") },
+            { slug: docsSlug("community-clients") },
             { slug: docsSlug("mcp") },
             { slug: docsSlug("operations") },
             { slug: docsSlug("guides/cloudflare-email-setup") },
