@@ -196,6 +196,12 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
 
 - Settings contains only active workspace and infrastructure destinations, and gains search,
   sorting, or pagination only when the behavior needs it.
+- Add and create forms use labelled dialogs. A dialog closes only after an explicit close action,
+  successful submission, or Escape. A backdrop click, including one that dismisses a nested
+  dropdown, must not close the dialog.
+- A drawer closes once toward its anchored edge. Its close animation must not replay its entrance.
+- Directly editable active or enabled values use labelled switches in their Settings table rows.
+  Keep these frequent switches out of detail panels and dialogs when the table has room for them.
 - Notification permission is requested only after the person activates **Enable notifications**,
   never on load, sign-in, navigation, or incoming mail.
 - Every signed-in person with a sending identity chooses a personal default From mailbox; replies
