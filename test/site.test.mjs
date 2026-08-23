@@ -785,7 +785,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(mcp, /## Connect via SKILL\.md/);
   assert.match(mcp, /### How SKILL\.md uses the Mail API/);
   assert.match(mcp, /Mail API reference/);
-  assert.match(mcp, /\/api\/v1\/openapi\.json/);
+  assert.match(mcp, /\/api\/v2\/openapi\.json/);
   assert.match(mcp, /Device\s+Authorization Grant/);
   assert.match(mcp, /no callback URL/);
   assert.match(mcp, /polls automatically and resumes/);
@@ -807,7 +807,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   );
   assert.match(composer, /## At a glance/);
   assert.match(composer, /## Drafts are private and automatic/);
-  assert.match(composer, /## Choose the From address/);
+  assert.match(composer, /## Choose the From mailbox/);
   assert.match(composer, /## Reply to the right message/);
   assert.match(composer, /## Use the composer on desktop and mobile/);
   assert.match(composer, /<summary>Editor, storage, and send behavior<\/summary>/);

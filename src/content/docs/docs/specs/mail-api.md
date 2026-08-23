@@ -7,22 +7,40 @@ HQBase exposes a stable HTTP API for mail clients, command-line tools, automatio
 HQBase web app uses the same API, so external clients follow the same mailbox access, validation,
 threading, attachment, and sending rules as the product UI.
 
-The current base path is `/api/v1`. It covers mailboxes, messages, conversations, attachments,
+The current base path is `/api/v2`. It covers mailboxes, messages, conversations, attachments,
 drafts, sending, replying, and forwarding. It does not expose workspace administration, people,
 invitations, domains, setup, updates, audits, sessions, notifications, app secrets, or Cloudflare
 credentials.
 
+## Migrate from Mail API v1
+
+This breaking release removes `/api/v1`; it does not serve v1 and v2 together.
+
+- Change each Mail API path from `/api/v1` to `/api/v2`, use the v2 protected-resource metadata,
+  and request the installation origin followed by `/api/v2` as the OAuth resource.
+- Reconnect each OAuth client for the `/api/v2` resource and approve the new access request. The
+  existing client registration can be reused, but a v1 token does not work with v2.
+- Reload every open HQBase tab after the upgrade. An older tab continues to call v1 and does not
+  work until it reloads the new app.
+- Treat each email address as a separate mailbox. During the upgrade, each old additional address
+  becomes a mailbox with a copy of the source mailbox's access grants and retention policy. The new
+  mailbox stays active only if the source mailbox was active and the address could both receive and
+  send; otherwise, it is disabled.
+- Existing mail and drafts move to the mailbox for their exact receiving or sending address.
+  Threads and attachments stay intact. Default-sender and catch-all settings stay on the original
+  mailbox.
+
 ## Authentication
 
-HQBase accepts two forms of authentication on `/api/v1`:
+HQBase accepts two forms of authentication on `/api/v2`:
 
 - The web app uses its HTTP-only HQBase session cookie.
 - External clients use an OAuth bearer token issued by the same HQBase installation.
 
 OAuth clients discover the installation's authorization server at
 `/.well-known/oauth-authorization-server/api/auth` and this API's protected-resource metadata at
-`/.well-known/oauth-protected-resource/api/v1`. The protected resource and token audience are the
-installation origin followed by `/api/v1`, for example `https://mail.example.com/api/v1`.
+`/.well-known/oauth-protected-resource/api/v2`. The protected resource and token audience are the
+installation origin followed by `/api/v2`, for example `https://mail.example.com/api/v2`.
 Protected-resource metadata identifies the API as **HQBase Mail API** and links its
 `resource_documentation` to the installation's generated Agent Skill at
 `/skills/hqbase-mail/SKILL.md`.
@@ -49,7 +67,7 @@ control, signs in to HQBase if necessary, verifies that the displayed code, clie
 and Mail API resource match the request, and chooses **Allow** or **Deny**. The client does not
 receive HQBase credentials, browser cookies, or a callback URL.
 
-The authorization request and token exchange both include the installation's `/api/v1` resource.
+The authorization request and token exchange both include the installation's `/api/v2` resource.
 Pending, denied, expired, and over-frequent polls use the standard `authorization_pending`,
 `access_denied`, `expired_token`, and `slow_down` OAuth errors. A device code is short-lived,
 single-use, bound to its registered client and resource, and cannot be approved by a different
@@ -94,7 +112,7 @@ and invalidates the refresh-token family.
 
 ## Endpoints
 
-All paths below are relative to `/api/v1`.
+All paths below are relative to `/api/v2`.
 
 | Method and path | Permission | Purpose |
 | --- | --- | --- |
@@ -198,7 +216,7 @@ with `DRAFT_CHANGE_CURSOR_EXPIRED` instead of silently skipping changes. Invalid
 return `400 INVALID_DRAFT_CURSOR`. Invalid change cursors return
 `400 INVALID_DRAFT_CHANGE_CURSOR`. An invalid limit returns `400 INVALID_LIMIT`.
 
-Drafts are not message rows. HQBase keeps `drafts` in the v1 message-folder enum for compatibility,
+Drafts are not message rows. HQBase keeps `drafts` in the message-folder enum for compatibility,
 but current write paths do not store messages in that folder. Clients use `/drafts` and
 `/drafts/changes` for a Drafts folder. The conversation-folder enum omits `drafts` because drafts
 are private composer state, not conversations.
@@ -287,7 +305,7 @@ An invalid `limit` returns `400` with `INVALID_LIMIT`. A malformed or foreign ch
 
 ### Change notifications
 
-`GET /api/v1/events` upgrades an authenticated HTTP request to a WebSocket. It is a wake-up channel,
+`GET /api/v2/events` upgrades an authenticated HTTP request to a WebSocket. It is a wake-up channel,
 not a second data API. A bearer token needs `mail:read`. The web app can use its same-origin HQBase
 session cookie. A cookie-authenticated upgrade must include an `Origin` header that exactly matches
 the HQBase installation origin. A missing or different origin returns `403 ORIGIN_FORBIDDEN`.
@@ -370,7 +388,7 @@ access changes, and recovery after an expired cursor.
 
 ## Stability policy
 
-`/api/v1` is the stable public mail API. Within v1, HQBase may add endpoints, optional request
+`/api/v2` is the stable public mail API. Within v2, HQBase may add endpoints, optional request
 fields, response fields, and error codes. Clients must ignore response fields they do not
 understand. HQBase will not remove or rename an endpoint or field, make an optional request field
 required, change the meaning of existing data, or broaden an existing enum in a way that changes
@@ -379,10 +397,11 @@ client behavior without introducing a new API version.
 Security fixes can make previously accepted unauthorized or invalid requests fail. Operational
 limits can also be tightened to protect an installation, with a documented error response.
 
-When a breaking version is necessary, it receives a new base path such as `/api/v2`. HQBase will
-document the migration and deprecation window before removing a supported public version. The
-unversioned `/api/*` routes are product-internal compatibility routes and are not covered by this
-stability promise.
+When a breaking version is necessary, it receives a new base path such as `/api/v3`. The release
+notes and this specification document the migration. HQBase can remove the old version in the same
+release unless the migration guide states that both versions remain available. The unversioned
+`/api/*` routes are product-internal compatibility routes and are not covered by this stability
+promise.
 
 ## Agent Skill, OpenAPI, and human testing
 
@@ -397,16 +416,16 @@ parameters, payloads, schemas, content types, and errors.
 compatibility with the earlier generated guide.
 
 The same installation serves its instance-adjusted OpenAPI document at
-`/api/v1/openapi.json`. Its `servers` entry and external documentation link use the installation's
+`/api/v2/openapi.json`. Its `servers` entry and external documentation link use the installation's
 canonical origin. Both discovery documents are public, contain no account data or credentials, and
 support `GET` and `HEAD`.
 
 The canonical machine-readable contract is the
-[OpenAPI 3.1 document](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v1.openapi.json).
+[OpenAPI 3.1 document](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v2.openapi.json).
 The repository also publishes a generated
-[Postman collection](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v1.postman_collection.json)
+[Postman collection](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v2.postman_collection.json)
 and an importable
-[Postman environment template](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v1.postman_environment.json).
+[Postman environment template](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v2.postman_environment.json).
 
 Set the environment's `base_url` to the canonical origin of your installation. Use the collection's
 OAuth setup requests to inspect discovery and dynamically register a public client, then complete

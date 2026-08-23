@@ -59,6 +59,9 @@ The **Mail actions** profile also provides:
 - `add_draft_attachment` and `remove_draft_attachment`
 - `send_email`, `reply_to_message`, and `forward_message`
 
+Each `list_mailboxes` item has one `address` and its `mailDomainId`. It does not have an
+`addresses` list because each email address is a separate mailbox.
+
 ### MCP technical details
 
 - **Transport:** Streamable HTTP.
@@ -87,7 +90,7 @@ MCP uses these OAuth permissions:
 ## Connect via SKILL.md
 
 `SKILL.md` is for agents that can install instructions and make HTTP requests. The skill does not
-use MCP. It uses the HQBase Mail API at `/api/v1`.
+use MCP. It uses the HQBase Mail API at `/api/v2`.
 
 ### How to connect
 
@@ -117,7 +120,7 @@ The skill contains:
 - The available OAuth permissions.
 - Safety and retry rules.
 - A compact list of Mail API methods.
-- A link to the installation's OpenAPI document at `/api/v1/openapi.json`.
+- A link to the installation's OpenAPI document at `/api/v2/openapi.json`.
 
 The Mail API supports mailboxes, messages, conversations, attachments, drafts, sending, and
 replying. It does not manage people, mailbox access, domains, setup, updates, sessions, app secrets,
@@ -132,7 +135,7 @@ errors, and versioning rules.
 - Giving an agent the skill does not grant access. The person must still approve OAuth access.
 - Device Authorization Grant is the preferred flow for agents and command-line tools.
 - Authorization Code with PKCE is available for clients that can safely receive a browser callback.
-- Mail API tokens use the `/api/v1` OAuth resource. They do not work with `/mcp` or `/mcp/full`.
+- Mail API tokens use the `/api/v2` OAuth resource. They do not work with `/mcp` or `/mcp/full`.
 - The old `/AGENTS.md` and `/agents.md` URLs redirect to the current `SKILL.md` URL.
 
 ## Access rules for both methods

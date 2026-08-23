@@ -11,7 +11,7 @@ remain private to their author, and are checked again before anything is sent.
 | When you… | HQBase… |
 | --- | --- |
 | Start a new message | Uses your default sending mailbox and saves a private draft. |
-| Reply | Replies to the exact message you selected and chooses an authorized From address. |
+| Reply | Replies to the exact message you selected and prefers the mailbox that received it. |
 | Forward | Starts with your default sending mailbox and adds the selected message as context. |
 | Add a file | Uploads it to your installation and keeps it attached to that draft only. |
 | Send | Rechecks mailbox access, the From address, and the domain before delivering anything. |
@@ -54,20 +54,20 @@ last draft does not leave you stranded.
 
 After a successful send, HQBase removes the saved draft.
 
-## Choose the From address
+## Choose the From mailbox
 
-Each person chooses one default From mailbox from the active mailboxes where they can send.
-Onboarding records the owner's first choice, and every signed-in person can change their own choice
-in **Settings**.
+Each mailbox has one email address. When the mailbox and its domain can send, that email address is
+also its sender address. Each person chooses one default From mailbox from the active mailboxes
+where they can send. Onboarding records the owner's first choice, and every signed-in person can
+change their own choice in **Settings**.
 
-- **New messages and forwards** use the primary send-enabled address of your default mailbox. If
-  that choice is no longer available, HQBase uses the first address you can still send from.
+- **New messages and forwards** use the address of your default mailbox. If that choice is no longer
+  available, HQBase uses the first mailbox you can still send from.
 - **Existing drafts** keep the exact From address that was saved with them.
-- **Replies** first try the address that received the selected message, if you are allowed to send
-  from it. HQBase then tries another address in that mailbox, your default mailbox, and finally the
-  first available sending address.
+- **Replies** first try the mailbox that received the selected message, if you are allowed to send
+  from it. HQBase then tries your default mailbox and finally the first available sending mailbox.
 
-HQBase checks the selected mailbox, exact From address, and domain sending status again when you
+HQBase checks the selected mailbox, its From address, and the domain sending status again when you
 send. Losing access while a draft is open therefore prevents the message from being sent.
 
 ## Add attachments safely
