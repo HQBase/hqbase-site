@@ -3,8 +3,8 @@ title: Mailbox access
 description: Choose who can read, reply to, organize, and manage each shared mailbox.
 ---
 
-People only see mailboxes they have been given access to. Workspace owners can use every mailbox so
-the workspace can always be recovered.
+People and machine agents only see mailboxes they have been given access to. Workspace owners can
+use every mailbox so the workspace can always be recovered.
 
 ## Choose a mailbox access level
 
@@ -12,18 +12,31 @@ the workspace can always be recovered.
 | --- | --- | --- | --- | --- |
 | None | No | No | No | No |
 | Read | Yes | No | No | No |
-| Agent | Yes | Yes | Yes | No |
+| Handle mail | Yes | Yes | Yes | No |
 | Manager | Yes | Yes | Yes | Yes |
 
 - **Read** lets someone search, open, and download messages and attachments.
-- **Agent** also lets them send and reply, mark messages read, add stars, archive messages, and move
-  messages to Trash.
+- **Handle mail** also lets them send and reply, mark messages read, add stars, archive messages,
+  and move messages to Trash.
 - **Manager** also lets them change mailbox settings and automatic deletion rules.
 
-For example, a support teammate with **Agent** access to `support@example.com` can reply to
+For example, a support teammate with **Handle mail** access to `support@example.com` can reply to
 customers and organize that inbox. They cannot see `billing@example.com` unless you give them
 access to it, and they cannot change how long support mail is kept unless you make them a
 **Manager**.
+
+## Machine agents
+
+A machine agent has no login account or workspace role. It gets **Read** or **Handle mail** access
+to the one mailbox selected during creation. Read access includes every current and future message
+and attachment in that mailbox. Create a separate mailbox agent for another mailbox.
+
+A provisioner's own credential works only with the separate Management API. It receives the
+one-time credentials for the mailbox agents that it creates, so treat it as a trusted credential
+issuer. It can list these agents and replace their credentials, but it cannot manage other agents.
+Machine agents cannot access unassigned catch-all mail.
+
+See [Agent mailboxes](/docs/agent-mailboxes/) for creation, credentials, and safe disablement.
 
 Messages are kept indefinitely by default. Messages in Trash are deleted after 30 days.
 
@@ -90,12 +103,12 @@ generate a new one. Admins can see setup status, but never a password or invitat
 ## How access is enforced
 
 The same mailbox access level applies in the web app, APIs, and MCP connections. An AI tool cannot
-see or change mail that its connected user cannot access. You can give an MCP connection fewer
-abilities, but never more.
+see or change mail that its connected user cannot access. A machine credential cannot exceed its
+agent's assigned mailbox access. You can give an MCP connection fewer abilities, but never more.
 
-Access changes take effect on the person's next request. With no mailbox access, messages,
-attachments, sender identities, exports, and mailbox details do not appear at all. Unassigned mail
-appears only to owners.
+Access changes take effect on the next request. With no mailbox access, messages, attachments,
+sender identities, exports, and mailbox details do not appear at all. Unassigned mail appears only
+to owners.
 
 HQBase records who performs sensitive actions such as changing access, deleting data, recovering
 an account, or managing sessions. These audit records do not contain email content, passwords,
@@ -103,7 +116,8 @@ password hashes, reset tokens, or invitation links.
 
 ## Technical details
 
-The internal access values are `read`, `agent`, and `manager`. New users and new mailbox access are
-always denied until explicitly assigned. Existing users created before onboarding tracking was
-introduced remain active during upgrades. Pre-launch schema consolidation does not keep old
-edition-migration compatibility code.
+The public **Handle mail** level uses the internal value `agent`. The other internal access values
+are `read` and `manager`. New people, new machine agents, and new mailbox access are always denied
+until explicitly assigned. Existing users created before onboarding tracking was introduced remain
+active during upgrades. Pre-launch schema consolidation does not keep old edition-migration
+compatibility code.

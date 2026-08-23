@@ -13,7 +13,9 @@ reviews, and tests own other implementation values such as colors, timings, and 
 Specialized topics live in their own specifications: sending in
 [Writing and sending mail](/docs/specs/composer/), Cloudflare authorization in
 [Cloudflare access](/docs/specs/cloudflare-oauth/), permissions in
-[Mailbox access](/docs/access-control/), and AI connections in [Connect AI agents](/docs/mcp/).
+[Mailbox access](/docs/access-control/), machine identities in
+[Agent mailboxes](/docs/agent-mailboxes/), and human-approved AI connections in
+[Connect an AI tool](/docs/mcp/).
 
 ## At a glance
 
@@ -103,6 +105,9 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
   operating-system changes.
 - **All mailboxes** and each accessible mailbox show their unread Inbox count, including zero.
   Catch-all remains an owner-only, unfiltered workspace count.
+- The desktop header uses a compact mailbox dropdown that opens below its trigger. It lists **All
+  mailboxes** and human mailboxes first. When dedicated agent mailboxes exist, an **Agent
+  mailboxes** divider with an agent icon separates and labels them.
 - A small status indicator follows **Mail** in the sidebar. It starts gray, turns green when live
   events are connected, turns yellow while HTTP fallback synchronization is working, and turns red
   when neither connection works. Its accessible label and tooltip state the same meaning without
@@ -200,6 +205,17 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
   never on load, sign-in, navigation, or incoming mail.
 - Every signed-in person with a sending identity chooses a personal default From mailbox; replies
   continue to prefer the mailbox that received the original message.
+- **Agents** lets an owner or admin create, rotate, reactivate, and disable machine identities. A
+  credential dialog shows the new secret once and the matching public skill URL with separate copy
+  actions. The page never shows a saved credential again. It also shows exact mailbox grants and
+  explains the effects of each lifecycle action. Provisioner creation explains that it receives
+  each child agent credential and must run as a trusted control-plane service.
+- **Connect AI agents** is the authoritative connection guide. It has two pill tabs in this order:
+  **Your account** and **Agentic mailbox**. **Your account** shows the human OAuth Mail API skill
+  and the `/mcp` and `/mcp/full` server URLs. **Agentic mailbox** shows two flat sections in this
+  order: **Mailbox agent**, then **Provisioner agent**. Each section shows only its matching public
+  skill. Both tabs use vertical space instead of card containers. In **Agentic mailbox**, a divider
+  and vertical space separate the two sections.
 - Cloudflare-backed actions never display an API-token field. Authorization starts OAuth with PKCE
   in a labelled modal. See [Cloudflare access](/docs/specs/cloudflare-oauth/) for the security
   rules.
@@ -209,8 +225,8 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
 
 - Primary routes are `/inbox`, `/sent`, `/starred`, `/archived`, `/trash`, `/catch-all`, and
   private drafts at `/drafts` and `/drafts/<draft-id>`. Settings routes live under
-  `/settings/*`. Unknown app paths normalize to `/inbox`. Catch-all mail stays owner-only even
-  after archive or trash actions.
+  `/settings/*`, including agent management at `/settings/agents`. Unknown app paths normalize to
+  `/inbox`. Catch-all mail stays owner-only even after archive or trash actions.
 - Every field has a persistent label and inline error. Loading buttons prevent duplicate
   submission. Errors stay limited and secret-free. Success messages say what happened, what
   remains safe, and what to do next.

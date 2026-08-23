@@ -1,17 +1,23 @@
 ---
-title: Connect AI agents
-description: Connect an AI agent through MCP or install HQBase's deployment-local SKILL.md.
+title: Connect an AI tool
+description: Let an AI tool act on mail available to your signed-in HQBase account.
 ---
 
-HQBase supports two ways to connect an AI agent.
+This page is for an AI tool that acts for a signed-in person. It does not create a machine identity
+or a dedicated mailbox. To give an automated service its own credential, see
+[Agent mailboxes](/docs/agent-mailboxes/).
+
+Open **Settings → Connect AI agents → Your account**. The other tab, **Agentic mailbox**, is for
+machine identities. Under **Your account**, choose one of two methods:
 
 | Method | Use it when |
 | --- | --- |
 | **MCP** | Your AI client supports a remote MCP server. |
-| **SKILL.md** | Your agent can install a skill and make HTTP API requests. |
+| **Agent Skill** | Your agent can install a skill and make HTTP requests. |
 
-Both methods use your existing HQBase account. They do not create another user or bypass your
-mailbox access.
+Both methods use your existing HQBase account and need your OAuth approval. They do not create
+another user or bypass your mailbox access. Machine agent credentials do not work with either
+method.
 
 ## Connect with MCP
 
@@ -19,8 +25,8 @@ MCP is the simplest choice for clients that support remote MCP servers.
 
 ### How to connect
 
-1. Open **Connect AI agent** in the HQBase sidebar or compact navigation.
-2. Select **MCP**.
+1. Open **Settings → Connect AI agents**.
+2. Select **Your account**.
 3. Choose **Read-only** or **Mail actions**.
 4. Copy the connection URL.
 5. Add the URL to your MCP client.
@@ -86,54 +92,21 @@ MCP uses these OAuth permissions:
 
 ## Connect via SKILL.md
 
-`SKILL.md` is for agents that can install instructions and make HTTP requests. The skill does not
-use MCP. It uses the HQBase Mail API at `/api/v1`.
-
-### How to connect
-
-1. Open **Connect AI agent** in the HQBase sidebar or compact navigation.
-2. Select **Agent Skill**.
-3. Select **Copy URL** or **Download Skill**.
-4. Give the URL or downloaded `SKILL.md` file to your agent.
-5. Let the agent read the skill and the linked OpenAPI document.
-6. Open the verification link that the agent displays.
-7. Sign in to HQBase, check the requested access, and select **Allow**.
-
-The agent must display the verification link and short code. It must not open the link in a remote,
-automated, or agent-controlled browser.
-
 ### How SKILL.md uses the Mail API
 
-Every HQBase installation publishes its skill at:
+Use the human-delegated skill when the agent can make HTTP requests but cannot connect to MCP:
 
 ```text
 https://mail.example.com/skills/hqbase-mail/SKILL.md
 ```
 
-The skill contains:
+In **Settings → Connect AI agents → Your account**, copy the skill URL or download the file and
+give it to the agent. The agent uses `/api/v1`, displays a short-code verification link, and waits
+while you sign in and approve access. The public skill contains no credential or mail content.
+It links to the installation's exact OpenAPI document at `/api/v1/openapi.json`.
 
-- The required skill name and description.
-- The installation's Mail API and OAuth URLs.
-- The available OAuth permissions.
-- Safety and retry rules.
-- A compact list of Mail API methods.
-- A link to the installation's OpenAPI document at `/api/v1/openapi.json`.
-
-The Mail API supports mailboxes, messages, conversations, attachments, drafts, sending, and
-replying. It does not manage people, mailbox access, domains, setup, updates, sessions, app secrets,
-or Cloudflare credentials.
-
-See the [Mail API reference](/docs/specs/mail-api/) for authentication, endpoints, request formats,
-errors, and versioning rules.
-
-### SKILL.md technical details
-
-- The skill file is public. It contains no token, account data, or mail content.
-- Giving an agent the skill does not grant access. The person must still approve OAuth access.
-- Device Authorization Grant is the preferred flow for agents and command-line tools.
-- Authorization Code with PKCE is available for clients that can safely receive a browser callback.
-- Mail API tokens use the `/api/v1` OAuth resource. They do not work with `/mcp` or `/mcp/full`.
-- The old `/AGENTS.md` and `/agents.md` URLs redirect to the current `SKILL.md` URL.
+The agent must not open the verification link in a remote or agent-controlled browser. See the
+[Mail API reference](/docs/specs/mail-api/) for the exact OAuth and API contract.
 
 ## Access rules for both methods
 

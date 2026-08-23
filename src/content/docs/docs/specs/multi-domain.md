@@ -68,6 +68,8 @@ in-app portal cutover.
 - An address is a receiving and sending identity attached to exactly one mailbox and domain.
 - Multiple addresses may share one mailbox. If addresses need different access, they must use
   different mailboxes.
+- An agent mailbox uses the same mailbox and address model. A provisioner can create its first
+  address only on a domain that is already connected to this workspace.
 - Messages record the exact receiving and sending address identities.
 - A connected email domain cannot match any workspace user's Login email domain. HQBase enforces
   the exclusion in both directions: user creation rejects connected domains, and later domain
@@ -76,9 +78,10 @@ in-app portal cutover.
 ## Authorization
 
 Mailbox grants remain `read`, `agent`, and `manager`. Addresses inherit their mailbox grant.
-Owners and admins manage hosts, domains, addresses, catch-all policy, and grants. Admins still need
-an explicit mailbox grant to read content. Domain bulk access is a UI operation that writes
-explicit mailbox grants; there is no implicit future domain grant.
+People and machine agents need explicit grants. Owners and admins manage hosts, domains, addresses,
+catch-all policy, and grants. Admins still need an explicit mailbox grant to read content. Domain
+bulk access is a UI operation that writes explicit mailbox grants; there is no implicit future
+domain grant.
 
 ## Provisioning
 
@@ -90,3 +93,11 @@ portal cutover, and service-origin changes require a fresh operation-specific OA
 never asks an owner to paste a Cloudflare API token. Domain disablement preserves mailbox, address,
 and message history. Domain connection validates Login email independence before making Cloudflare
 changes.
+
+A provisioner uses the separate Management API to create a mailbox, its first address, a mailbox
+agent, and an explicit grant. It cannot connect or reconfigure a domain. It receives the child
+mailbox agent credential once and is therefore a trusted credential issuer. If the response is
+lost, it can list only its own mailbox agents and replace a child credential. Credential creation
+and its audit record commit together. Disabling a mailbox agent preserves its mailbox, address,
+messages, and audit history. Disabling a provisioner stops new provisioning but does not disable
+its existing mailbox agents.
