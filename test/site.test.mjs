@@ -787,10 +787,10 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(mcp, /## Connect with MCP/);
   assert.match(mcp, /### Choose an MCP profile/);
   assert.match(mcp, /### MCP technical details/);
-  assert.match(mcp, /## Connect via SKILL\.md/);
+  assert.match(mcp, /## Connect with Skill \+ API/);
   assert.match(mcp, /### How SKILL\.md uses the Mail API/);
   assert.match(mcp, /Mail API reference/);
-  assert.match(mcp, /\/api\/v1\/openapi\.json/);
+  assert.match(mcp, /\/api\/v2\/openapi\.json/);
   assert.match(mcp, /Device\s+Authorization Grant/);
   assert.match(mcp, /no callback URL/);
   assert.match(mcp, /polls automatically and resumes/);
@@ -929,7 +929,7 @@ test("agent mailboxes keep machine identity and mail access separate", async () 
   assert.match(agents, /HQBase shows the new bearer credential once/);
   assert.match(agents, /current and future messages and attachments/);
   assert.match(agents, /never see[\s\S]*unassigned catch-all mail/);
-  assert.match(agents, /authenticated WebSocket at `\/api\/v1\/events`/);
+  assert.match(agents, /authenticated WebSocket at `\/api\/v2\/events`/);
   assert.match(agents, /authoritative changes from the Mail API/);
   assert.match(agents, /Drafts remain private to the identity that created them/);
   assert.match(agents, /`\/management\/v1`/);
@@ -964,6 +964,8 @@ test("agent mailboxes keep machine identity and mail access separate", async () 
   assert.match(mailApi, /Soft-deleted mailboxes[\s\S]*drafts,[\s\S]*attachments do not appear/);
   assert.match(productUi, /agent management at `\/settings\/agents`/);
   assert.match(productUi, /Deleted mailboxes[\s\S]*linked agents stay disabled/);
+  assert.match(productUi, /divider labelled \*\*or\*\*[\s\S]*\*\*Skill \+ API\*\*/);
+  assert.match(productUi, /divider labelled \*\*Automate mailbox creation\*\*/);
 });
 
 test("the design scaffold and local assets remain available", async () => {

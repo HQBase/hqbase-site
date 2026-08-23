@@ -8,12 +8,12 @@ or a dedicated mailbox. To give an automated service its own credential, see
 [Agent mailboxes](/docs/agent-mailboxes/).
 
 Open **Settings → Connect AI agents → Your account**. The other tab, **Agentic mailbox**, is for
-machine identities. Under **Your account**, choose one of two methods:
+machine identities. **Your account** shows two connection methods as flat sections:
 
 | Method | Use it when |
 | --- | --- |
 | **MCP** | Your AI client supports a remote MCP server. |
-| **Agent Skill** | Your agent can install a skill and make HTTP requests. |
+| **Skill + API** | Your agent can install a skill and make HTTP requests. |
 
 Both methods use your existing HQBase account and need your OAuth approval. They do not create
 another user or bypass your mailbox access. Machine agent credentials do not work with either
@@ -21,7 +21,7 @@ method.
 
 ## Connect with MCP
 
-MCP is the simplest choice for clients that support remote MCP servers.
+MCP connects an AI tool to HQBase through a remote MCP server.
 
 ### How to connect
 
@@ -90,20 +90,20 @@ MCP uses these OAuth permissions:
 | `mail:send` | Manage drafts and attachments, send new mail, reply, and forward. |
 | `offline_access` | Let a compatible client request an optional refresh token. |
 
-## Connect via SKILL.md
+## Connect with Skill + API
 
 ### How SKILL.md uses the Mail API
 
-Use the human-delegated skill when the agent can make HTTP requests but cannot connect to MCP:
+The **Skill + API** section shows the human-delegated skill:
 
 ```text
 https://mail.example.com/skills/hqbase-mail/SKILL.md
 ```
 
 In **Settings → Connect AI agents → Your account**, copy the skill URL or download the file and
-give it to the agent. The agent uses `/api/v1`, displays a short-code verification link, and waits
+give it to the agent. The agent uses `/api/v2`, displays a short-code verification link, and waits
 while you sign in and approve access. The public skill contains no credential or mail content.
-It links to the installation's exact OpenAPI document at `/api/v1/openapi.json`.
+It links to the installation's exact OpenAPI document at `/api/v2/openapi.json`.
 
 The agent must not open the verification link in a remote or agent-controlled browser. See the
 [Mail API reference](/docs/specs/mail-api/) for the exact OAuth and API contract.

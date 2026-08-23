@@ -7,14 +7,14 @@ HQBase exposes a stable HTTP API for mail clients, command-line tools, automatio
 HQBase web app uses the same API, so external clients follow the same mailbox access, validation,
 threading, attachment, and sending rules as the product UI.
 
-The current base path is `/api/v1`. It covers mailboxes, messages, conversations, attachments,
+The current base path is `/api/v2`. It covers mailboxes, messages, conversations, attachments,
 drafts, sending, replying, and forwarding. It does not expose workspace administration, people,
 invitations, domains, setup, updates, audits, sessions, notifications, app secrets, or Cloudflare
 credentials.
 
 ## Authentication
 
-HQBase accepts three forms of authentication on `/api/v1`:
+HQBase accepts three forms of authentication on `/api/v2`:
 
 - The web app uses its HTTP-only HQBase session cookie.
 - External clients acting for a person use an OAuth bearer token issued by the same HQBase
@@ -24,8 +24,8 @@ HQBase accepts three forms of authentication on `/api/v1`:
 
 OAuth clients discover the installation's authorization server at
 `/.well-known/oauth-authorization-server/api/auth` and this API's protected-resource metadata at
-`/.well-known/oauth-protected-resource/api/v1`. The protected resource and token audience are the
-installation origin followed by `/api/v1`, for example `https://mail.example.com/api/v1`.
+`/.well-known/oauth-protected-resource/api/v2`. The protected resource and token audience are the
+installation origin followed by `/api/v2`, for example `https://mail.example.com/api/v2`.
 Protected-resource metadata identifies the API as **HQBase Mail API** and links its
 `resource_documentation` to the installation's generated human-delegated Agent Skill at
 `/skills/hqbase-mail/SKILL.md`.
@@ -41,7 +41,7 @@ authorization, device-authorization, and token endpoints. Clients request the AP
 registering and authorizing so the resulting token cannot be replayed against MCP or another
 service.
 
-A mailbox agent credential is bound to its machine principal and the `/api/v1` resource. It does
+A mailbox agent credential is bound to its machine principal and the `/api/v2` resource. It does
 not create a browser session, use an OAuth refresh token, or work with MCP. A provisioner credential
 is instead bound to `/management/v1` and does not work with this API. The provisioner does receive
 each child mailbox agent credential once, so it is a trusted credential issuer. It can list only
@@ -59,7 +59,7 @@ control, signs in to HQBase if necessary, verifies that the displayed code, clie
 and Mail API resource match the request, and chooses **Allow** or **Deny**. The client does not
 receive HQBase credentials, browser cookies, or a callback URL.
 
-The authorization request and token exchange both include the installation's `/api/v1` resource.
+The authorization request and token exchange both include the installation's `/api/v2` resource.
 Pending, denied, expired, and over-frequent polls use the standard `authorization_pending`,
 `access_denied`, `expired_token`, and `slow_down` OAuth errors. A device code is short-lived,
 single-use, bound to its registered client and resource, and cannot be approved by a different
@@ -108,7 +108,7 @@ and invalidates the refresh-token family.
 
 ## Endpoints
 
-All paths below are relative to `/api/v1`.
+All paths below are relative to `/api/v2`.
 
 | Method and path | Permission | Purpose |
 | --- | --- | --- |
@@ -313,7 +313,7 @@ An invalid `limit` returns `400` with `INVALID_LIMIT`. A malformed or foreign ch
 
 ### Change notifications
 
-`GET /api/v1/events` upgrades an authenticated HTTP request to a WebSocket. It is a wake-up channel,
+`GET /api/v2/events` upgrades an authenticated HTTP request to a WebSocket. It is a wake-up channel,
 not a second data API. An OAuth token or machine credential needs `mail:read`. The web app can use
 its same-origin HQBase session cookie. A cookie-authenticated upgrade must include an `Origin`
 header that exactly matches the HQBase installation origin. A missing or different origin returns
@@ -396,7 +396,7 @@ access changes, and recovery after an expired cursor.
 
 ## Stability policy
 
-`/api/v1` is the stable public mail API. Within v1, HQBase may add endpoints, optional request
+`/api/v2` is the stable public mail API. Within v2, HQBase may add endpoints, optional request
 fields, response fields, and error codes. Clients must ignore response fields they do not
 understand. HQBase will not remove or rename an endpoint or field, make an optional request field
 required, change the meaning of existing data, or broaden an existing enum in a way that changes
@@ -405,7 +405,7 @@ client behavior without introducing a new API version.
 Security fixes can make previously accepted unauthorized or invalid requests fail. Operational
 limits can also be tightened to protect an installation, with a documented error response.
 
-When a breaking version is necessary, it receives a new base path such as `/api/v2`. HQBase will
+When a breaking version is necessary, it receives a new base path such as `/api/v3`. HQBase will
 document the migration and deprecation window before removing a supported public version. The
 unversioned `/api/*` routes are product-internal compatibility routes and are not covered by this
 stability promise.
@@ -429,16 +429,16 @@ reads: **This file is retired. Open Settings → Connect AI agents in HQBase to 
 Agent Skill or MCP server.** That Settings page is the authoritative connection guide.
 
 The same installation serves its instance-adjusted OpenAPI document at
-`/api/v1/openapi.json`. Its `servers` entry and external documentation link use the installation's
+`/api/v2/openapi.json`. Its `servers` entry and external documentation link use the installation's
 canonical origin. The OpenAPI document is public, contains no account data or credentials, and
 supports `GET` and `HEAD`.
 
 The canonical machine-readable contract is the
-[OpenAPI 3.1 document](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v1.openapi.json).
+[OpenAPI 3.1 document](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v2.openapi.json).
 The repository also publishes a generated
-[Postman collection](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v1.postman_collection.json)
+[Postman collection](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v2.postman_collection.json)
 and an importable
-[Postman environment template](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v1.postman_environment.json).
+[Postman environment template](https://github.com/HQBase/hqbase/blob/main/api/hqbase-mail-api-v2.postman_environment.json).
 
 Set the environment's `base_url` to the canonical origin of your installation. Use the collection's
 OAuth setup requests to inspect discovery and dynamically register a public client, then complete

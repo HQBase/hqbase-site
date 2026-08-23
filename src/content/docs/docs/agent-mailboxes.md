@@ -13,7 +13,8 @@ its normal position when you also give an agent access to it.
 
 ## Choose an agent type
 
-An owner or admin creates the first agent in **Settings → Agents**.
+An owner or admin creates an agent from **Settings → Connect AI agents → Agentic mailbox** or
+manages existing agents in **Settings → Agents**.
 
 | Agent type | What it does |
 | --- | --- |
@@ -39,7 +40,7 @@ organize, send, and reply from that mailbox. It cannot see `billing@example.com`
 
 ## Connect a mailbox agent
 
-Use the mailbox agent credential as a bearer token with the existing Mail API at `/api/v1`. The
+Use the mailbox agent credential as a bearer token with the existing Mail API at `/api/v2`. The
 same message, conversation, attachment, draft, send, reply, and forward endpoints used by other
 clients apply the agent's current mailbox access on every request.
 
@@ -49,13 +50,13 @@ Give the agent the mailbox skill shown after credential creation:
 https://mail.example.com/skills/hqbase-mailbox/SKILL.md
 ```
 
-You can copy the public skill URL again from **Settings → Connect AI agents → Agentic mailbox**.
-It is in the **Mailbox agent** section. The skill contains no credential or mail content.
+The **Mailbox agent** section in **Settings → Connect AI agents → Agentic mailbox** provides the
+create action and public skill URL. The skill contains no credential or mail content.
 
 Drafts remain private to the identity that created them. A person cannot open a machine agent's
 draft, even when both can use the same mailbox.
 
-The authenticated WebSocket at `/api/v1/events` can wake the agent when a synchronization feed may
+The authenticated WebSocket at `/api/v2/events` can wake the agent when a synchronization feed may
 have new work. A wake-up contains only a topic, not mail content or message identifiers. The agent
 then reads the authoritative changes from the Mail API. It can poll the same feeds if the socket is
 not available.
@@ -76,8 +77,8 @@ Give the provisioner its separate skill:
 https://mail.example.com/skills/hqbase-provisioner/SKILL.md
 ```
 
-The **Provisioner agent** section under **Settings → Connect AI agents → Agentic mailbox** shows
-this URL. Do not give a provisioner the mailbox skill.
+The **Provisioner agent** section under the **Automate mailbox creation** divider shows the create
+action and this URL. Do not give a provisioner the mailbox skill.
 
 It creates one mailbox agent per request:
 
@@ -159,7 +160,7 @@ lists deleted mailboxes, and the third restores the same mailbox ID and messages
 The three connection roles are separate:
 
 ```text
-Mailbox agent  → mailbox skill      → mailbox credential     → /api/v1
+Mailbox agent  → mailbox skill      → mailbox credential     → /api/v2
 Provisioner    → provisioner skill  → provisioner credential → /management/v1
 Your account   → human skill or MCP → human OAuth approval   → mail you can access
 ```

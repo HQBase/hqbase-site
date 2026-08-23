@@ -224,11 +224,13 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
   explains the effects of each lifecycle action. Provisioner creation explains that it receives
   each child agent credential and must run as a trusted control-plane service.
 - **Connect AI agents** is the authoritative connection guide. It has two pill tabs in this order:
-  **Your account** and **Agentic mailbox**. **Your account** shows the human OAuth Mail API skill
-  and the `/mcp` and `/mcp/full` server URLs. **Agentic mailbox** shows two flat sections in this
-  order: **Mailbox agent**, then **Provisioner agent**. Each section shows only its matching public
-  skill. Both tabs use vertical space instead of card containers. In **Agentic mailbox**, a divider
-  and vertical space separate the two sections.
+  **Your account** and **Agentic mailbox**. Both tabs use flat sections and vertical space instead
+  of card containers. **Your account** shows **MCP** first, with **Read only** and **Mail actions**
+  as permission profiles. A visible divider labelled **or** separates it from **Skill + API**,
+  which shows the human OAuth Mail API skill. **Agentic mailbox** shows **Mailbox agent** first,
+  with a create action and the mailbox skill. A divider labelled **Automate mailbox creation**
+  separates **Provisioner agent**, its create action, and the provisioner skill. Only owners and
+  admins see the create actions.
 - Cloudflare-backed actions never display an API-token field. Authorization starts OAuth with PKCE
   in a labelled modal. See [Cloudflare access](/docs/specs/cloudflare-oauth/) for the security
   rules.
