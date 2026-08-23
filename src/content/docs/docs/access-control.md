@@ -53,14 +53,19 @@ Workspace roles control administration. Mailbox access controls email. They are 
 Owners and admins can see the list of mailboxes so they can manage access, but that list does not
 reveal messages or attachments.
 
+Owners and admins can soft-delete and restore mailboxes. Mailbox agents cannot do either. A
+provisioner can deprovision only a dedicated child mailbox that it created; it cannot deprovision
+an existing human mailbox or another provisioner's mailbox.
+
 ## Unassigned catch-all mail
 
 Mail sent to an address that does not match a mailbox is unassigned. It belongs to no mailbox, so
 only a workspace owner can read it, organize it, download its attachments, or receive a
 notification for it. Admins and members cannot access unassigned mail.
 
-HQBase keeps this rule when an owner archives or trashes the message. Mail from a mailbox that was
-later deleted does not become unassigned catch-all mail.
+HQBase keeps this rule when an owner archives or trashes the message. Historical mail from a
+mailbox that was later deleted does not become unassigned catch-all mail. New mail to that
+mailbox's inactive address follows the domain's normal unmatched-mail policy.
 
 ## Login accounts and shared mailboxes are separate
 

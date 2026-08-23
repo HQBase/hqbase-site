@@ -110,18 +110,51 @@ The provisioner's own credential cannot call the Mail API. However, the provisio
 new mailbox agent credential, so it can delegate or retain that mailbox access. Run it as a trusted
 control-plane service. Do not use an untrusted mail-processing agent as the provisioner.
 
-## Disable an agent safely
+## Disable or deprovision safely
 
-Disabling any agent stops its credentials from authorizing new requests. For a mailbox agent,
-HQBase keeps the mailbox, address, messages, and audit history. Mail sent to the address still
-belongs to that mailbox; it never becomes unassigned catch-all mail. Disabling a provisioner stops
-new provisioning but does not disable the mailbox agents that it already created.
+Disabling an agent stops its credentials from authorizing new requests. It does not delete or
+deactivate the mailbox. For a mailbox agent, HQBase keeps the active mailbox, address, messages,
+and audit history. Mail sent to the address still belongs to that mailbox. Disabling a provisioner
+stops new provisioning but does not disable the mailbox agents that it already created.
+
+An owner or admin can select **Delete mailbox** in **Settings → Mailboxes**. This is a reversible
+soft deletion. It preserves the mailbox ID, addresses, messages, drafts, attachments, and audit
+history under the current retention rules, but hides them from normal mail views and stops
+receiving and sending. HQBase disables every linked agent and revokes its credentials. New mail to
+the inactive address follows the domain's normal unmatched-mail policy.
+
+A provisioner can perform the same operation only for a dedicated child mailbox that it created:
+
+```http
+DELETE /management/v1/agents/{agent-id}
+Authorization: Bearer hqb_agent_<provisioner-secret>
+```
+
+It cannot deprovision an existing human mailbox, a mailbox that was only shared with an agent, or
+another provisioner's child. Repeating the request has the same successful result. The
+deprovisioned child remains in `GET /management/v1/agents`, but it no longer counts as an active
+provisioned mailbox.
+
+Only a human owner or admin can restore a mailbox in this release. They can find deleted mailboxes
+under **Settings → Mailboxes → Deleted mailboxes** and restore the same mailbox. Linked agents stay
+disabled until an owner or admin separately reactivates them and receives a new credential.
 
 ## Technical details
 
 People and machine agents are separate principals. People can have workspace roles. Machine agents
 have no workspace role. A mailbox agent uses one explicit mailbox grant. A provisioner uses only
 its provisioning capability.
+
+The signed-in Settings routes are:
+
+```text
+DELETE /api/mailboxes/{mailbox-id}
+GET /api/mailboxes/deleted
+POST /api/mailboxes/{mailbox-id}/restore
+```
+
+Only an owner or admin can use these routes. The first route soft-deletes the mailbox. The second
+lists deleted mailboxes, and the third restores the same mailbox ID and messages.
 
 The three connection roles are separate:
 

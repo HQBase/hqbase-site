@@ -935,23 +935,35 @@ test("agent mailboxes keep machine identity and mail access separate", async () 
   assert.match(agents, /`\/management\/v1`/);
   assert.match(agents, /It cannot connect a domain/);
   assert.match(agents, /trusted[\s\S]*control-plane service/);
-  assert.match(agents, /keeps the mailbox,[\s\S]*address,[\s\S]*messages,[\s\S]*audit history/);
+  assert.match(agents, /keeps the active mailbox,[\s\S]*address,[\s\S]*messages,[\s\S]*audit history/);
+  assert.match(agents, /DELETE \/management\/v1\/agents\/\{agent-id\}/);
+  assert.match(agents, /Repeating the request has the same successful result/);
+  assert.match(agents, /Only a human owner or admin can restore a mailbox/);
+  assert.match(agents, /DELETE \/api\/mailboxes\/\{mailbox-id\}/);
+  assert.match(agents, /GET \/api\/mailboxes\/deleted/);
+  assert.match(agents, /POST \/api\/mailboxes\/\{mailbox-id\}\/restore/);
+  assert.match(agents, /Linked agents stay[\s\S]*disabled until[\s\S]*separately reactivates them/);
   assert.match(agents, /Handle mail[\s\S]*internal `agent` permission/);
   assert.doesNotMatch(agents, /webhook|Idempotency-Key|scheduled send|human review/i);
 
   assert.match(access, /People and machine agents only see mailboxes/);
   assert.match(access, /\| Handle mail \|/);
   assert.match(access, /Machine agents cannot access unassigned catch-all mail/);
+  assert.match(access, /Owners and admins can soft-delete and restore mailboxes/);
+  assert.match(access, /provisioner can deprovision only a dedicated child mailbox/);
   assert.match(architecture, /authenticated event WebSocket/);
   assert.match(mcp, /acts for a signed-in person/);
   assert.match(mcp, /Agent mailboxes/);
   assert.match(product, /A person and a machine agent are separate identities/);
   assert.match(multiDomain, /A provisioner uses the separate Management API/);
+  assert.match(multiDomain, /New mail to its[\s\S]*normal unmatched-mail policy/);
   assert.match(mailApi, /mailbox agent uses a revocable bearer credential/);
   assert.match(mailApi, /This credential[\s\S]*is not OAuth/);
   assert.match(mailApi, /A provisioner credential[\s\S]*does not work with this API/);
   assert.match(mailApi, /wake-up channel,[\s\S]*not a second data API/);
+  assert.match(mailApi, /Soft-deleted mailboxes[\s\S]*drafts,[\s\S]*attachments do not appear/);
   assert.match(productUi, /agent management at `\/settings\/agents`/);
+  assert.match(productUi, /Deleted mailboxes[\s\S]*linked agents stay disabled/);
 });
 
 test("the design scaffold and local assets remain available", async () => {

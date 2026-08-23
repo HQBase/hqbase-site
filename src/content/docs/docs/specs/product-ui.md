@@ -205,6 +205,13 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
   never on load, sign-in, navigation, or incoming mail.
 - Every signed-in person with a sending identity chooses a personal default From mailbox; replies
   continue to prefer the mailbox that received the original message.
+- **Mailboxes** lists active human and agent mailboxes. An owner or admin can select **Delete
+  mailbox** after a confirmation explains that HQBase will hide the mailbox from normal mail views,
+  stop receiving and sending, disable linked agents, and revoke their credentials while preserving
+  the mailbox ID, messages, drafts, and attachments under the current retention rules. Deleted
+  mailboxes do not appear in the header or default Settings list. **Deleted mailboxes** lists them
+  for restoration. Restore reactivates the same mailbox, but linked agents stay disabled until an
+  owner or admin separately reactivates them.
 - **Agents** lets an owner or admin create, rotate, reactivate, and disable machine identities. A
   credential dialog shows the new secret once and the matching public skill URL with separate copy
   actions. The page never shows a saved credential again. It also shows exact mailbox grants and

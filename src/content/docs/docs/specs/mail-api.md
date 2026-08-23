@@ -112,7 +112,7 @@ All paths below are relative to `/api/v1`.
 
 | Method and path | Permission | Purpose |
 | --- | --- | --- |
-| `GET /mailboxes` | `mail:read` | List mailboxes visible to the caller. Owners and admins may see mailbox metadata for access management without receiving its mail. |
+| `GET /mailboxes` | `mail:read` | List active mailboxes visible to the caller. Owners and admins may see active mailbox metadata for access management without receiving its mail. |
 | `GET /messages` | `mail:read` | List or search messages with cursor pagination, optionally filtered by mailbox or folder. |
 | `GET /changes` | `mail:read` | Read message upserts and deletion tombstones after a sync checkpoint. |
 | `GET /events` | `mail:read` | Open a WebSocket that wakes clients when a synchronization feed can have new work. |
@@ -145,6 +145,10 @@ mailbox metadata but cannot read, change, or send its mail.
 Each mailbox has a stable `kind`: `human` for an ordinary mailbox or `agent` for a dedicated
 mailbox created with a mailbox agent. Giving an agent access to an existing human mailbox does not
 change that mailbox's kind.
+
+Soft-deleted mailboxes and their messages, drafts, and attachments do not appear through the Mail
+API. Their stored data remains subject to the current retention rules. Restoring the mailbox makes
+the same mailbox ID and mail available again under its current access rules.
 
 Inbound mail that did not match a mailbox is unassigned and has no mailbox grant. Only an owner can
 list, read, change, or download this mail through the REST API or MCP. The stored unassigned state

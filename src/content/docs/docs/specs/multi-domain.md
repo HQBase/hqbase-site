@@ -71,6 +71,10 @@ in-app portal cutover.
 - An agent mailbox uses the same mailbox and address model. A provisioner can create its first
   address only on a domain that is already connected to this workspace.
 - Messages record the exact receiving and sending address identities.
+- Soft-deleting a mailbox preserves its mailbox ID, addresses, messages, and audit history. It
+  disables receiving and sending without moving historical mail to Catch-all. New mail to its
+  inactive addresses follows the domain's normal unmatched-mail policy. Restoring the mailbox
+  reactivates the same mailbox and addresses.
 - A connected email domain cannot match any workspace user's Login email domain. HQBase enforces
   the exclusion in both directions: user creation rejects connected domains, and later domain
   connection rejects domains already used for Login emails.
@@ -98,6 +102,7 @@ A provisioner uses the separate Management API to create a mailbox, its first ad
 agent, and an explicit grant. It cannot connect or reconfigure a domain. It receives the child
 mailbox agent credential once and is therefore a trusted credential issuer. If the response is
 lost, it can list only its own mailbox agents and replace a child credential. Credential creation
-and its audit record commit together. Disabling a mailbox agent preserves its mailbox, address,
-messages, and audit history. Disabling a provisioner stops new provisioning but does not disable
-its existing mailbox agents.
+and its audit record commit together. It can deprovision only a dedicated child mailbox that it
+created. Deprovisioning uses the same soft deletion as Settings and disables that child agent.
+Disabling a mailbox agent preserves its active mailbox, address, messages, and audit history.
+Disabling a provisioner stops new provisioning but does not disable its existing mailbox agents.
