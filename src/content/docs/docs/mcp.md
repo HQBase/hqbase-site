@@ -122,9 +122,9 @@ The skill contains:
 - A compact list of Mail API methods.
 - A link to the installation's OpenAPI document at `/api/v2/openapi.json`.
 
-The Mail API supports mailboxes, messages, conversations, attachments, drafts, sending, and
-replying. It does not manage people, mailbox access, domains, setup, updates, sessions, app secrets,
-or Cloudflare credentials.
+The Mail API supports mailboxes, messages, conversations, attachments, drafts, sending, replying,
+and forwarding. It does not manage people, mailbox access, domains, setup, updates, sessions, app
+secrets, or Cloudflare credentials.
 
 See the [Mail API reference](/docs/specs/mail-api/) for authentication, endpoints, request formats,
 errors, and versioning rules.
