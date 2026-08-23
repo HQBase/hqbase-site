@@ -196,6 +196,8 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
 
 - Settings contains only active workspace and infrastructure destinations, and gains search,
   sorting, or pagination only when the behavior needs it.
+- Tab controls use a rounded pill track with even inner padding and fully rounded triggers. The
+  selected trigger stays inset from every edge of the track.
 - Add and create forms use labelled dialogs. A dialog closes only after an explicit close action,
   successful submission, or Escape. A backdrop click, including one that dismisses a nested
   dropdown, must not close the dialog.
