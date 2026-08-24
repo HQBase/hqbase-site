@@ -27,7 +27,8 @@ A draft keeps:
 - To, Cc, and Bcc recipients;
 - the subject, formatted content, and plain-text version;
 - reply or forward context;
-- attachments; and
+- attachments;
+- its signature mode and sanitized signature snapshot; and
 - a version number that prevents an older edit from silently replacing a newer one.
 
 HQBase waits briefly while you type, then saves changes in order. Local crash recovery protects
@@ -125,10 +126,45 @@ the composer. Ordinary **Enter** never sends. The keyboard shortcut uses the sam
 duplicate-send protection as the visible **Send** button, and stays inactive while sending is
 disabled or an attachment is still uploading.
 
-New messages use a separate window on desktop and a full-screen composer on compact screens.
+New messages use a separate window on desktop and a full-screen composer on compact screens. The
+desktop window starts at the bottom-right, can be dragged by its header, and can be resized within
+the viewport. It keeps Minimize and Close controls and does not have a maximize control. Recipient
+and subject fields use subtle separators instead of large bright focus borders.
 Replies and forwards appear after the conversation on desktop and above it in a focused editor on
 compact screens. Opening a saved reply or forward uses this same conversation-first layout instead
 of the new-message window. Composer chrome respects device safe areas.
+
+The **To**, **Cc**, and **Bcc** fields show accessible contact suggestions while the person types.
+They validate completed addresses after blur and before save or send, not after each keystroke. See
+[Contacts and labels](/docs/specs/contacts-and-labels/) for suggestion ranking and privacy.
+
+## Use email signatures
+
+A signature belongs to exactly one person, mailbox, or mail domain. Each scope can contain several
+signatures and no more than one default. A person can use only signatures that apply to the exact
+selected From address and a mailbox where they can send. Automatic selection uses the mailbox
+default, then the person&apos;s default, then the exact domain default, and finally no signature. HQBase
+uses one signature and never concatenates scopes.
+
+Every new web draft starts in **Automatic** mode. A small **Signature** dropdown sits directly below
+the rendered signature preview and outside the serialized email content. It offers Automatic,
+applicable personal, mailbox, and domain signatures, **No signature**, and **Manage signatures…**.
+The preview has no card or border. Compact layouts keep a 44px target.
+
+The draft stores `automatic`, `selected`, or `none` plus a sanitized name, HTML, and plain-text
+snapshot. Editing or deleting the source signature does not rewrite a saved draft. A From change
+re-resolves Automatic, keeps Selected only when it remains valid, and preserves None. The From and
+signature change share one draft revision.
+
+Sending assembles authored content, then the signature snapshot, then reply or forward context.
+The selector never enters sent HTML or text. A signature alone does not make an empty new message or
+reply sendable. Existing API clients that omit the optional signature request field keep sending the
+body unchanged.
+
+Every signed-in person can manage personal signatures in **Settings → Signatures**. Mailbox Managers
+can manage mailbox signatures. Owners and admins can manage domain signatures. Mailbox Handle-mail
+users can use shared signatures but cannot manage them. The server sanitizes supported formatting,
+generates equivalent plain text, and stores all content in the customer&apos;s D1 database.
 
 ## Technical details
 

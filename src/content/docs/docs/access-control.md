@@ -20,6 +20,11 @@ use every mailbox so the workspace can always be recovered.
   and move messages to Trash.
 - **Manager** also lets them change mailbox settings and automatic deletion rules.
 
+People with **Handle mail** or **Manager** access can use applicable shared signatures and add or
+remove existing labels. Only a mailbox Manager can create or change that mailbox&apos;s signatures.
+Workspace owners and admins manage domain signatures and workspace label definitions. These
+configuration rights do not grant access to message content.
+
 For example, a support teammate with **Handle mail** access to `support@example.com` can reply to
 customers and organize that inbox. They cannot see `billing@example.com` unless you give them
 access to it, and they cannot change how long support mail is kept unless you make them a
