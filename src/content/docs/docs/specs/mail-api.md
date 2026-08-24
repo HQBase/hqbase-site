@@ -31,6 +31,19 @@ mailbox was active and the address could both receive and send; otherwise, it is
 mail and drafts move to the mailbox for their exact receiving or sending address. Threads and
 attachments stay intact. Default-sender and catch-all settings stay on the original mailbox.
 
+### Upgrade a client from v1 to v2
+
+Existing v1 clients can upgrade when convenient:
+
+1. Change the API base, protected-resource metadata, OpenAPI, and WebSocket URLs from `/api/v1` to
+   `/api/v2`.
+2. Request the `/api/v2` OAuth resource and ask the person to approve it. A v1 token cannot be used
+   with v2.
+3. Read the mailbox's `address`, `mailDomainId`, `kind`, and `deletedAt` fields directly. Do not read
+   an `addresses` list.
+4. Verify mailbox listing, synchronization, and sending with v2. Then remove the client's v1 token
+   and configuration.
+
 ## Authentication
 
 HQBase accepts two forms of authentication on `/api/v1` and `/api/v2`:
