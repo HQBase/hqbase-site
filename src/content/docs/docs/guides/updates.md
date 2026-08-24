@@ -11,12 +11,17 @@ an update from **Settings → Updates**.
 HQBase checks after sign-in, while the app remains open, and when you return to the browser. When a
 newer compatible release is ready, Settings shows **Update available**.
 
+The update banner and **Settings → Updates** show the target release changelog before installation.
+The list comes from the signed release record and describes the features and fixes in the exact
+version being offered. A link opens the complete public release notes. HQBase keeps the currently
+displayed notes if a later check fails.
+
 Members do not see infrastructure controls. A temporary network problem does not interrupt the
 mail interface; owners and admins can still see the failed check in Settings.
 
 ## Install an update
 
-1. In **Settings → Updates**, review the installed and target versions.
+1. In **Settings → Updates**, review the installed and target versions and their changelog.
 2. Confirm that the update is supported, then start it.
 3. Approve the temporary Cloudflare permission needed to run the production build.
 4. Leave the page open while HQBase pins, verifies, installs, and checks that exact release.
