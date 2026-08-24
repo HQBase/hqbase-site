@@ -19,7 +19,7 @@ workspace data, and app secrets stay in infrastructure you control.
 | Cloudflare service | What it does for HQBase |
 | --- | --- |
 | Worker | Serves the web app and APIs, receives email, and performs approved actions. |
-| D1 | Stores people, mailbox access, searchable email information, drafts, and app state. |
+| D1 | Stores people, machine agents, mailbox access, searchable email information, drafts, and app state. |
 | R2 | Stores original email files and attachments. |
 | Queues | Runs background work. Failed jobs move to a separate queue so they can be investigated. |
 | Email Routing | Delivers incoming email to HQBase. |
@@ -38,6 +38,10 @@ When a teammate replies, the Worker first checks that they can send from the `su
 mailbox. Cloudflare Email Sending delivers the reply, and HQBase adds it to **Sent**.
 
 The same mailbox access rules protect the web app, APIs, and MCP connections used by AI tools.
+
+A machine agent uses a separate bearer credential with the same Mail API. It can reach only its
+granted mailbox. The authenticated event WebSocket can wake it when a REST change feed may have
+new work, but the event contains no mail content. See [Agent mailboxes](/docs/agent-mailboxes/).
 
 ## Installation and updates
 
