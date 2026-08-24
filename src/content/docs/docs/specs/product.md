@@ -41,6 +41,9 @@ multi-domain administration.
 - Every person signs in with a unique login email that does not use a domain connected to the
   workspace. The workspace owner&apos;s login is an authentication and recovery identity; it never
   implicitly becomes a shared mailbox.
+- A person and a machine agent are separate identities. A machine agent has no login account or
+  workspace role. Its bearer credential and exact mailbox grants give it no implicit owner, admin,
+  domain, future-mailbox, or catch-all access.
 - Mailbox access is explicit and never inherited from role, domain ownership, or inference. The one
   exception is stated directly: workspace owners can reach every mailbox so the workspace stays
   recoverable.
