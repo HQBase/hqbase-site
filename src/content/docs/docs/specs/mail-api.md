@@ -158,6 +158,11 @@ All paths below are available relative to `/api/v1` and `/api/v2`. New clients u
 | `GET /messages/{id}/inline/{attachmentId}` | `mail:read` | Render a safe inline image from a message. |
 | `GET /attachments/{id}` | `mail:read` | Download an attachment. |
 | `GET /conversations` | `mail:read` | List or search conversation summaries with cursor pagination. |
+| `GET /labels` | `mail:read` | List workspace labels visible to the caller. |
+| `PUT /messages/{id}/labels/{labelId}` | `mail:write` | Add a label to one organizable message. |
+| `DELETE /messages/{id}/labels/{labelId}` | `mail:write` | Remove a label from one organizable message. |
+| `PUT /conversations/{id}/labels/{labelId}` | `mail:write` | Add a label to accessible organizable messages in a conversation. |
+| `DELETE /conversations/{id}/labels/{labelId}` | `mail:write` | Remove a label from accessible organizable messages in a conversation. |
 | `POST /messages/{id}/{action}` | `mail:write` | Apply `read`, `unread`, `star`, `unstar`, `archive`, `unarchive`, `trash`, or `restore`. |
 | `POST /messages/{id}/remote-media/trust` | `mail:write` | A person can trust the message sender's remote images. Machine agents cannot change this preference. |
 | `POST /conversations/{id}/{action}` | `mail:write` | Apply a message action to the accessible part of a conversation. |
@@ -201,6 +206,32 @@ The `search` value is one literal substring. HQBase searches the subject, sender
 recipients, snippet, and plain-text body. The characters `%`, `_`, and `\` are ordinary search
 text. They do not enable wildcards or escapes. Mailbox access and the requested mailbox and folder
 filters still apply, and search does not change the activity-time order used by pagination.
+
+`labelId` is an optional message and conversation filter. It combines with mailbox, folder, and
+literal search filters. A conversation matches when one accessible message in it has that label.
+An unknown label returns `404 LABEL_NOT_FOUND`; a label never broadens mailbox access.
+
+### Labels
+
+Labels are workspace organization, not folders or access controls. `GET /labels` is available to
+human OAuth and machine mailbox clients with `mail:read`. A caller with `mail:write` can add or remove
+an existing label only where its live mailbox grant permits mail organization. Conversation label
+actions update accessible organizable messages and leave inaccessible copies unchanged.
+
+Label-definition management remains in owner/admin installed-app routes. Machine credentials and
+OAuth Mail API tokens cannot create, rename, recolor, or delete workspace labels.
+
+### Signatures
+
+`GET /signatures?from=<exact-address>` requires `mail:send` and returns only personal, mailbox, and
+exact-domain signatures usable from that address, plus the automatic signature ID. Draft create and
+update requests accept an optional `signature` object with mode `automatic`, `selected`, or `none`;
+selected mode also requires an ID. Draft responses include the saved mode and sanitized snapshot.
+
+Direct send, reply, and forward requests accept the same optional object. When it is present, HQBase
+resolves and snapshots the signature before message assembly. When it is omitted, the supplied body
+is unchanged. This preserves existing clients. Signature management remains in session-authenticated
+installed-app routes.
 
 ### Message actions
 

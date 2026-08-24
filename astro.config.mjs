@@ -89,6 +89,7 @@ export default defineConfig({
             { slug: docsSlug("specs/product") },
             { slug: docsSlug("specs/multi-domain") },
             { slug: docsSlug("specs/composer") },
+            { slug: docsSlug("specs/contacts-and-labels") },
             { slug: docsSlug("specs/mail-api") },
             { slug: docsSlug("specs/cloudflare-oauth") },
             { slug: docsSlug("specs/product-ui") },

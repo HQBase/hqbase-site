@@ -193,6 +193,16 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - No list, reader, or conversation action may read or change a mailbox outside the person&apos;s current
   access. See [Mailbox access](/docs/access-control/) for the permission levels.
 
+At widths below 640 CSS pixels, a conversation row uses the dense layout established by mobile mail
+clients: avatar or sender initial at the start; sender and time on the first line; subject on the
+second line; snippet on the third line; and the star action at the trailing edge. Do not hide the
+sender, subject, snippet, time, or star to make the row fit. Larger compact and desktop layouts keep
+their current horizontal row.
+
+Every folder can filter by one label without changing its mailbox, search, or folder selection.
+Conversation rows and the reader expose one **Labels** action that can add or remove a label in one
+step. See [Contacts and labels](/docs/specs/contacts-and-labels/) for permissions and API behavior.
+
 ## Setup and Settings
 
 Setup is one quiet, resumable page. After temporary Cloudflare access is verified, progress
@@ -238,17 +248,29 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
   rules.
 - Debug contains read-only deployment diagnostics.
 
+Standard form choices use the shared dropdown control at the normal compact field height. The
+mailbox selector in the header remains uniquely smaller. Primary and create actions use the normal
+or small button size; the installed app does not use an extra-large button size.
+
 ## Navigation and accessibility
 
-- Primary routes are `/inbox`, `/sent`, `/starred`, `/archived`, `/trash`, `/catch-all`, and
-  private drafts at `/drafts` and `/drafts/<draft-id>`. Settings routes live under
-  `/settings/*`, including agent management at `/settings/agents`. Unknown app paths normalize to
-  `/inbox`. Catch-all mail stays owner-only even after archive or trash actions.
+- Primary navigation has **Mail**, **Contacts**, and **Settings**. Mail routes are `/inbox`, `/sent`,
+  `/starred`, `/archived`, `/trash`, `/catch-all`, and private drafts at `/drafts` and
+  `/drafts/<draft-id>`. Contacts use `/contacts` and `/contacts/<contact-id>`. Settings routes live
+  under `/settings/*`, including agent management at `/settings/agents`. They also include label
+  management at `/settings/labels` and signature management at `/settings/signatures`. Unknown app
+  paths normalize to `/inbox`. Catch-all mail stays owner-only even after archive or trash actions.
 - Every field has a persistent label and inline error. Loading buttons prevent duplicate
   submission. Errors stay limited and secret-free. Success messages say what happened, what
   remains safe, and what to do next.
 - Compact editable fields use at least 16px text on iOS to avoid focus zoom. Keep focus visible,
   use 44px targets where practical, and never rely on color alone for meaning.
+
+The header search is global while the person types. After a short debounce, an anchored result list
+shows matching conversations, contacts, and app destinations that the person can access. Arrow keys
+move through results, Enter opens the active result, and Escape closes the list. Selecting a
+conversation or contact opens that item. Pressing Enter with no active result applies the literal
+query as the Inbox search filter. Typing alone never changes the current route or mail list.
 
 ## Feedback sounds
 
