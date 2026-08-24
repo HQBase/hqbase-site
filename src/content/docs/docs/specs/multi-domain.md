@@ -1,6 +1,6 @@
 ---
 title: Using multiple domains
-description: How workspaces, domains, mailboxes, addresses, and sending fit together.
+description: How workspaces, domains, mailboxes, and sending fit together.
 ---
 
 One HQBase deployment owns one workspace and may operate multiple email domains in the same
@@ -60,25 +60,25 @@ in-app portal cutover.
 - Staging acceptance moves a live staging installation to a second hostname and back. It verifies
   the portal and service-origin contract after each move.
 
-## Domains, mailboxes, and addresses
+## Domains and mailboxes
 
 - A domain records Cloudflare zone identity and independent receiving, sending, DNS, and catch-all
   state.
-- A mailbox is the content, retention, and permission boundary.
-- An address is a receiving and sending identity attached to exactly one mailbox and domain.
-- Multiple addresses may share one mailbox. If addresses need different access, they must use
-  different mailboxes.
-- Messages record the exact receiving and sending address identities.
+- A mailbox is the content, retention, permission, receiving, and sending boundary. It owns exactly
+  one email address on exactly one connected domain.
+- Each email address requires its own mailbox. The mailbox switcher and **All mailboxes** view let a
+  person work across the mailboxes they can access.
+- Messages record the exact envelope recipient and sender address.
 - A connected email domain cannot match any workspace user's Login email domain. HQBase enforces
   the exclusion in both directions: user creation rejects connected domains, and later domain
   connection rejects domains already used for Login emails.
 
 ## Authorization
 
-Mailbox grants remain `read`, `agent`, and `manager`. Addresses inherit their mailbox grant.
-Owners and admins manage hosts, domains, addresses, catch-all policy, and grants. Admins still need
-an explicit mailbox grant to read content. Domain bulk access is a UI operation that writes
-explicit mailbox grants; there is no implicit future domain grant.
+Mailbox grants remain `read`, `agent`, and `manager`. Owners and admins manage hosts, domains,
+mailboxes, catch-all policy, and grants. Admins still need an explicit mailbox grant to read
+content. Domain bulk access is a UI operation that writes explicit mailbox grants; there is no
+implicit future domain grant.
 
 ## Provisioning
 
@@ -87,6 +87,6 @@ supports active zones selected during Cloudflare consent. The portal, service or
 selected email domain are inspected and provisioned with retry-safe Cloudflare operations. HQBase
 revokes the grant and deletes its masked setup secret after setup completes. Additional domains,
 portal cutover, and service-origin changes require a fresh operation-specific OAuth grant. HQBase
-never asks an owner to paste a Cloudflare API token. Domain disablement preserves mailbox, address,
-and message history. Domain connection validates Login email independence before making Cloudflare
+never asks an owner to paste a Cloudflare API token. Domain disablement preserves mailbox and
+message history. Domain connection validates Login email independence before making Cloudflare
 changes.
