@@ -68,12 +68,18 @@ export default defineConfig({
             { slug: docsSlug("architecture") },
             { slug: docsSlug("access-control") },
             { slug: docsSlug("community-clients") },
-            { slug: docsSlug("mcp") },
             { slug: docsSlug("operations") },
             { slug: docsSlug("guides/cloudflare-email-setup") },
             { slug: docsSlug("guides/deployment") },
             { slug: docsSlug("guides/customer-managed-oauth") },
             { slug: docsSlug("guides/updates") },
+          ],
+        },
+        {
+          label: "AI agents",
+          items: [
+            { slug: docsSlug("agent-mailboxes") },
+            { slug: docsSlug("mcp"), label: "Connect an AI tool" },
           ],
         },
         {

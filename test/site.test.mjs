@@ -26,6 +26,9 @@ test("Astro owns the landing and Starlight documentation routes", async () => {
   assert.doesNotMatch(config, /label: "Product home"/);
   assert.doesNotMatch(config, /label: "Source"/);
   assert.match(config, /label: "Using HQBase"/);
+  assert.match(config, /label: "AI agents"/);
+  assert.match(config, /docsSlug\("agent-mailboxes"\)/);
+  assert.match(config, /docsSlug\("mcp"\), label: "Connect an AI tool"/);
   assert.match(config, /label: "Product reference"/);
   assert.doesNotMatch(
     config,
@@ -731,6 +734,8 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(overview, /Manage mailbox access/);
   assert.match(overview, /Explore community clients/);
   assert.match(overview, /\/docs\/community-clients\//);
+  assert.match(overview, /Give an agent a mailbox/);
+  assert.match(overview, /\/docs\/agent-mailboxes\//);
   assert.match(overview, /Connect AI tools/);
   assert.match(overview, /Back up or recover/);
   assert.match(overview, /## Building or maintaining HQBase\?/);
@@ -778,11 +783,11 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.doesNotMatch(communityClients, /unsupported|use at your own risk/i);
   assert.match(mcp, /Read-only[\s\S]*\/mcp/);
   assert.match(mcp, /Mail actions[\s\S]*\/mcp\/full/);
-  assert.match(mcp, /title: Connect AI agents/);
+  assert.match(mcp, /title: Connect an AI tool/);
   assert.match(mcp, /## Connect with MCP/);
   assert.match(mcp, /### Choose an MCP profile/);
   assert.match(mcp, /### MCP technical details/);
-  assert.match(mcp, /## Connect via SKILL\.md/);
+  assert.match(mcp, /## Connect with Skill \+ API/);
   assert.match(mcp, /### How SKILL\.md uses the Mail API/);
   assert.match(mcp, /Mail API reference/);
   assert.match(mcp, /\/api\/v2\/openapi\.json/);
@@ -888,6 +893,79 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(styles, /\.pagination-links \.link-title[\s\S]*font-size: 1\.125rem/);
   assert.match(styles, /\.pagination-links svg[\s\S]*width: 1\.125rem[\s\S]*height: 1\.125rem/);
   assert.doesNotMatch(styles, /googleapis|fontshare/);
+});
+
+test("agent mailboxes keep machine identity and mail access separate", async () => {
+  const [
+    config,
+    overview,
+    agents,
+    access,
+    architecture,
+    mcp,
+    product,
+    multiDomain,
+    mailApi,
+    productUi,
+  ] = await Promise.all([
+      read("astro.config.mjs"),
+      read("src/content/docs/docs/index.mdx"),
+      read("src/content/docs/docs/agent-mailboxes.md"),
+      read("src/content/docs/docs/access-control.md"),
+      read("src/content/docs/docs/architecture.md"),
+      read("src/content/docs/docs/mcp.md"),
+      read("src/content/docs/docs/specs/product.md"),
+      read("src/content/docs/docs/specs/multi-domain.md"),
+      read("src/content/docs/docs/specs/mail-api.md"),
+      read("src/content/docs/docs/specs/product-ui.md"),
+    ]);
+
+  assert.match(config, /label: "AI agents"/);
+  assert.match(config, /docsSlug\("agent-mailboxes"\)/);
+  assert.match(overview, /Give an agent a mailbox/);
+  assert.match(agents, /title: Agent mailboxes/);
+  assert.match(agents, /Mailbox agent[\s\S]*Provisioner/);
+  assert.match(agents, /one exact mailbox/);
+  assert.match(agents, /HQBase shows the new bearer credential once/);
+  assert.match(agents, /current and future messages and attachments/);
+  assert.match(agents, /never see[\s\S]*unassigned catch-all mail/);
+  assert.match(agents, /authenticated WebSocket at `\/api\/v2\/events`/);
+  assert.match(agents, /authoritative changes from the Mail API/);
+  assert.match(agents, /Drafts remain private to the identity that created them/);
+  assert.match(agents, /`\/management\/v1`/);
+  assert.match(agents, /It cannot connect a domain/);
+  assert.match(agents, /trusted[\s\S]*control-plane service/);
+  assert.match(agents, /keeps the active mailbox,[\s\S]*address,[\s\S]*messages,[\s\S]*audit history/);
+  assert.match(agents, /DELETE \/management\/v1\/agents\/\{agent-id\}/);
+  assert.match(agents, /Repeating the request has the same successful result/);
+  assert.match(agents, /Only a human owner or admin can restore a mailbox/);
+  assert.match(agents, /DELETE \/api\/mailboxes\/\{mailbox-id\}/);
+  assert.match(agents, /GET \/api\/mailboxes\/deleted/);
+  assert.match(agents, /POST \/api\/mailboxes\/\{mailbox-id\}\/restore/);
+  assert.match(agents, /Linked agents stay[\s\S]*disabled until[\s\S]*separately reactivates them/);
+  assert.match(agents, /Handle mail[\s\S]*internal `agent` permission/);
+  assert.doesNotMatch(agents, /webhook|Idempotency-Key|scheduled send|human review/i);
+
+  assert.match(access, /People and machine agents only see mailboxes/);
+  assert.match(access, /\| Handle mail \|/);
+  assert.match(access, /Machine agents cannot access unassigned catch-all mail/);
+  assert.match(access, /Owners and admins can soft-delete and restore mailboxes/);
+  assert.match(access, /provisioner can deprovision only a dedicated child mailbox/);
+  assert.match(architecture, /authenticated event WebSocket/);
+  assert.match(mcp, /acts for a signed-in person/);
+  assert.match(mcp, /Agent mailboxes/);
+  assert.match(product, /A person and a machine agent are separate identities/);
+  assert.match(multiDomain, /A provisioner uses the separate Management API/);
+  assert.match(multiDomain, /New mail to its[\s\S]*normal unmatched-mail policy/);
+  assert.match(mailApi, /mailbox agent uses a revocable bearer credential/);
+  assert.match(mailApi, /This credential[\s\S]*is not OAuth/);
+  assert.match(mailApi, /A provisioner credential[\s\S]*does not work with this API/);
+  assert.match(mailApi, /wake-up channel,[\s\S]*not a second data API/);
+  assert.match(mailApi, /Soft-deleted mailboxes[\s\S]*drafts,[\s\S]*attachments do not appear/);
+  assert.match(productUi, /agent management at `\/settings\/agents`/);
+  assert.match(productUi, /Deleted mailboxes[\s\S]*linked agents stay disabled/);
+  assert.match(productUi, /divider labelled \*\*or\*\*[\s\S]*\*\*Skill \+ API\*\*/);
+  assert.match(productUi, /divider labelled \*\*Automate mailbox creation\*\*/);
 });
 
 test("the design scaffold and local assets remain available", async () => {

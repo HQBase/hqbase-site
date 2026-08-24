@@ -68,7 +68,13 @@ in-app portal cutover.
   one email address on exactly one connected domain.
 - Each email address requires its own mailbox. The mailbox switcher and **All mailboxes** view let a
   person work across the mailboxes they can access.
+- An agent mailbox uses the same one-address model. A provisioner can create it only on a domain
+  that is already connected to this workspace.
 - Messages record the exact envelope recipient and sender address.
+- Soft-deleting a mailbox preserves its mailbox ID, address, messages, and audit history. It
+  disables receiving and sending without moving historical mail to Catch-all. New mail to its
+  inactive address follows the domain's normal unmatched-mail policy. Restoring the mailbox
+  reactivates the same mailbox and address.
 - A connected email domain cannot match any workspace user's Login email domain. HQBase enforces
   the exclusion in both directions: user creation rejects connected domains, and later domain
   connection rejects domains already used for Login emails.
@@ -76,9 +82,9 @@ in-app portal cutover.
 ## Authorization
 
 Mailbox grants remain `read`, `agent`, and `manager`. Owners and admins manage hosts, domains,
-mailboxes, catch-all policy, and grants. Admins still need an explicit mailbox grant to read
-content. Domain bulk access is a UI operation that writes explicit mailbox grants; there is no
-implicit future domain grant.
+mailboxes, catch-all policy, and grants. People and machine agents need explicit grants. Admins
+still need an explicit mailbox grant to read content. Domain bulk access is a UI operation that
+writes explicit mailbox grants; there is no implicit future domain grant.
 
 ## Provisioning
 
@@ -90,3 +96,13 @@ portal cutover, and service-origin changes require a fresh operation-specific OA
 never asks an owner to paste a Cloudflare API token. Domain disablement preserves mailbox and
 message history. Domain connection validates Login email independence before making Cloudflare
 changes.
+
+A provisioner uses the separate Management API to create a dedicated mailbox and its address, a
+mailbox agent, and an explicit grant. It cannot connect or reconfigure a domain. It receives the
+child mailbox agent credential once and is therefore a trusted credential issuer. If the response
+is lost, it can list only its own mailbox agents and replace a child credential. Credential
+creation and its audit record commit together. It can deprovision only a dedicated child mailbox
+that it created. Deprovisioning uses the same soft deletion as Settings and disables that child
+agent.
+Disabling a mailbox agent preserves its active mailbox, address, messages, and audit history.
+Disabling a provisioner stops new provisioning but does not disable its existing mailbox agents.

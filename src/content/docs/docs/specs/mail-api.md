@@ -46,10 +46,14 @@ Existing v1 clients can upgrade when convenient:
 
 ## Authentication
 
-HQBase accepts two forms of authentication on `/api/v1` and `/api/v2`:
+HQBase accepts an HQBase session cookie or human OAuth token on `/api/v1` and `/api/v2`. V2 also
+accepts a mailbox-agent credential:
 
 - The web app uses its HTTP-only HQBase session cookie.
-- External clients use an OAuth bearer token issued by the same HQBase installation.
+- External clients acting for a person use an OAuth bearer token issued by the same HQBase
+  installation.
+- A mailbox agent uses a revocable bearer credential created with the agent. An owner, admin, or
+  approved provisioner can create it. This credential is not OAuth and HQBase shows it only once.
 
 OAuth clients discover the installation's authorization server at
 `/.well-known/oauth-authorization-server/api/auth`. Protected-resource metadata is available at
@@ -58,13 +62,13 @@ OAuth clients discover the installation's authorization server at
 installation origin followed by the selected API version, for example
 `https://mail.example.com/api/v2`.
 Protected-resource metadata identifies the API as **HQBase Mail API** and links its
-`resource_documentation` to the installation's generated Agent Skill at
+`resource_documentation` to the installation's generated human-delegated Agent Skill at
 `/skills/hqbase-mail/SKILL.md`.
 
 HQBase supports OAuth dynamic client registration, Device Authorization Grant, and Authorization
-Code with PKCE. Device Authorization is the preferred flow for agents, command-line tools, and
-other clients that cannot safely receive a browser callback. PKCE remains available for clients
-that can receive one.
+Code with PKCE. Device Authorization is the preferred flow for AI tools acting for a person,
+command-line tools, and other clients that cannot safely receive a browser callback. PKCE remains
+available for clients that can receive one.
 
 A public client registers with token endpoint authentication method `none`; it must not embed a
 client secret. The authorization server's discovery document supplies the registration,
@@ -72,11 +76,18 @@ authorization, device-authorization, and token endpoints. Clients request the AP
 registering and authorizing so the resulting token cannot be replayed against MCP or another
 service.
 
+A mailbox agent credential is bound to its machine principal and the `/api/v2` resource. It does
+not create a browser session, use an OAuth refresh token, or work with MCP. A provisioner credential
+is instead bound to `/management/v1` and does not work with this API. The provisioner does receive
+each child mailbox agent credential once, so it is a trusted credential issuer. It can list only
+the mailbox agents that it created and replace a lost child credential. Replacement revokes the
+old credential. Disabling an agent makes its credentials fail on the next request.
+
 ### Device Authorization Grant
 
 The client registers `urn:ietf:params:oauth:grant-type:device_code`, requests a device code from
 `/api/auth/device/code`, shows the returned short `user_code` and `verification_uri` to the person,
-and polls `/api/auth/oauth2/token` at no less than the returned `interval`. An agent presents the
+and polls `/api/auth/oauth2/token` at no less than the returned `interval`. The client presents the
 verification URL as a clickable link but does not open it in Cloud Browser or another remote,
 automated, or agent-controlled browser. The person opens the verification URL in a browser they
 control, signs in to HQBase if necessary, verifies that the displayed code, client, permissions,
@@ -119,9 +130,13 @@ reverse-domain scheme with no authority component, for example `com.example.mail
 | `mail:send` | Manage drafts and draft attachments, send new mail, reply, and forward. |
 | `offline_access` | Ask the authorization server for an optional refresh token. It is not an API endpoint permission. |
 
-Tokens are further limited by the connected person's current account and mailbox access. The most
+For a machine credential, `mail:read`, `mail:write`, and `mail:send` are credential capabilities,
+not OAuth permissions. `offline_access` never applies to a machine credential.
+
+OAuth tokens are further limited by the connected person's current account and mailbox access.
+Machine credentials are limited by the agent's capabilities and exact mailbox grants. The most
 limited result wins. Revoking consent, ending a session, banning a person, requiring password
-setup, or changing mailbox access takes effect on the next request.
+setup, disabling an agent, or changing mailbox access takes effect on the next request.
 
 HQBase rotates refresh tokens. A second matching refresh request that uses the previous token
 within 30 seconds returns the same rotated token response. Reuse after that window remains a replay
@@ -133,7 +148,7 @@ All paths below are available relative to `/api/v1` and `/api/v2`. New clients u
 
 | Method and path | Permission | Purpose |
 | --- | --- | --- |
-| `GET /mailboxes` | `mail:read` | List mailboxes visible to the connected person. Owners and admins may see mailbox metadata for access management without receiving its mail. |
+| `GET /mailboxes` | `mail:read` | List active mailboxes visible to the caller. Owners and admins may see active mailbox metadata for access management without receiving its mail. |
 | `GET /messages` | `mail:read` | List or search messages with cursor pagination, optionally filtered by mailbox or folder. |
 | `GET /changes` | `mail:read` | Read message upserts and deletion tombstones after a sync checkpoint. |
 | `GET /events` | `mail:read` | Open a WebSocket that wakes clients when a synchronization feed can have new work. |
@@ -144,9 +159,9 @@ All paths below are available relative to `/api/v1` and `/api/v2`. New clients u
 | `GET /attachments/{id}` | `mail:read` | Download an attachment. |
 | `GET /conversations` | `mail:read` | List or search conversation summaries with cursor pagination. |
 | `POST /messages/{id}/{action}` | `mail:write` | Apply `read`, `unread`, `star`, `unstar`, `archive`, `unarchive`, `trash`, or `restore`. |
-| `POST /messages/{id}/remote-media/trust` | `mail:write` | Trust the message sender's remote images for the connected person. |
+| `POST /messages/{id}/remote-media/trust` | `mail:write` | A person can trust the message sender's remote images. Machine agents cannot change this preference. |
 | `POST /conversations/{id}/{action}` | `mail:write` | Apply a message action to the accessible part of a conversation. |
-| `GET /drafts` and `GET /drafts/{id}` | `mail:send` | List one cursor page or get one of the connected person's drafts. |
+| `GET /drafts` and `GET /drafts/{id}` | `mail:send` | List one cursor page or get one of the caller's drafts. |
 | `GET /drafts/changes` | `mail:send` | Read draft upserts and deletion tombstones after a sync checkpoint. |
 | `POST /drafts` | `mail:send` | Create a draft. |
 | `PATCH /drafts/{id}` | `mail:send` | Update a draft using its current version. |
@@ -157,10 +172,19 @@ All paths below are available relative to `/api/v1` and `/api/v2`. New clients u
 | `POST /reply` | `mail:send` | Reply to an existing message. |
 | `POST /forward` | `mail:send` | Forward an existing message with optional staged and original attachments. |
 
-Mailbox access still applies after OAuth permission checks. Read access is required to receive mail
-content, Agent access is required for organization and sending actions, and Manager access is not
-granted by this API. Owners retain Manager access to every mailbox. An admin without mailbox access
-can see mailbox metadata but cannot read, change, or send its mail.
+Mailbox access still applies after OAuth permission or machine-capability checks. Read access is
+required to receive mail content, **Handle mail** access is required for organization and sending
+actions, and Manager access is not granted by this API. **Handle mail** uses the internal value
+`agent`. Owners retain Manager access to every mailbox. An admin without mailbox access can see
+mailbox metadata but cannot read, change, or send its mail.
+
+Each mailbox has a stable `kind`: `human` for an ordinary mailbox or `agent` for a dedicated
+mailbox created with a mailbox agent. Giving an agent access to an existing human mailbox does not
+change that mailbox's kind.
+
+Soft-deleted mailboxes and their messages, drafts, and attachments do not appear through the Mail
+API. Their stored data remains subject to the current retention rules. Restoring the mailbox makes
+the same mailbox ID and mail available again under its current access rules.
 
 Inbound mail that did not match a mailbox is unassigned and has no mailbox grant. Only an owner can
 list, read, change, or download this mail through the REST API or MCP. The stored unassigned state
@@ -218,8 +242,8 @@ public `Draft` object. A delete is a tombstone:
 
 Creating or editing a draft, adding or removing an attachment, sending a saved draft, and deleting
 a draft all write to the draft journal. The monotonic sequence keeps rapid changes distinct and
-keeps deletion records after the draft row is removed. HQBase applies the connected person's
-current ownership and mailbox access before it returns an upsert. When mailbox access changes, a
+keeps deletion records after the draft row is removed. HQBase applies the caller's current draft
+ownership and mailbox access before it returns an upsert. When mailbox access changes, a
 client repeats the full draft bootstrap so drafts that became hidden or visible are reconciled.
 
 A new client uses this bootstrap order:
@@ -238,6 +262,9 @@ but current write paths do not store messages in that folder. Clients use `/draf
 `/drafts/changes` for a Drafts folder. The conversation-folder enum omits `drafts` because drafts
 are private composer state, not conversations.
 
+A draft belongs to the person or machine agent that created it. Another principal cannot list,
+open, edit, attach files to, or send that draft, even when both principals can use the same mailbox.
+
 ### Message pagination
 
 `GET /messages` returns one page of messages as a JSON array. `limit` sets the page size. It is an
@@ -253,7 +280,7 @@ request and adds a `cursor`. A client follows that URL to read the next page. Th
 
 A cursor is opaque and versioned. Clients must return it unchanged and must not construct, parse, or
 edit one. A cursor from another list, such as a conversation cursor, is not valid here. A cursor
-never widens message access: every page is filtered by the mailboxes the connected person can read
+never widens message access: every page is filtered by the mailboxes the caller can read
 and the owner-only rule for unassigned mail.
 
 A `limit` that is not an integer from 1 to 100 returns `400` with the error code `INVALID_LIMIT`. A
@@ -307,7 +334,7 @@ When a change cycle starts, HQBase fixes its high-water sequence. Page cursors k
 bound. The last page advances `nextCursor` to the high-water sequence. Changes written during
 paging belong to the next cycle, so one cycle stays bounded.
 
-HQBase applies the connected person's current mailbox access to each journal entry. Before each
+HQBase applies the caller's current mailbox access to each journal entry. Before each
 change cycle, the client lists `GET /mailboxes`. It removes cached mail for mailboxes that are no
 longer readable and performs a new full bootstrap for each newly readable mailbox. Stored mailbox
 identifiers let HQBase authorize deletion tombstones after the message row is gone.
@@ -323,11 +350,11 @@ An invalid `limit` returns `400` with `INVALID_LIMIT`. A malformed or foreign ch
 ### Change notifications
 
 `GET /api/v1/events` and `GET /api/v2/events` upgrade an authenticated HTTP request to a WebSocket.
-This is a wake-up channel, not a second data API. A bearer token needs `mail:read` for the selected
-API audience. The web app can use its same-origin HQBase session cookie. A cookie-authenticated
-upgrade must include an `Origin` header that exactly matches the HQBase installation origin. A
-missing or different origin returns `403 ORIGIN_FORBIDDEN`. Bearer-token connections do not depend
-on the `Origin` header and can omit it.
+This is a wake-up channel, not a second data API. An OAuth token needs `mail:read` for the selected
+API audience. A v2 machine credential also needs `mail:read`. The web app can use its same-origin
+HQBase session cookie. A cookie-authenticated upgrade must include an `Origin` header that exactly
+matches the HQBase installation origin. A missing or different origin returns
+`403 ORIGIN_FORBIDDEN`. Bearer connections do not depend on the `Origin` header and can omit it.
 
 The server sends JSON text frames in this form:
 
@@ -347,8 +374,8 @@ connection can receive all three topics. Events contain no mail content, identif
 cursor values, or mailbox names.
 
 The authorization decision at upgrade is an event-delivery lease for 10 minutes. Revoking a bearer
-token or consent, ending its session, or ending a web session does not close the existing socket
-immediately. The server closes the socket when the lease ends. Reconnection must use current
+credential or OAuth consent, disabling an agent, or ending a web session does not close the existing
+socket immediately. The server closes the socket when the lease ends. Reconnection must use current
 credentials and permissions. Mailbox visibility is checked for each message event. After a mailbox
 grant is removed, the connection can receive the `mailboxes` wake-up needed to reconcile its cache,
 but it receives no later `messages` event for mail that is no longer visible.
@@ -417,21 +444,28 @@ Security fixes can make previously accepted unauthorized or invalid requests fai
 limits can also be tightened to protect an installation, with a documented error response.
 
 When a breaking version is necessary, it receives a new base path such as `/api/v3`. The release
-notes and this specification document the migration and the support policy for older versions. The
+notes and this specification document the migration, support policy, and any deprecation window
+before HQBase removes a supported public version. The
 unversioned `/api/*` routes are product-internal compatibility routes and are not covered by this
 stability promise.
 
-## Agent Skill, OpenAPI, and human testing
+## Agent skills, OpenAPI, and human testing
 
-Every HQBase installation publishes a generated, instruction-only Agent Skill at
-`/skills/hqbase-mail/SKILL.md`. The file starts with the required `name` and `description` YAML
-frontmatter. Its body contains the installation's canonical origin, OAuth discovery and audience
-URLs, permission rules, safety requirements, and a compact method index generated from the OpenAPI
-contract. The method index is for orientation; the OpenAPI document remains authoritative for
-parameters, payloads, schemas, content types, and errors.
+Every HQBase installation publishes three public, instruction-only Agent Skills:
 
-`/AGENTS.md` and `/agents.md` permanently redirect to the canonical Agent Skill URL for
-compatibility with the earlier generated guide.
+| Skill | Path | Purpose |
+| --- | --- | --- |
+| Your account | `/skills/hqbase-mail/SKILL.md` | Use human OAuth with the Mail API. |
+| Mailbox agent | `/skills/hqbase-mailbox/SKILL.md` | Use one mailbox-agent credential with the Mail API. |
+| Provisioner | `/skills/hqbase-provisioner/SKILL.md` | Use one provisioner credential with the Management API. |
+
+Each file starts with the required `name` and `description` YAML frontmatter. A skill contains the
+installation's canonical URLs, permission rules, and safety requirements. It either lists the
+available methods or links to them. It contains no credential, account data, or mail content.
+
+The old `/AGENTS.md` and `/agents.md` paths return a short `200` retirement notice. The notice
+reads: **This file is retired. Open Settings → Connect AI agents in HQBase to choose the correct
+Agent Skill or MCP server.** That Settings page is the authoritative connection guide.
 
 The same installation serves instance-adjusted OpenAPI documents at `/api/v1/openapi.json` and
 `/api/v2/openapi.json`. Their `servers` entries and external documentation links use the
@@ -458,10 +492,9 @@ The checked-in collection and environment are generated from the OpenAPI contrac
 suite rejects artifact drift and verifies cookie authentication, bearer authentication, OAuth
 audience and permission enforcement, Device Authorization polling and approval boundaries, live
 mailbox access, stable error challenges, and the web app's use of the versioned routes. It also
-verifies that the Agent Skill, deployment-local OpenAPI document, authorization-server metadata,
-and protected-resource metadata agree on the canonical installation URLs and that the Agent Skill
-lists every public Mail API operation. It also verifies both API versions and both compatibility
-redirects.
+verifies that all three skills, both deployment-local OpenAPI documents, authorization-server
+metadata, and protected-resource metadata agree on the canonical installation URLs. It also
+verifies both API versions and the retirement notice at both old instruction paths.
 
 ## Affected repositories
 
