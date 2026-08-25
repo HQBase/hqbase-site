@@ -95,14 +95,16 @@ returns to the newest page and does not change the underlying folder.
 
 Conversation rows and the conversation reader have a one-click **Labels** action. On desktop, the
 row shows up to three named pills over the trailing edge of the preview, then stacks the remaining
-labels so their colors stay visible. A content-width, fully rounded surface with a translucent blur,
-about two CSS pixels of outer padding, and a restrained shadow keeps the pills and row label action
-readable without reserving a separate column. The row action has no separate button background.
-Hovering the surface changes only the label icon color. Each named pill uses the label color as its
+labels so their colors stay visible. A content-width, fully rounded surface with a fully transparent
+background, blur, about two CSS pixels of outer padding, and a soft edge shadow keeps the pills and
+row label action readable without reserving a separate column. Its trailing edge stays fixed so the
+desktop label icons align between rows. The row action has no separate button background. Hovering
+the surface changes only the label icon color. Each named pill uses the label color as its
 background, with readable text and a non-color label name. The action menu lists current labels with
 checked state, applies a choice immediately, and reports success or failure. The same menu can
-remove a label. Compact layouts use full touch targets and a compact stack without hiding the
-sender, subject, snippet, time, or star action.
+remove a label. Compact layouts use a smaller label stack and action directly beside the star while
+keeping each target at least 24 CSS pixels wide and preserving the sender, subject, snippet, and
+time.
 
 The folder toolbar uses a small-text compact checkbox multiselect instead of a standard field
 dropdown. Its trigger shows selected label names and colors, not only their count. A person can add
