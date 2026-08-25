@@ -165,7 +165,9 @@ and subject fields use subtle separators instead of large bright focus borders.
 
 Replies and forwards appear after the conversation on desktop and above it in a focused editor on
 compact screens. A desktop reply or forward can detach into the same movable window without losing
-its draft state. Its **Return to conversation** action opens the exact conversation and restores the
+its draft state. Leaving the conversation does not detach an inline composer: HQBase keeps it active
+but hidden until its conversation returns. Only the explicit **Detach composer** action changes it
+into a window. Its **Return to conversation** action opens the exact conversation and restores the
 composer to its inline place. Detached composers stay open while the person moves between app
 destinations, and more than one composer can remain open at the same time. Minimized desktop
 composers form one bottom-right row, cannot be dragged until restored, and keep their drafts active.
