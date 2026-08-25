@@ -258,10 +258,11 @@ or small button size; the installed app does not use an extra-large button size.
   `/mail/inbox`, `/mail/sent`, `/mail/starred`, `/mail/archived`, `/mail/trash`, `/mail/catch-all`,
   and private drafts at `/mail/drafts` and `/mail/drafts/<draft-id>`. Earlier root-level mail and
   draft paths remain accepted and normalize to the canonical route. Contacts use `/contacts` and
-  `/contacts/<contact-id>`. Settings routes live under `/settings/*`, including agent management at
-  `/settings/agents`. They also include label management at `/settings/labels` and signature
-  management at `/settings/signatures`. Unknown app paths normalize to `/mail/inbox`. Catch-all mail
-  stays owner-only even after archive or trash actions.
+  `/contacts/<contact-id>`. Settings routes live under `/settings/*`.
+  Routes include agent management at `/settings/agents`. They include label management at
+  `/settings/labels` and signature management at
+  `/settings/signatures`. Unknown app paths normalize to `/mail/inbox`. Catch-all mail stays
+  owner-only even after archive or trash actions.
 - Every field has a persistent label and inline error. Loading buttons prevent duplicate
   submission. Errors stay limited and secret-free. Success messages say what happened, what
   remains safe, and what to do next.
