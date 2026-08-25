@@ -52,7 +52,9 @@ not its name.
 
 Resources reused from somewhere else are preserved. If ownership is missing or unclear, removal
 stops before making a change. If a resource cannot be removed, HQBase keeps the deployment record
-and its completed cleanup steps so you can fix the problem and retry.
+and its completed cleanup steps so you can fix the problem and retry. For a created R2 bucket,
+removal first permanently deletes its objects and then deletes the bucket. HQBase does not empty
+storage that the deployment record marks as reused.
 
 ## What logs contain
 
