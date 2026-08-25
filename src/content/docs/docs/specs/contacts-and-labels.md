@@ -95,8 +95,10 @@ returns to the newest page and does not change the underlying folder.
 
 Conversation rows and the conversation reader have a one-click **Labels** action. On desktop, the
 row shows up to three named pills over the trailing edge of the preview, then stacks the remaining
-labels so their colors stay visible. A translucent blurred surface keeps the pills and row label
-action readable without reserving a separate column. Each named pill uses the label color as its
+labels so their colors stay visible. A content-width, fully rounded surface with a translucent blur,
+about two CSS pixels of outer padding, and a restrained shadow keeps the pills and row label action
+readable without reserving a separate column. The row action has no separate button background.
+Hovering the surface changes only the label icon color. Each named pill uses the label color as its
 background, with readable text and a non-color label name. The action menu lists current labels with
 checked state, applies a choice immediately, and reports success or failure. The same menu can
 remove a label. Compact layouts use full touch targets and a compact stack without hiding the
