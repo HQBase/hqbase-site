@@ -173,7 +173,7 @@ The original HTML remains in customer storage; sanitization happens when the mes
   background. Hovering the pill changes only the icon color.
   On compact layouts, up to two small named labels and the label action sit over the trailing edge
   of the message preview, separate from the star action. The header label filter keeps its small
-  filter icon, left alignment, restrained text, and clear space before the conversation total.
+  label icon, left alignment, restrained text, and clear space before the conversation total.
 
 ### Conversation reader
 
@@ -200,10 +200,13 @@ The original HTML remains in customer storage; sanitization happens when the mes
   lines and blank lines before the quoted text. Do not depend on the English words `On` or `wrote`.
 - When content before a recognized quote is empty, show the quote without an ellipsis. Printing and
   other full-content views include every safe fragment without changing the stored original.
-- Keep subject, read/unread, star, archive, and Trash actions at the top. In Archived, replace
-  archive with **Unarchive**. In Trash, replace archive and Trash with **Restore**. Put compact
-  **Reply** and **Forward** actions after every expanded message and larger conversation-level
-  actions after the final message.
+- Keep subject, Labels, read/unread, star, archive, and Trash actions at the top. The Labels action
+  uses the normal label icon. In Archived, replace archive with **Unarchive**. In Trash, replace
+  archive and Trash with **Restore**. Below 640 CSS pixels, keep read/unread and Trash visible and
+  put Labels, star or unstar, archive or unarchive, and Restore in one **More actions** menu. Trash
+  has no separate Trash action, so its compact reader keeps read/unread visible and puts Restore in
+  the menu. Put compact **Reply** and **Forward** actions after every expanded message and larger
+  conversation-level actions after the final message.
 - Opening an unread conversation marks its accessible unread inbound messages read. Star and unstar
   affect every accessible message in the thread. Archive moves accessible Inbox and Catch-all
   messages without moving Sent copies. Trash moves the accessible messages represented by the
