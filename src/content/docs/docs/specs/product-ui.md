@@ -161,13 +161,13 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - Changing a filter returns to the newest page. Opening a conversation and returning preserves
   loaded pages and scroll position. Background refresh updates the newest page without discarding
   older loaded pages. Paging cursors stay opaque and never bypass mailbox access.
-- Desktop rows keep the correspondent and utility columns compact so the subject and preview use
-  most of the available width, and align every column vertically. The thread count has its own
-  narrow column. A labels column sits between the preview and time, shows up to three small named
-  color pills, and keeps the colored edges of additional labels visible in a compact stack. The
-  label management action stays in that column and uses the same compact menu size as the header
-  label filter. The header keeps that filter left aligned with restrained text and clear space
-  before the conversation total.
+- The folder header and conversation list use a shared maximum width of 960 CSS pixels. Desktop
+  rows keep the correspondent and utility columns compact so the subject and preview use all
+  remaining space, and align every column vertically. The thread count and time have their own
+  narrow columns with tight gaps. Labels do not reserve a column: up to three small named color
+  pills, overflow colors, and the label action sit over the trailing edge of the preview on a
+  translucent blurred surface. The row action uses a label icon. The header label filter keeps its
+  small filter icon, left alignment, restrained text, and clear space before the conversation total.
 
 ### Conversation reader
 
