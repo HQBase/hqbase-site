@@ -95,18 +95,19 @@ returns to the newest page and does not change the underlying folder.
 
 Conversation rows and the desktop conversation reader have a one-click **Labels** action. The
 folder toolbar and reader header use the normal label icon. On compact readers, Labels is in the
-**More actions** menu with the same checked-state controls. On desktop, the row shows up to three
-named pills over the trailing edge of the preview, then stacks the remaining labels so their colors
-stay visible. A content-width, fully rounded surface with a fully transparent background, slight
-blur, about two CSS pixels of outer padding, and an almost invisible edge shadow keeps the pills and
-row label action readable without reserving a separate column. Its trailing edge
-stays fixed so the desktop label icons align between rows. The row action has no separate button
-background. Hovering the surface changes only the label icon color. Each named pill uses the label
-color as its background, with readable text and a non-color label name. The action menu lists current
-labels with checked state, applies a choice immediately, and reports success or failure. The same
-menu can remove a label. Compact layouts show up to two small named labels and the label action over
-the trailing edge of the message preview, separate from the star. Each action stays at least 24 CSS
-pixels wide without hiding the sender, subject, snippet, or time.
+**More actions** menu. It starts as one collapsed item. Activating it shows the checked label
+choices directly below it in the same menu, and activating it again collapses the choices. On
+desktop, the row shows up to three named pills over the trailing edge of the preview, then stacks
+the remaining labels so their colors stay visible. The container has no background, blur, border,
+shadow, or decorative outer padding. Its trailing edge stays fixed so the desktop label icons align
+between rows. The row action has no separate button background. Hovering the container changes only
+the label icon color. Each named pill uses the label color as its background, reserves at least a
+four-letter width, and shows at least nine characters, including **Important**, before truncation.
+The action menu lists current labels with checked state, applies a choice immediately, and reports
+success or failure. The same menu can remove a label. Compact layouts show up to two small read-only
+named labels and overflow colors at the bottom trailing edge of the message preview, separate from
+the star. A compact row does not show the label action; a person opens the conversation to change
+its labels.
 
 The folder toolbar uses a small-text compact checkbox multiselect instead of a standard field
 dropdown. Its trigger shows selected label names and colors, not only their count. A person can add
