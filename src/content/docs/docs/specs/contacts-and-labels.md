@@ -93,13 +93,14 @@ returns to the newest page and does not change the underlying folder.
 
 ### Human controls
 
-Conversation rows and the conversation reader have a one-click **Labels** action. On desktop, each
-conversation row has a labels column between its preview and time. It shows up to three named pills,
-then stacks the remaining labels so their colors stay visible. The action stays in the same column.
-Each named pill uses the label color as its background, with readable text and a non-color label
-name. The action menu lists current labels with checked state, applies a choice immediately, and
-reports success or failure. The same menu can remove a label. Compact layouts use full touch targets
-and a compact stack without hiding the sender, subject, snippet, time, or star action.
+Conversation rows and the conversation reader have a one-click **Labels** action. On desktop, the
+row shows up to three named pills over the trailing edge of the preview, then stacks the remaining
+labels so their colors stay visible. A translucent blurred surface keeps the pills and row label
+action readable without reserving a separate column. Each named pill uses the label color as its
+background, with readable text and a non-color label name. The action menu lists current labels with
+checked state, applies a choice immediately, and reports success or failure. The same menu can
+remove a label. Compact layouts use full touch targets and a compact stack without hiding the
+sender, subject, snippet, time, or star action.
 
 The folder toolbar uses a small-text compact checkbox multiselect instead of a standard field
 dropdown. Its trigger shows selected label names and colors, not only their count. A person can add
