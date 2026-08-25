@@ -254,12 +254,14 @@ or small button size; the installed app does not use an extra-large button size.
 
 ## Navigation and accessibility
 
-- Primary navigation has **Mail**, **Contacts**, and **Settings**. Mail routes are `/inbox`, `/sent`,
-  `/starred`, `/archived`, `/trash`, `/catch-all`, and private drafts at `/drafts` and
-  `/drafts/<draft-id>`. Contacts use `/contacts` and `/contacts/<contact-id>`. Settings routes live
-  under `/settings/*`, including agent management at `/settings/agents`. They also include label
-  management at `/settings/labels` and signature management at `/settings/signatures`. Unknown app
-  paths normalize to `/inbox`. Catch-all mail stays owner-only even after archive or trash actions.
+- Primary navigation has **Mail**, **Contacts**, and **Settings**. Canonical mail routes are
+  `/mail/inbox`, `/mail/sent`, `/mail/starred`, `/mail/archived`, `/mail/trash`, `/mail/catch-all`,
+  and private drafts at `/mail/drafts` and `/mail/drafts/<draft-id>`. Earlier root-level mail and
+  draft paths remain accepted and normalize to the canonical route. Contacts use `/contacts` and
+  `/contacts/<contact-id>`. Settings routes live under `/settings/*`, including agent management at
+  `/settings/agents`. They also include label management at `/settings/labels` and signature
+  management at `/settings/signatures`. Unknown app paths normalize to `/mail/inbox`. Catch-all mail
+  stays owner-only even after archive or trash actions.
 - Every field has a persistent label and inline error. Loading buttons prevent duplicate
   submission. Errors stay limited and secret-free. Success messages say what happened, what
   remains safe, and what to do next.
@@ -267,10 +269,11 @@ or small button size; the installed app does not use an extra-large button size.
   use 44px targets where practical, and never rely on color alone for meaning.
 
 The header search is global while the person types. After a short debounce, an anchored result list
-shows matching conversations, contacts, and app destinations that the person can access. Arrow keys
-move through results, Enter opens the active result, and Escape closes the list. Selecting a
-conversation or contact opens that item. Pressing Enter with no active result applies the literal
-query as the Inbox search filter. Typing alone never changes the current route or mail list.
+shows matching conversations, contacts, private drafts, and app destinations that the person can
+access. Arrow keys move through results, Enter opens the active result, and Escape closes the list.
+Selecting a conversation, contact, or draft opens that item. Pressing Enter with no active result
+applies the literal query as the Inbox search filter. Typing alone never changes the current route or
+mail list.
 
 ## Feedback sounds
 
