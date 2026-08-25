@@ -19,9 +19,10 @@ send can add addresses from **To**, **Cc**, and **Bcc** as recent contacts. Rece
 not add its sender, and recipients on inbound messages do not become contacts. Current workspace
 mailbox addresses never appear in Contacts, including after a person sends mail to one of them.
 
-The page supports search, create, edit, and delete actions. Removing a saved contact removes its
-saved name and notes. The address can still appear as a recent contact when it is an accessible
-outbound recipient.
+The page supports search, create, edit, and delete actions. Its directory and exchange rows use the
+same list surface, spacing, hover color, and focus treatment as conversation rows. Removing a saved
+contact removes its saved name and notes. The address can still appear as a recent contact when it
+is an accessible outbound recipient.
 
 Opening a contact shows:
 
@@ -85,17 +86,23 @@ HQBase applies labels to messages. A conversation row shows the union of labels 
 messages. A conversation-level action adds or removes the label from every message in that
 conversation that the actor can organize. It does not change inaccessible copies.
 
-Every mail folder supports one optional label filter. The filter combines with the active folder,
-mailbox, and literal search filters. A conversation matches when at least one accessible message in
-that conversation has the selected label. Changing the label filter returns to the newest page and
-does not change the underlying folder.
+Every mail folder supports an optional set of label filters. The filters combine with the active
+folder, mailbox, and literal search filters. A conversation matches when its accessible messages
+contain every selected label. Selecting no labels shows all labels. Changing the label filters
+returns to the newest page and does not change the underlying folder.
 
 ### Human controls
 
-Conversation rows and the conversation reader have a one-click **Labels** action. Its menu lists
-current labels with checked state, applies a choice immediately, and reports success or failure.
-The same menu can remove a label. Compact layouts use full touch targets without hiding the sender,
-subject, snippet, time, or star action.
+Conversation rows and the conversation reader have a one-click **Labels** action. In a conversation
+row, assigned label pills and this action share their own line below the message preview. Each pill
+uses the label color as its background, with readable text and a non-color label name. The action
+menu lists current labels with checked state, applies a choice immediately, and reports success or
+failure. The same menu can remove a label. Compact layouts use full touch targets without hiding the
+sender, subject, snippet, time, or star action.
+
+The folder toolbar uses a compact checkbox multiselect instead of a standard field dropdown. It
+shows the selected labels without taking message-content width. A person can add or remove more
+than one active filter without closing the menu after each choice.
 
 **Settings → Labels** uses compact rows and normal-size dropdowns. Add and edit actions use a
 labelled dialog. No large button size is used. The mailbox selector in the app header remains the
@@ -109,7 +116,8 @@ Both stable Mail API versions support labels without changing existing clients:
 - `PUT /messages/{id}/labels/{labelId}` and the matching `DELETE` add or remove one label.
 - `PUT /conversations/{id}/labels/{labelId}` and the matching `DELETE` apply the change to every
   accessible message that the caller can organize.
-- `labelId` is an optional filter on message and conversation list requests.
+- Repeating `labelId` is an optional filter on message and conversation list requests. A result
+  must contain every requested label. A single `labelId` keeps its existing behavior.
 
 Session-authenticated `/api/labels` management routes let an owner or admin create, update, and
 delete label definitions. Machine credentials cannot change workspace label definitions. A label
