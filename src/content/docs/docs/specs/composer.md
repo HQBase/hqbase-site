@@ -92,9 +92,11 @@ knowing its identifier.
 ### Insert and resize images
 
 The message and signature editors accept safe raster images from an image picker, drop, or paste.
-HQBase inserts each image at the cursor. A selected image has mouse and touch resize handles that
-preserve its aspect ratio. The saved width and height travel with the email, while the editor keeps
-the image within the available message width. Resizing does not change the original image bytes.
+HQBase inserts each image at the cursor. Clicking or tapping an image selects it and shows a resize
+box. Its edges and corners use the matching resize cursor on pointer devices and remain large enough
+to drag by touch. Mouse and touch resizing preserves the image aspect ratio. The saved width and
+height travel with the email, while the editor keeps the image within the available message width.
+Resizing does not change the original image bytes.
 
 Images inserted into a message use the draft's private R2 storage and count toward the normal limit
 of 20 files and 25 MiB. The editor uses an authenticated preview. HQBase sends only images that the
@@ -130,6 +132,11 @@ HQBase removes active content, unsafe URLs, unsafe CSS, and unrelated attachment
 copy. It adds the quote on the server only when sending, so the saved draft contains what you wrote
 and a quote by itself cannot make an empty reply sendable.
 
+While writing a reply, the selected message appears below the new content as collapsed quoted
+context. A small borderless gray ellipsis at the left expands or collapses it. This preview is
+composer chrome: it is not copied into the draft body, and the server still creates the final reply
+quote from the exact selected message when sending.
+
 ## Forward a message
 
 Forward opens the same editable To, Cc, and Bcc fields and includes a limited plain-text copy of the
@@ -155,9 +162,15 @@ New messages use a separate window on desktop and a full-screen composer on comp
 desktop window starts at the bottom-right, can be dragged by its header, and can be resized within
 the viewport. It keeps Minimize and Close controls and does not have a maximize control. Recipient
 and subject fields use subtle separators instead of large bright focus borders.
+
 Replies and forwards appear after the conversation on desktop and above it in a focused editor on
-compact screens. Opening a saved reply or forward uses this same conversation-first layout instead
-of the new-message window. Composer chrome respects device safe areas.
+compact screens. A desktop reply or forward can detach into the same movable window without losing
+its draft state. Its **Return to conversation** action opens the exact conversation and restores the
+composer to its inline place. Detached composers stay open while the person moves between app
+destinations, and more than one composer can remain open at the same time. Minimized desktop
+composers form one bottom-right row, cannot be dragged until restored, and keep their drafts active.
+Opening a saved reply or forward uses the same conversation-first layout. Composer chrome respects
+device safe areas.
 
 The **To**, **Cc**, and **Bcc** fields show saved contacts and recent accessible outbound recipients
 while the person types. Available From mailboxes can appear as separate suggestions labelled
@@ -173,7 +186,8 @@ selected From address and a mailbox where they can send. Default selection uses 
 then the person&apos;s default, then the exact domain default, and finally no signature. HQBase uses one
 signature and never concatenates scopes.
 
-Every new web draft resolves that default when the draft starts. A small **Signature** dropdown sits
+Every new web draft resolves and selects the most specific applicable default when the draft starts:
+mailbox, then person, then exact domain. A small **Signature** dropdown sits
 directly below the rendered signature preview and outside the serialized email content. It shows the
 resolved signature by name, or **No signature** when no default applies. Its menu offers applicable
 personal, mailbox, and domain signatures, **No signature**, and **Manage signatures…**. It does not

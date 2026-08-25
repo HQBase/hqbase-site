@@ -114,8 +114,9 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
   relying on color. Green reports WebSocket transport health, not synchronization completeness;
   the event lease reconnect remains the bounded recovery path for a missed wake-up.
 - New-message Compose is a non-modal window on desktop and full-screen on compact layouts. Reply
-  and Forward open within the conversation, never as a pop-up or separate browser tab. A saved
-  draft reopens attached to its exact saved target. See
+  and Forward open within the conversation by default. Active primary-navigation icons keep their
+  selected background on hover; only inactive icons gain a hover background. Buttons and dropdowns
+  do not scale or shift when pressed. A saved draft reopens attached to its exact saved target. See
   [Writing and sending mail](/docs/specs/composer/) for persistence and sending rules.
 
 ## Reading mail
@@ -157,6 +158,9 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - Changing a filter returns to the newest page. Opening a conversation and returning preserves
   loaded pages and scroll position. Background refresh updates the newest page without discarding
   older loaded pages. Paging cursors stay opaque and never bypass mailbox access.
+- Desktop rows keep the correspondent and utility columns compact so the subject and preview use
+  most of the available width. A thread count has space on both sides and does not touch adjacent
+  metadata. Assigned labels and their management action use a separate line in each row.
 
 ### Conversation reader
 
@@ -198,11 +202,12 @@ The original HTML remains in customer storage; sanitization happens when the mes
 
 At widths below 640 CSS pixels, a conversation row uses the dense layout established by mobile mail
 clients: avatar or sender initial at the start; sender and time on the first line; subject on the
-second line; snippet on the third line; and the star action at the trailing edge. Do not hide the
-sender, subject, snippet, time, or star to make the row fit. Larger compact and desktop layouts keep
-their current horizontal row.
+second line; snippet on the third line; and the star action at the trailing edge. Rows keep compact
+outer padding and rounded corners instead of touching the screen edges. Do not hide the sender,
+subject, snippet, time, star, or label line to make the row fit. Larger compact and desktop layouts
+keep their current horizontal row.
 
-Every folder can filter by one label without changing its mailbox, search, or folder selection.
+Every folder can filter by multiple labels without changing its mailbox, search, or folder selection.
 Conversation rows and the reader expose one **Labels** action that can add or remove a label in one
 step. See [Contacts and labels](/docs/specs/contacts-and-labels/) for permissions and API behavior.
 
