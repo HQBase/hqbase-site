@@ -14,6 +14,7 @@ remain private to their author, and are checked again before anything is sent.
 | Reply | Replies to the exact message you selected and prefers the mailbox that received it. |
 | Forward | Starts with your default sending mailbox and adds the selected message as context. |
 | Add a file | Uploads it to your installation and keeps it attached to that draft only. |
+| Insert an image | Keeps it private, places it at the cursor, and sends it inside the message. |
 | Send | Rechecks mailbox access, the From address, and the domain before delivering anything. |
 
 ## Drafts are private and automatic
@@ -87,6 +88,25 @@ directly.
 
 An attachment belongs to its draft and author. Another user or draft cannot reuse it simply by
 knowing its identifier.
+
+### Insert and resize images
+
+The message and signature editors accept safe raster images from an image picker, drop, or paste.
+HQBase inserts each image at the cursor. A selected image has mouse and touch resize handles that
+preserve its aspect ratio. The saved width and height travel with the email, while the editor keeps
+the image within the available message width. Resizing does not change the original image bytes.
+
+Images inserted into a message use the draft's private R2 storage and count toward the normal limit
+of 20 files and 25 MiB. The editor uses an authenticated preview. HQBase sends only images that the
+current HTML still references, as content-ID inline MIME attachments. It never creates a public R2
+URL or sends a data URL. Removing an image stops it from being sent; discarding or sending the draft
+removes staged objects that the final message does not use.
+
+A signature can contain at most five images and 256 KiB of decoded image data in total. The
+sanitized signature and each saved draft snapshot contain their own bounded copy, so editing or
+deleting the source signature does not break an older draft. HQBase converts the copy to a
+content-ID attachment when it sends. SVG and other active image formats cannot be inserted inline.
+Plain-text output uses the image's alternative text and keeps the surrounding text.
 
 ## Reply to the right message
 
@@ -173,7 +193,8 @@ body unchanged.
 Every signed-in person can manage personal signatures in **Settings → Signatures**. Mailbox Managers
 can manage mailbox signatures. Owners and admins can manage domain signatures. Mailbox Handle-mail
 users can use shared signatures but cannot manage them. The server sanitizes supported formatting,
-generates equivalent plain text, and stores all content in the customer&apos;s D1 database.
+generates equivalent plain text, validates bounded raster images, and stores the signature content
+in the customer&apos;s D1 database.
 
 ## Technical details
 
@@ -183,6 +204,11 @@ generates equivalent plain text, and stores all content in the customer&apos;s D
 Autosave is debounced, serialized, revision-aware, and backed by local crash recovery. Sending and
 reply context are assembled and validated on the server. Successful sends remove the private draft
 only after delivery is accepted.
+
+Draft images use private R2 objects with a server-generated content ID. Signature snapshots keep
+small validated base64 image data in D1, below D1's row limit. Before delivery, the Worker replaces
+private draft preview paths and signature data URLs with `cid:` references. Sent inline objects use
+the same private R2 and message-attachment records as received inline images.
 
 </details>
 

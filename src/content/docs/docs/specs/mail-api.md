@@ -171,7 +171,8 @@ All paths below are available relative to `/api/v1` and `/api/v2`. New clients u
 | `POST /drafts` | `mail:send` | Create a draft. |
 | `PATCH /drafts/{id}` | `mail:send` | Update a draft using its current version. |
 | `DELETE /drafts/{id}` | `mail:send` | Delete a draft and its stored attachments. |
-| `POST /drafts/{id}/attachments` | `mail:send` | Add one multipart file to a draft. |
+| `POST /drafts/{id}/attachments` | `mail:send` | Add one multipart attachment or inline image to a draft. |
+| `GET /drafts/{draftId}/attachments/{id}/inline` | `mail:send` | Render one safe inline draft image for its author. |
 | `DELETE /drafts/{draftId}/attachments/{id}` | `mail:send` | Remove a draft attachment. |
 | `POST /send` | `mail:send` | Send a new message. |
 | `POST /reply` | `mail:send` | Reply to an existing message. |
@@ -249,11 +250,22 @@ with `affected: 0`. Clients must not remove a conversation optimistically when `
 
 ### Draft attachments
 
-`POST /drafts/{id}/attachments` accepts one `file` part. HQBase records the part's `Content-Type`.
-If the part has no type, HQBase records `application/octet-stream`. A file can be at most 25 MiB,
-and all attachments in one draft can total at most 25 MiB. An upload that exceeds either limit
-returns `413 ATTACHMENTS_TOO_LARGE`. Send, reply, and forward requests can name at most 20 staged
-attachments.
+`POST /drafts/{id}/attachments` accepts one `file` part and an optional `inline` part. HQBase records
+the file's `Content-Type`. If the file has no type, HQBase records `application/octet-stream`. When
+`inline` is `true`, the file must be a safe raster image. The returned attachment has `inline: true`
+and can be previewed only through
+`GET /drafts/{draftId}/attachments/{id}/inline` by the draft owner.
+
+To place that image in draft HTML, a client uses the matching API-version path as its `src`, for
+example `/api/v2/drafts/{draftId}/attachments/{id}/inline`, and includes the attachment ID in the
+send request. HQBase verifies the draft, image, and caller again, then replaces the private path with
+a `cid:` reference and sends the image as an inline MIME part. It does not send an unreferenced
+inline image.
+
+A file can be at most 25 MiB, and all attachments in one draft can total at most 25 MiB. An upload
+that exceeds either limit returns `413 ATTACHMENTS_TOO_LARGE`. Send, reply, and forward requests can
+name at most 20 staged attachments. Inline images, signature images, and ordinary attachments share
+the 20-file and 25-MiB send limits.
 
 ### Draft pagination and changes
 
