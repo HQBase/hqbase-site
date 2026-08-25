@@ -208,8 +208,10 @@ recipients, snippet, and plain-text body. The characters `%`, `_`, and `\` are o
 text. They do not enable wildcards or escapes. Mailbox access and the requested mailbox and folder
 filters still apply, and search does not change the activity-time order used by pagination.
 
-`labelId` is an optional message and conversation filter. It combines with mailbox, folder, and
-literal search filters. A conversation matches when one accessible message in it has that label.
+`labelId` remains the optional single-label message and conversation filter. Repeat `labelIds` to
+require more than one label. The server combines and deduplicates both parameters with mailbox,
+folder, and literal search filters. A message must carry every requested label. A conversation
+matches when its accessible messages collectively carry every requested label.
 An unknown label returns `404 LABEL_NOT_FOUND`; a label never broadens mailbox access.
 
 ### Labels
