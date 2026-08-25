@@ -304,6 +304,11 @@ where activity time is the received time, then the sent time, then the creation 
 the same activity time are ordered by descending identifier, so the order stays stable across a page
 boundary.
 
+Message summaries and details keep `fromAddress` as the exact email address. They also return the
+nullable `fromName` field. It contains the decoded display name supplied by an inbound message or
+the mailbox sender name used for an outbound message. Clients must treat it as untrusted display
+text and continue to use `fromAddress` for address matching and replies.
+
 When more messages follow the page, the response includes an RFC 8288 `Link` header of the form
 `<url>; rel="next"`. The URL keeps the `mailboxId`, `folder`, `search`, and `limit` values of the
 request and adds a `cursor`. A client follows that URL to read the next page. The last page has no

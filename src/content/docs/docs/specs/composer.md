@@ -57,10 +57,15 @@ After a successful send, HQBase removes the saved draft.
 
 ## Choose the From mailbox
 
-Each mailbox has one email address. When the mailbox and its domain can send, that email address is
-also its sender address. Each person chooses one default From mailbox from the active mailboxes
-where they can send. Onboarding records the owner's first choice, and every signed-in person can
-change their own choice in **Settings**.
+Each mailbox has one email address and one sender name. When the mailbox and its domain can send,
+HQBase sends the standard named address `Sender name <address>`. Owners and admins can change the
+sender name in the mailbox details. The change applies to future messages and does not rewrite
+stored mail.
+
+Each person chooses one default From mailbox from the active mailboxes where they can send.
+Onboarding records the owner's first choice, and every signed-in person can change their own choice
+in **Settings**. The composer shows both the sender name and exact address for each choice. The
+mailbox owns the sender name; a person or machine caller cannot replace it for one message.
 
 - **New messages and forwards** use the address of your default mailbox. If that choice is no longer
   available, HQBase uses the first mailbox you can still send from.
@@ -134,9 +139,11 @@ Replies and forwards appear after the conversation on desktop and above it in a 
 compact screens. Opening a saved reply or forward uses this same conversation-first layout instead
 of the new-message window. Composer chrome respects device safe areas.
 
-The **To**, **Cc**, and **Bcc** fields show accessible contact suggestions while the person types.
-They validate completed addresses after blur and before save or send, not after each keystroke. See
-[Contacts and labels](/docs/specs/contacts-and-labels/) for suggestion ranking and privacy.
+The **To**, **Cc**, and **Bcc** fields show saved contacts and recent accessible outbound recipients
+while the person types. Available From mailboxes can appear as separate suggestions labelled
+**Mailbox**. The fields validate completed addresses after blur and before save or send, not after
+each keystroke. See [Contacts and labels](/docs/specs/contacts-and-labels/) for suggestion ranking
+and privacy.
 
 ## Use email signatures
 
