@@ -166,11 +166,13 @@ The original HTML remains in customer storage; sanitization happens when the mes
   remaining space, and align every column vertically. The thread count and time have their own
   narrow columns with tight gaps. Labels do not reserve a column: up to three small named color
   pills, overflow colors, and the label action sit over the trailing edge of the preview on a
-  translucent blurred surface. This surface is a content-width, fully rounded pill with about two
-  CSS pixels of outer padding and a restrained shadow. The row action uses a label icon without a
-  separate button background. Hovering the pill changes only the icon color. The header label
-  filter keeps its small filter icon, left alignment, restrained text, and clear space before the
-  conversation total.
+  fully transparent blurred surface. This surface is a content-width, fully rounded pill with about
+  two CSS pixels of outer padding and a soft edge shadow that blends with the row. Its trailing edge
+  stays at the same desktop position so the label icons align between rows. The row action uses a
+  label icon without a separate button background. Hovering the pill changes only the icon color.
+  On compact layouts, a smaller label stack and action sit directly beside the star action. The
+  header label filter keeps its small filter icon, left alignment, restrained text, and clear space
+  before the conversation total.
 
 ### Conversation reader
 
