@@ -159,8 +159,9 @@ The original HTML remains in customer storage; sanitization happens when the mes
   loaded pages and scroll position. Background refresh updates the newest page without discarding
   older loaded pages. Paging cursors stay opaque and never bypass mailbox access.
 - Desktop rows keep the correspondent and utility columns compact so the subject and preview use
-  most of the available width. A thread count has space on both sides and does not touch adjacent
-  metadata. Assigned labels and their management action use a separate line in each row.
+  most of the available width. The thread count has its own narrow column. A labels column sits
+  between the preview and time, shows up to three named color pills, and keeps the colored edges of
+  additional labels visible in a compact stack. The label management action stays in that column.
 
 ### Conversation reader
 
@@ -204,7 +205,7 @@ At widths below 640 CSS pixels, a conversation row uses the dense layout establi
 clients: avatar or sender initial at the start; sender and time on the first line; subject on the
 second line; snippet on the third line; and the star action at the trailing edge. Rows keep compact
 outer padding and rounded corners instead of touching the screen edges. Do not hide the sender,
-subject, snippet, time, star, or label line to make the row fit. Larger compact and desktop layouts
+subject, snippet, time, star, or compact label stack to make the row fit. Larger compact and desktop layouts
 keep their current horizontal row.
 
 Every folder can filter by multiple labels without changing its mailbox, search, or folder selection.
