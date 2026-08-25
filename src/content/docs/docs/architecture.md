@@ -19,7 +19,7 @@ workspace data, and app secrets stay in infrastructure you control.
 | Cloudflare service | What it does for HQBase |
 | --- | --- |
 | Worker | Serves the web app and APIs, receives email, and performs approved actions. |
-| D1 | Stores people, machine agents, mailbox access, searchable email information, drafts, bounded signature content, and app state. |
+| D1 | Stores people, machine agents, mailbox access, searchable email information, drafts, email signatures, and app state. |
 | R2 | Stores original email files, attachments, and private inline message images. |
 | Queues | Runs background work. Failed jobs move to a separate queue so they can be investigated. |
 | Email Routing | Delivers incoming email to HQBase. |
