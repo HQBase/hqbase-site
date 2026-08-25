@@ -398,10 +398,11 @@ The topic is one of:
 - `messages` — read `/changes` from the client's last message cursor until `hasMore` is `false`.
 - `drafts` — read `/drafts/changes` from the client's last draft cursor until `hasMore` is `false`.
 - `mailboxes` — list `/mailboxes` again and apply the documented access-change bootstrap rules.
+- `labels` — list `/labels` again and refresh visible label filters and assignments.
 
 The server sends only topics permitted by the connection. A bearer connection always needs
 `mail:read`; it receives the `drafts` topic only when its token also has `mail:send`. A session
-connection can receive all three topics. Events contain no mail content, identifiers, counts,
+connection can receive all four topics. Events contain no mail content, identifiers, counts,
 cursor values, or mailbox names.
 
 The authorization decision at upgrade is an event-delivery lease for 10 minutes. Revoking a bearer

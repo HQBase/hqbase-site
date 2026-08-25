@@ -22,12 +22,12 @@ Opening a contact shows:
 
 - the saved name and exact email address;
 - editable private notes;
-- the latest accessible conversations with that address; and
+- every accessible conversation with that address, loaded in stable pages; and
 - a **New email** action that opens the normal composer with the address in **To**.
 
-The exchange list uses exact sender and recipient matching. It never reveals a conversation from a
-mailbox the person cannot currently read. Losing mailbox access removes those exchanges on the next
-request.
+The exchange list uses exact sender and recipient matching. A person can load older pages until all
+accessible exchanges are visible. It never reveals a conversation from a mailbox the person cannot
+currently read. Losing mailbox access removes those exchanges on the next request.
 
 ### Recipient suggestions
 
@@ -93,7 +93,9 @@ Both stable Mail API versions support labels without changing existing clients:
 - `labelId` is an optional filter on message and conversation list requests.
 
 Session-authenticated `/api/labels` management routes let an owner or admin create, update, and
-delete label definitions. Machine credentials cannot change workspace label definitions.
+delete label definitions. Machine credentials cannot change workspace label definitions. A label
+definition change sends a wake-only `labels` event so connected clients refresh the authoritative
+label list and visible mail.
 
 The MCP server exposes `list_labels`, `add_label`, and `remove_label`. Tool descriptions state that
 labels organize mail but never change mailbox access or message folders. Label changes use the same
@@ -105,5 +107,5 @@ Contact and label controls use persistent labels, visible focus, keyboard naviga
 messages. Compact targets are at least 44 by 44 CSS pixels where practical.
 
 Stable label errors are `LABEL_NOT_FOUND`, `LABEL_FORBIDDEN`, `LABEL_NAME_CONFLICT`, and
-`LABEL_INVALID`. Stable contact errors are `CONTACT_NOT_FOUND`, `CONTACT_FORBIDDEN`, and
-`CONTACT_INVALID`. Error responses never contain contact notes or email content.
+`LABEL_INVALID`. Stable contact errors are `CONTACT_NOT_FOUND` and `CONTACT_INVALID`. Error
+responses never contain contact notes or email content.
