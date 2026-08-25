@@ -163,13 +163,14 @@ The original HTML remains in customer storage; sanitization happens when the mes
   older loaded pages. Paging cursors stay opaque and never bypass mailbox access.
 - The folder header and conversation list use a shared maximum width of 960 CSS pixels. Desktop
   rows keep the correspondent and utility columns compact so the subject and preview use all
-  remaining space, and align every column vertically. The thread count and time have their own
-  narrow columns with tight gaps. Labels do not reserve a column: up to three small named color
-  pills, overflow colors, and the label action sit over the trailing edge of the preview on a
-  fully transparent blurred surface. This surface is a content-width, fully rounded pill with about
-  two CSS pixels of outer padding and a faint edge shadow that is almost invisible. Its trailing edge
-  stays at the same desktop position so the label icons align between rows. The row action uses a
-  label icon without a separate button background. Hovering the pill changes only the icon color.
+  remaining space, and align every column vertically. The thread count uses a fixed 28 CSS pixel
+  lane with two CSS pixels of inner horizontal padding. The time has its own narrow column. Labels
+  do not reserve a column: up to three small named color pills, overflow colors, and the label
+  action sit over the trailing edge of the preview on a fully transparent blurred surface. This
+  surface is a content-width, fully rounded pill with about two CSS pixels of outer padding and a
+  faint edge shadow that is almost invisible. Its trailing edge stays at the same desktop position
+  so the label icons align between rows. The row action uses a label icon without a separate button
+  background. Hovering the pill changes only the icon color.
   On compact layouts, up to two small named labels and the label action sit over the trailing edge
   of the message preview, separate from the star action. The header label filter keeps its small
   filter icon, left alignment, restrained text, and clear space before the conversation total.
