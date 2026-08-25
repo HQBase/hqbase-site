@@ -101,8 +101,9 @@ desktop, the row shows up to three named pills over the trailing edge of the pre
 the remaining labels so their colors stay visible. The container has no background, blur, border,
 shadow, or decorative outer padding. Its trailing edge stays fixed so the desktop label icons align
 between rows. The row action has no separate button background. Hovering the container changes only
-the label icon color. Each named pill uses the label color as its background, reserves at least a
-four-letter width, and shows at least nine characters, including **Important**, before truncation.
+the label icon color. Each named pill uses the label color as a solid, full-opacity background with
+black text in light mode and white text in dark mode. It reserves at least a four-letter width and
+shows at least nine characters, including **Important**, before truncation.
 The action menu lists current labels with checked state, applies a choice immediately, and reports
 success or failure. The same menu can remove a label. Compact layouts show up to two small read-only
 named labels and overflow colors at the bottom trailing edge of the message preview, separate from

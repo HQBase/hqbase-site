@@ -164,14 +164,16 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - The folder header and conversation list use a shared maximum width of 960 CSS pixels. Desktop
   rows keep the correspondent and utility columns compact so the subject and preview use all
   remaining space, and align every column vertically. The thread count uses a fixed 28 CSS pixel
-  lane with two CSS pixels of inner horizontal padding. The time has its own narrow column. Labels
-  do not reserve a column. On desktop, up to three small named color pills, overflow colors, and the
+  lane with two CSS pixels of inner horizontal padding. Compact and desktop rows use a fixed 64 CSS
+  pixel time lane so the preview keeps the remaining width while timestamps stay aligned. Labels do
+  not reserve a column. On desktop, up to three small named color pills, overflow colors, and the
   label action sit over the trailing edge of the preview. The label container has no background,
   blur, border, shadow, or decorative outer padding. Its trailing edge stays at the same desktop
   position so the label icons align between rows. The row action uses a label icon without a
   separate button background. Hovering the container changes only the icon color. Each named pill
-  reserves at least a four-letter width and shows at least nine characters, including
-  **Important**, before truncation.
+  uses its label color as a solid, full-opacity background with black text in light mode and white
+  text in dark mode. It reserves at least a four-letter width and shows at least nine characters,
+  including **Important**, before truncation.
   On compact layouts, up to two small read-only named labels and overflow colors sit at the bottom
   trailing edge of the message preview, separate from the star action. The row does not show a
   label edit action; a person opens the conversation to change its labels. The header label filter
