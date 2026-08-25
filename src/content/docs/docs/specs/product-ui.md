@@ -100,6 +100,9 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
 - Use the desktop shell at viewport widths of 1024 CSS pixels and wider. At smaller widths, use the
   compact shell on every input type. Do not impose a minimum window size or cover the workspace
   with a request to enlarge the window.
+- A responsive shell change must not remount the current page or reload an open conversation.
+  When a browser tab returns to the foreground, refresh mail atomically: keep the visible list and
+  open conversation in place until the authoritative newest page replaces stale data.
 - The installed app offers explicit Light and Dark modes. Dark is the initial mode until the person
   chooses otherwise. The choice updates browser chrome, persists locally, and does not follow later
   operating-system changes.
@@ -159,9 +162,12 @@ The original HTML remains in customer storage; sanitization happens when the mes
   loaded pages and scroll position. Background refresh updates the newest page without discarding
   older loaded pages. Paging cursors stay opaque and never bypass mailbox access.
 - Desktop rows keep the correspondent and utility columns compact so the subject and preview use
-  most of the available width. The thread count has its own narrow column. A labels column sits
-  between the preview and time, shows up to three named color pills, and keeps the colored edges of
-  additional labels visible in a compact stack. The label management action stays in that column.
+  most of the available width, and align every column vertically. The thread count has its own
+  narrow column. A labels column sits between the preview and time, shows up to three small named
+  color pills, and keeps the colored edges of additional labels visible in a compact stack. The
+  label management action stays in that column and uses the same compact menu size as the header
+  label filter. The header keeps that filter left aligned with restrained text and clear space
+  before the conversation total.
 
 ### Conversation reader
 
