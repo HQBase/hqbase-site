@@ -143,7 +143,8 @@ The original HTML remains in customer storage; sanitization happens when the mes
 ### Conversation lists
 
 - Each list contains at most one row per accessible thread. The latest matching accessible message
-  provides the sender, subject, snippet, and time. The row also shows a thread count above one,
+  provides the sender display name when present, subject, snippet, and time. The row also shows a
+  thread count above one,
   whether any accessible message has an attachment, and unread state when any accessible inbound
   message remains unread.
 - A new inbound or outbound reply updates and moves the existing row instead of creating another
@@ -166,6 +167,8 @@ The original HTML remains in customer storage; sanitization happens when the mes
   messages sit between them, one labelled divider reports the hidden count and reveals them in
   place. Remove the divider after expansion and keep the messages visible until the reader closes,
   including when synchronization adds another message to the open thread.
+- Show a decoded sender display name when the message provides one, and keep the exact sender
+  address visible in the message header. Treat both values as untrusted message metadata.
 - Use the structural quote markers used by established mail clients. Split HTML into content before
   the quote, the quoted block, and content after the quote. Keep content before and after the quote
   visible and in its original order. Keep a signature after the quote visible. When an established

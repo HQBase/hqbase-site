@@ -14,9 +14,14 @@ address. Contact notes never appear to another workspace user, a mailbox agent, 
 recipient.
 
 The **Contacts** destination sits beside **Mail** and **Settings** in primary navigation. The page
-lists saved contacts and correspondents found in mail that the current person can access. It supports
-search, create, edit, and delete actions. Removing a saved contact removes its saved name and notes;
-the address can still appear as a recent correspondent while an accessible exchange exists.
+lists saved external contacts and external recipients from accessible outbound mail. A successful
+send can add addresses from **To**, **Cc**, and **Bcc** as recent contacts. Receiving a message does
+not add its sender, and recipients on inbound messages do not become contacts. Current workspace
+mailbox addresses never appear in Contacts, including after a person sends mail to one of them.
+
+The page supports search, create, edit, and delete actions. Removing a saved contact removes its
+saved name and notes. The address can still appear as a recent contact when it is an accessible
+outbound recipient.
 
 Opening a contact shows:
 
@@ -31,11 +36,15 @@ currently read. Losing mailbox access removes those exchanges on the next reques
 
 ### Recipient suggestions
 
-The **To**, **Cc**, and **Bcc** fields suggest contacts while the person types. Suggestions combine:
+The **To**, **Cc**, and **Bcc** fields suggest addresses while the person types. Suggestions combine:
 
 1. saved contacts;
-2. recent senders and recipients from accessible mail; and
-3. the person&apos;s available mailbox addresses when applicable.
+2. recent **To**, **Cc**, and **Bcc** recipients from accessible outbound mail; and
+3. the person&apos;s available mailbox addresses as separate **Mailbox** suggestions.
+
+An address found only in an inbound **From**, **To**, **Cc**, or **Bcc** field is not a contact or a
+recent suggestion. Available mailbox addresses can appear in the composer, but they never appear in
+the Contacts directory.
 
 Prefix matches on a saved name or email address appear first, followed by other literal matches and
 recent exchanges. Each row shows the display name, address, and why it is known. Keyboard users can
@@ -47,9 +56,19 @@ and does not send anything.
 
 ### Contact storage and privacy
 
-Saved contact records belong to a workspace user and stay in D1. HQBase derives recent
-correspondents from accessible message metadata; it does not copy message bodies into contacts.
+Saved contact records belong to a workspace user and stay in D1. HQBase derives recent contacts
+only from **To**, **Cc**, and **Bcc** metadata on accessible outbound messages. It does not copy
+message bodies into contacts.
+
+HQBase stores a decoded sender display name as message metadata when an inbound message provides
+one. This observed name does not create or save a contact. For an address that is already saved or
+eligible as a recent outbound recipient, the latest accessible observed name can appear as a
+fallback. A private saved name always takes priority. Clearing a private name does not copy the
+observed name into the saved contact.
+
 Names and notes do not enter logs, analytics, push notifications, or Cloudflare configuration.
+HQBase does not retrieve personal profile photos from Gmail, Gravatar, or another remote directory.
+Contact avatars use initials until a separate, explicit photo source is supported.
 
 ## Labels
 
