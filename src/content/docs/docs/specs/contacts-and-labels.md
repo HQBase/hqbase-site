@@ -116,8 +116,9 @@ Both stable Mail API versions support labels without changing existing clients:
 - `PUT /messages/{id}/labels/{labelId}` and the matching `DELETE` add or remove one label.
 - `PUT /conversations/{id}/labels/{labelId}` and the matching `DELETE` apply the change to every
   accessible message that the caller can organize.
-- Repeating `labelId` is an optional filter on message and conversation list requests. A result
-  must contain every requested label. A single `labelId` keeps its existing behavior.
+- Repeating `labelIds` is an optional filter on message and conversation list requests. A result
+  must contain every requested label. The existing single `labelId` parameter keeps its behavior
+  and can be combined with `labelIds`.
 
 Session-authenticated `/api/labels` management routes let an owner or admin create, update, and
 delete label definitions. Machine credentials cannot change workspace label definitions. A label
