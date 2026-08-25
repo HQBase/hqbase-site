@@ -93,11 +93,13 @@ returns to the newest page and does not change the underlying folder.
 
 ### Human controls
 
-Conversation rows and the conversation reader have a one-click **Labels** action. On desktop, the
-row shows up to three named pills over the trailing edge of the preview, then stacks the remaining
-labels so their colors stay visible. A content-width, fully rounded surface with a fully transparent
-background, slight blur, about two CSS pixels of outer padding, and an almost invisible edge shadow
-keeps the pills and row label action readable without reserving a separate column. Its trailing edge
+Conversation rows and the desktop conversation reader have a one-click **Labels** action. The
+folder toolbar and reader header use the normal label icon. On compact readers, Labels is in the
+**More actions** menu with the same checked-state controls. On desktop, the row shows up to three
+named pills over the trailing edge of the preview, then stacks the remaining labels so their colors
+stay visible. A content-width, fully rounded surface with a fully transparent background, slight
+blur, about two CSS pixels of outer padding, and an almost invisible edge shadow keeps the pills and
+row label action readable without reserving a separate column. Its trailing edge
 stays fixed so the desktop label icons align between rows. The row action has no separate button
 background. Hovering the surface changes only the label icon color. Each named pill uses the label
 color as its background, with readable text and a non-color label name. The action menu lists current
