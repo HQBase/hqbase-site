@@ -346,6 +346,8 @@ or small button size; the installed app does not use an extra-large button size.
   Mail, Contacts, Agents, or Settings navigation. The current navigation panel does not repeat
   primary section links. Selecting a quick-access section opens that section's default page and
   keeps the drawer open. Selecting a destination in the current navigation panel closes the drawer.
+  While mailbox selection is open, tapping elsewhere inside the drawer dismisses only the mailbox
+  selector. Choosing a mailbox applies the filter and closes the drawer.
   Only deliberate content surfaces scroll; the application shell, header, and navigation stay
   fixed and do not use native document scrolling.
 - Inbox lists, Contacts lists and details, Agents pages, and Settings pages use the same 960 CSS
