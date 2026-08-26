@@ -97,11 +97,11 @@ Conversation rows and the conversation reader have a one-click **Labels** action
 toolbar uses the normal label icon. The reader shows one thread-level control outside every
 individual message header. On desktop, put the control in the top action toolbar directly before
 the read or unread action. Give it the same action treatment as the adjacent toolbar controls, but
-show the normal label icon and current label pills inside it. On compact layouts, put the same
-control in a trailing row directly below the top toolbar and before the first message. A person with
+show the normal label icon and current label pills inside it. On compact layouts, center the same
+control in a row directly below the top toolbar and before the first message. A person with
 Handle or Manager access can open that control and change the assignments. Read access shows the
-same control without an edit action. Align the reader control to the trailing edge, with its icon at
-the leading edge and clear space before the label pills. When no label is assigned, the editable
+same control without an edit action. Keep the icon at the control's leading edge with clear space
+before the label pills. When no label is assigned, the editable
 control says **Add label**. The compact control uses a light dashed border in that empty state.
 Labels do not appear in **More actions**.
 On desktop, the row
