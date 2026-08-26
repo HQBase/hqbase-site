@@ -98,7 +98,10 @@ toolbar uses the normal label icon. At every reader width, the current labels fo
 directly below the header. The control keeps the current desktop pill size on compact and desktop
 layouts, always shows the normal label icon, and uses a very light gray surface. A person with
 Handle or Manager access can open that control and change the assignments. Read access shows the
-same control without an edit action. Labels do not appear in **More actions**. On desktop, the row
+same control without an edit action. Align the reader control to the trailing edge, with its icon at
+the leading edge and clear space before the label pills. When no label is assigned, the editable
+control says **Add label** and uses a light dashed border. Labels do not appear in **More actions**.
+On desktop, the row
 shows up to three named pills over the trailing edge of the preview, then stacks the remaining
 labels so their colors stay visible. The fully rounded container uses the current conversation-row
 surface, including its hover or selected state, two CSS pixels of outer padding, and a solid shadow
