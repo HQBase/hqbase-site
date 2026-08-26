@@ -224,7 +224,8 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - Show the remote-image warning only when a blocked remote image is in content that is currently
   visible. A remote image inside collapsed quoted history does not show the warning until that
   history expands. Keep the warning compact: use no more than two lines of bold text and small
-  action buttons.
+  action buttons. Use a quiet neutral-gray background. Keep the message and actions in one row on
+  wider layouts, and let the actions wrap below the message on narrow layouts.
 - Keep subject, read/unread, star, archive, and Trash actions at the top. In Archived, replace
   archive with **Unarchive**. In Trash, replace archive and Trash with **Restore**. Keep the current
   thread labels outside every individual message header. On desktop, put one Labels control in the
