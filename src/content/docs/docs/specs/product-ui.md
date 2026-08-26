@@ -141,6 +141,8 @@ is sanitized and rendered in a sandboxed iframe.
 - Resolve `cid:` images only to allowed raster attachments from the same message.
 - Block remote media until the person chooses **Load images**. **Always load from this sender** is a
   per-user, per-address preference and does not restore other removed content.
+- Apply the remote-media block to sent messages too. A sent message can include remote media from
+  quoted inbound content, so message direction is not consent to load it.
 
 The original HTML remains in customer storage; sanitization happens when the message is displayed.
 
