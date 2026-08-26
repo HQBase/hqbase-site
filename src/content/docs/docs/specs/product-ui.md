@@ -171,7 +171,8 @@ The original HTML remains in customer storage; sanitization happens when the mes
   color pills, overflow colors, and the label action sit over the trailing edge of the preview. The
   fully rounded label container uses the current conversation-row surface, including its hover or
   selected state, two CSS pixels of outer padding, and a solid shadow in the same color. The shadow
-  extends past the container edge so preview text cannot show through. It has no blur or border. Its
+  extends past the container edge so preview text cannot show through. It has no blur or border.
+  The preview keeps five CSS pixels of trailing padding below the label container. The container's
   trailing edge stays at the same desktop position so the label icons align between rows. The
   complete container is the Labels button, and selecting any visible part opens the assignment
   menu. The label icon has no separate
@@ -183,7 +184,9 @@ The original HTML remains in customer storage; sanitization happens when the mes
   trailing edge of the message preview, separate from the star action. The trailing edge stays
   aligned with the preview boundary. If the group is wider than the preview, it extends to the left
   instead of clipping labels. The row does not show a label edit action; a person opens the
-  conversation to change its labels. The header label filter
+  conversation to change its labels. Center the labels and star on the final preview line. A thread
+  count beside the correspondent uses the same size, weight, and color as the correspondent. The
+  header label filter
   keeps its small label icon and restrained text. On desktop, its trailing edge aligns with the row
   Labels buttons at the trailing edge of the preview and leaves clear space before the conversation
   total.
@@ -217,8 +220,11 @@ The original HTML remains in customer storage; sanitization happens when the mes
   archive with **Unarchive**. In Trash, replace archive and Trash with **Restore**. At every width,
   the current labels form one control directly below the header. It keeps the current desktop pill
   size, always shows the normal label icon, and uses a very light gray surface. Labels
-  do not appear in **More actions**. Below 640 CSS pixels, the header shows only star or unstar and
-  **More actions**, in addition to Back navigation. The subject stays on one line and continues
+  do not appear in **More actions**. Align the control to the trailing edge, with the icon at its
+  leading edge and clear space before the label pills. When no label is assigned, the editable
+  control says **Add label** and uses a light dashed border. Below 640 CSS pixels, the header shows
+  only star or unstar and **More actions**, in addition to Back navigation. The subject stays on one
+  line and continues
   below the trailing actions when it is long. A toolbar-colored surface and matching soft shadow
   prevent subject text from showing through those actions. **More actions** contains read or
   unread, archive or unarchive, and Trash. The unread action is named **Mark Unread**. In Trash, the
