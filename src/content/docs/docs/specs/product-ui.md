@@ -213,16 +213,18 @@ The original HTML remains in customer storage; sanitization happens when the mes
   lines and blank lines before the quoted text. Do not depend on the English words `On` or `wrote`.
 - When content before a recognized quote is empty, show the quote without an ellipsis. Printing and
   other full-content views include every safe fragment without changing the stored original.
-- Keep subject, Labels, read/unread, star, archive, and Trash actions at the top. The Labels action
-  uses the normal label icon. In Archived, replace archive with **Unarchive**. In Trash, replace
-  archive and Trash with **Restore**. Below 640 CSS pixels, the header shows only star or unstar and
+- Keep subject, read/unread, star, archive, and Trash actions at the top. In Archived, replace
+  archive with **Unarchive**. In Trash, replace archive and Trash with **Restore**. At every width,
+  the current labels form one control directly below the header. It keeps the current desktop pill
+  size, always shows the normal label icon, and uses a very light gray surface. Labels
+  do not appear in **More actions**. Below 640 CSS pixels, the header shows only star or unstar and
   **More actions**, in addition to Back navigation. The subject stays on one line and continues
   below the trailing actions when it is long. A toolbar-colored surface and matching soft shadow
-  prevent subject text from showing through those actions. The current labels form an editable
-  control directly below the header and do not appear in **More actions**. **More actions** contains
-  read or unread, archive or unarchive, and Trash. In Trash, it contains read or unread and Restore.
-  It does not repeat star or unstar. Put compact **Reply** and **Forward** actions after every
-  expanded message and larger conversation-level actions after the final message.
+  prevent subject text from showing through those actions. **More actions** contains read or
+  unread, archive or unarchive, and Trash. The unread action is named **Mark Unread**. In Trash, the
+  menu contains read or unread and Restore. It does not repeat star or unstar. Put compact **Reply**
+  and **Forward** actions after every expanded message and larger conversation-level actions after
+  the final message.
 - Opening an unread conversation marks its accessible unread inbound messages read. Star and unstar
   affect every accessible message in the thread. Archive moves accessible Inbox and Catch-all
   messages without moving Sent copies. Trash moves the accessible messages represented by the
@@ -235,11 +237,11 @@ The original HTML remains in customer storage; sanitization happens when the mes
 At widths below 640 CSS pixels, a conversation row uses the dense layout established by mobile mail
 clients: avatar or sender initial at the start; sender and time on the first line; an attachment
 marker, when present, before the subject and preview; and the star action at the trailing edge. A
-thread count above one follows the subject as `(n)` instead of using a separate element. The mobile
-star is slightly larger and optically aligned with the bottom text line. Rows keep compact outer
-padding and rounded corners instead of touching the screen edges. Do not hide the sender, subject,
-snippet, time, star, or compact label stack to make the row fit. Larger compact and desktop layouts
-keep their current horizontal row.
+thread count above one follows the sender on the first line as `(n)` instead of using a separate
+element. The mobile star is slightly larger and aligns with the bottom preview line. Rows keep
+compact outer padding and rounded corners instead of touching the screen edges. Do not hide the
+sender, subject, snippet, time, star, or compact label stack to make the row fit. Larger compact and
+desktop layouts keep their current horizontal row.
 
 Every folder can filter by multiple labels without changing its mailbox, search, or folder selection.
 Desktop conversation rows and the reader expose one **Labels** action that can add or remove a label
