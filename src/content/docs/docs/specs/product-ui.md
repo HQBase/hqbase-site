@@ -184,12 +184,12 @@ The original HTML remains in customer storage; sanitization happens when the mes
   trailing edge of the message preview, separate from the star action. The trailing edge stays
   aligned with the preview boundary. If the group is wider than the preview, it extends to the left
   instead of clipping labels. The row does not show a label edit action; a person opens the
-  conversation to change its labels. Center the labels and star on the final preview line. A thread
-  count beside the correspondent uses the same size, weight, and color as the correspondent. The
-  header label filter
-  keeps its small label icon and restrained text. On desktop, its trailing edge aligns with the row
-  Labels buttons at the trailing edge of the preview and leaves clear space before the conversation
-  total.
+  conversation to change its labels. Center the labels and star on the final preview line. The star
+  action has no rectangular hover surface; hover changes only its icon color. A thread count beside
+  the correspondent uses the same size, weight, and color as the correspondent. The header label
+  filter keeps its small label icon and restrained text. On desktop, its trailing edge aligns with
+  the row Labels buttons at the trailing edge of the preview and leaves clear space before the
+  conversation total.
 
 ### Conversation reader
 
@@ -221,7 +221,7 @@ The original HTML remains in customer storage; sanitization happens when the mes
   thread labels outside every individual message header. On desktop, put one Labels control in the
   top action toolbar directly before read or unread. Give it the same action treatment as the
   adjacent toolbar controls, but show the normal label icon and current label pills inside it. Below
-  640 CSS pixels, put the same control in a trailing row directly below the top toolbar and before
+  640 CSS pixels, center the same control in a row directly below the top toolbar and before
   the first message. Labels do not appear in **More actions**. Align the icon at the control's
   leading edge with clear space before the label pills. When no label is assigned, the editable
   control says **Add label**; the compact control also uses a light dashed border. Apply label
