@@ -142,6 +142,11 @@ HQBase rotates refresh tokens. A second matching refresh request that uses the p
 within 30 seconds returns the same rotated token response. Reuse after that window remains a replay
 and invalidates the refresh-token family.
 
+The signed-in product UI lists a person's OAuth connections through `GET /api/oauth-connections`.
+`DELETE /api/oauth-connections/{client-id}` removes every consent, access token, and refresh token
+for that person-client pair in one operation. These routes are private product routes, not Mail API
+routes. They never let one person list or revoke another person's connection.
+
 ## Endpoints
 
 All paths below are available relative to `/api/v1` and `/api/v2`. New clients use `/api/v2`.
@@ -506,7 +511,7 @@ Every HQBase installation publishes three public, instruction-only Agent Skills:
 
 | Skill | Path | Purpose |
 | --- | --- | --- |
-| Your account | `/skills/hqbase-mail/SKILL.md` | Use human OAuth with the Mail API. |
+| Connected app | `/skills/hqbase-mail/SKILL.md` | Use human OAuth with the Mail API. |
 | Mailbox agent | `/skills/hqbase-mailbox/SKILL.md` | Use one mailbox-agent credential with the Mail API. |
 | Provisioner | `/skills/hqbase-provisioner/SKILL.md` | Use one provisioner credential with the Management API. |
 
@@ -515,8 +520,8 @@ installation's canonical URLs, permission rules, and safety requirements. It eit
 available methods or links to them. It contains no credential, account data, or mail content.
 
 The old `/AGENTS.md` and `/agents.md` paths return a short `200` retirement notice. The notice
-reads: **This file is retired. Open Settings → Connect AI agents in HQBase to choose the correct
-Agent Skill or MCP server.** That Settings page is the authoritative connection guide.
+reads: **This file is retired. Open Agents in HQBase to choose the correct Agent Skill or MCP
+server.** The **Agents** section is the authoritative connection guide.
 
 The same installation serves instance-adjusted OpenAPI documents at `/api/v1/openapi.json` and
 `/api/v2/openapi.json`. Their `servers` entries and external documentation links use the

@@ -303,19 +303,23 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
   mailboxes do not appear in the header or default Settings list. **Deleted mailboxes** lists them
   for restoration. Restore reactivates the same mailbox, but linked agents stay disabled until an
   owner or admin separately reactivates them.
-- **Agents** lets an owner or admin create, rotate, reactivate, and disable machine identities. A
-  credential dialog shows the new secret once and the matching public skill URL with separate copy
-  actions. The page never shows a saved credential again. It also shows exact mailbox grants and
-  explains the effects of each lifecycle action. Provisioner creation explains that it receives
-  each child agent credential and must run as a trusted control-plane service.
-- **Connect AI agents** is the authoritative connection guide. It has two pill tabs in this order:
-  **Your account** and **Agentic mailbox**. Both tabs use flat sections and vertical space instead
-  of card containers. **Your account** shows **MCP** first, with **Read only** and **Mail actions**
-  as permission profiles. A visible divider labelled **or** separates it from **Skill + API**,
-  which shows the human OAuth Mail API skill. **Agentic mailbox** shows **Mailbox agent** first,
-  with a create action and the mailbox skill. A divider labelled **Automate mailbox creation**
-  separates **Provisioner agent**, its create action, and the provisioner skill. Only owners and
-  admins see the create actions.
+- **Agents** is a primary section beside Mail, Contacts, and Settings. Its main navigation contains
+  **Connected apps**, **Mailbox agents**, and **Provisioning keys**. Connected apps act for the
+  signed-in person through OAuth. Mailbox agents and provisioning keys are separate machine
+  identities. The UI never calls a connected app an agent identity.
+- **Connected apps** is the authoritative human-delegated connection page. It shows **MCP** first,
+  with **Read only** and **Mail actions** as permission profiles. A visible divider labelled **or**
+  separates it from **Skill + API**, which shows the human OAuth Mail API skill. New Skill + API
+  instructions show only `/api/v2`; `/api/v1` remains a hidden compatibility surface. The page
+  also lists the signed-in person's approved clients, permissions, and resources. **Revoke** removes
+  that person's consent and invalidates every access token and refresh-token family for the client
+  before the request succeeds. The revoked connection fails on its next request.
+- **Mailbox agents** lets an owner or admin create, rotate, reactivate, and disable machine
+  identities that can use one exact mailbox. **Provisioning keys** gives trusted control-plane
+  software permission to create and deprovision child mailbox agents. Each page shows only its own
+  identity type and matching public skill. A credential dialog shows the new secret once and never
+  shows a saved credential again. Provisioning-key creation explains that the key receives each
+  child credential and must remain in a trusted service.
 - Cloudflare-backed actions never display an API-token field. Authorization starts OAuth with PKCE
   in a labelled modal. See [Cloudflare access](/docs/specs/cloudflare-oauth/) for the security
   rules.
@@ -327,23 +331,24 @@ or small button size; the installed app does not use an extra-large button size.
 
 ## Navigation and accessibility
 
-- Primary navigation has **Mail**, **Contacts**, and **Settings**. Canonical mail routes are
+- Primary navigation has **Mail**, **Contacts**, **Agents**, and **Settings**. Canonical mail routes are
   `/mail/inbox`, `/mail/sent`, `/mail/starred`, `/mail/archived`, `/mail/trash`, `/mail/catch-all`,
   and private drafts at `/mail/drafts` and `/mail/drafts/<draft-id>`. Earlier root-level mail and
   draft paths remain accepted and normalize to the canonical route. Contacts use `/contacts` and
-  `/contacts/<contact-id>`. Settings routes live under `/settings/*`.
-  Routes include agent management at `/settings/agents`. They include label management at
-  `/settings/labels` and signature management at
-  `/settings/signatures`. Unknown app paths normalize to `/mail/inbox`. Catch-all mail stays
-  owner-only even after archive or trash actions.
+  `/contacts/<contact-id>`. Agent routes are `/agents/connections`, `/agents/mailboxes`, and
+  `/agents/provisioning`. Earlier `/settings/mcp` and `/settings/agents` paths normalize to the
+  matching Agent page. Settings routes live under `/settings/*`, including label management at
+  `/settings/labels` and signature management at `/settings/signatures`. Unknown app paths
+  normalize to `/mail/inbox`. Catch-all mail stays owner-only even after archive or trash actions.
 - The compact navigation drawer keeps the same quick-access rail as desktop beside the current
-  Mail, Contacts, or Settings navigation. The current navigation panel does not repeat primary
-  Mail, Contacts, or Settings links. Selecting a quick-access section opens that section's default
-  page and keeps the drawer open. Selecting a destination in the current navigation panel closes
-  the drawer. Only deliberate content surfaces scroll; the application shell, header, and
-  navigation stay fixed and do not use native document scrolling.
-- Inbox lists, Contacts lists and details, and Settings pages use the same 960 CSS pixel maximum
-  content width on desktop. A conversation reader continues to use the full available mail area.
+  Mail, Contacts, Agents, or Settings navigation. The current navigation panel does not repeat
+  primary section links. Selecting a quick-access section opens that section's default page and
+  keeps the drawer open. Selecting a destination in the current navigation panel closes the drawer.
+  Only deliberate content surfaces scroll; the application shell, header, and navigation stay
+  fixed and do not use native document scrolling.
+- Inbox lists, Contacts lists and details, Agents pages, and Settings pages use the same 960 CSS
+  pixel maximum content width on desktop. A conversation reader continues to use the full
+  available mail area.
 - Every field has a persistent label and inline error. Loading buttons prevent duplicate
   submission. Errors stay limited and secret-free. Success messages say what happened, what
   remains safe, and what to do next.
