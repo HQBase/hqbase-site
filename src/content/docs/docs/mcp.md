@@ -7,12 +7,14 @@ This page is for an AI tool that acts for a signed-in person. It does not create
 or a dedicated mailbox. To give an automated service its own credential, see
 [Agent mailboxes](/docs/agent-mailboxes/).
 
-Open **Agents → Connected apps**. This page shows two ways to connect software to your account:
+Open **Agents → Connected apps**. Use the compact tabs to connect software or review existing
+connections:
 
-| Method | Use it when |
+| Tab | Use it when |
 | --- | --- |
 | **MCP** | Your AI client supports a remote MCP server. |
 | **Skill + API** | Your agent can install a skill and make HTTP requests. |
+| **Connections** | You want to review or revoke an existing connection. |
 
 Both methods use your existing HQBase account and need your OAuth approval. They do not create
 another user or bypass your mailbox access. Machine agent credentials do not work with either
@@ -25,11 +27,12 @@ MCP connects an AI tool to HQBase through a remote MCP server.
 ### How to connect
 
 1. Open **Agents → Connected apps**.
-2. Choose **Read-only** or **Mail actions**.
-3. Copy the connection URL.
-4. Add the URL to your MCP client.
-5. Follow the short-code verification link that the client displays.
-6. Sign in to HQBase, check the requested access, and select **Allow**.
+2. Select **MCP**.
+3. Choose **Read-only** or **Mail actions**.
+4. Copy the connection URL.
+5. Add the URL to your MCP client.
+6. Follow the short-code verification link that the client displays.
+7. Sign in to HQBase, check the requested access, and select **Allow**.
 
 Start with **Read-only**. Use **Mail actions** only when the agent must change or send mail.
 
@@ -101,10 +104,10 @@ The **Skill + API** section shows the human-delegated skill:
 https://mail.example.com/skills/hqbase-mail/SKILL.md
 ```
 
-In **Agents → Connected apps**, copy the skill URL or download the file and
-give it to the agent. The agent uses `/api/v2`, displays a short-code verification link, and waits
-while you sign in and approve access. The public skill contains no credential or mail content.
-It links to the installation's exact OpenAPI document at `/api/v2/openapi.json`.
+In **Agents → Connected apps**, select **Skill + API**, then copy the skill URL or download the file
+and give it to the agent. The agent uses `/api/v2`, displays a short-code verification link, and
+waits while you sign in and approve access. The public skill contains no credential or mail
+content. It links to the installation's exact OpenAPI document at `/api/v2/openapi.json`.
 
 The agent must not open the verification link in a remote or agent-controlled browser. See the
 [Mail API reference](/docs/specs/mail-api/) for the exact OAuth and API contract.
@@ -127,9 +130,9 @@ email content.
 
 ## Review or revoke a connection
 
-**Agents → Connected apps** lists only the OAuth clients approved by the signed-in person. It shows
-the client name, approved access, and connection method. It does not show another workspace
-member's connections.
+In **Agents → Connected apps**, select **Connections**. This panel lists only the OAuth clients
+approved by the signed-in person. It shows the client name, approved access, and connection method.
+It does not show another workspace member's connections.
 
 Select **Revoke** to remove the complete person-client connection. HQBase removes its consent and
 invalidates all access tokens and refresh-token families for that person and client in one
