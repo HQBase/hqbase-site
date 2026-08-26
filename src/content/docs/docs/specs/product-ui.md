@@ -224,9 +224,10 @@ The original HTML remains in customer storage; sanitization happens when the mes
   thread labels outside every individual message header. On desktop, put one Labels control in the
   top action toolbar directly before read or unread. Give it the same action treatment as the
   adjacent toolbar controls, but show the normal label icon and current label pills inside it. Below
-  640 CSS pixels, center the same control in a row directly below the top toolbar and before
-  the first message. Labels do not appear in **More actions**. Align the icon at the control's
-  leading edge with clear space before the label pills. When no label is assigned, the editable
+  640 CSS pixels, align the same control to the trailing edge in a row with minimal vertical padding
+  directly below the top toolbar and before the first message. Labels do not appear in **More
+  actions**. Align the icon at the control's leading edge with clear space before the label pills.
+  When no label is assigned, the editable
   control says **Add label**; the compact control also uses a light dashed border. Apply label
   changes optimistically without lowering the control opacity, and restore the previous assignment
   if the request fails. Below 640 CSS pixels, the top toolbar shows
