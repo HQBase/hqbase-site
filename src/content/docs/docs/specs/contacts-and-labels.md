@@ -94,15 +94,16 @@ returns to the newest page and does not change the underlying folder.
 ### Human controls
 
 Conversation rows and the desktop conversation reader have a one-click **Labels** action. The
-folder toolbar and reader header use the normal label icon. On compact readers, Labels is in the
-**More actions** menu. It starts as one collapsed item. Activating it shows the checked label
-choices directly below it in the same menu, and activating it again collapses the choices. On
-desktop, the row shows up to three named pills over the trailing edge of the preview, then stacks
-the remaining labels so their colors stay visible. The fully rounded container uses the application
-background, two CSS pixels of outer padding, and a solid shadow in the same color. The shadow extends
-past the container edge so preview text cannot show through. It has no blur or border. Its trailing
-edge stays fixed so the desktop label icons align between rows. The complete container is the Labels
-button, and selecting any visible part opens the assignment menu. The label
+folder toolbar and desktop reader header use the normal label icon. On compact readers, the current
+labels form one control directly below the header. A person with Handle or Manager access can open
+that control and change the assignments. Read access shows the same assignments without an edit
+action. Labels do not appear in **More actions**. On desktop, the row shows up to three named pills
+over the trailing edge of the preview, then stacks the remaining labels so their colors stay
+visible. The fully rounded container uses the current conversation-row surface, including its hover
+or selected state, two CSS pixels of outer padding, and a solid shadow in the same color. The shadow
+extends past the container edge so preview text cannot show through. It has no blur or border. Its
+trailing edge stays fixed so the desktop label icons align between rows. The complete container is
+the Labels button, and selecting any visible part opens the assignment menu. The label
 icon has no separate button background. Hovering the container changes only the icon color. Each
 named pill uses a translucent label-color background with darker color-matched text in light mode
 and lighter color-matched text in dark mode. It reserves at least a four-letter width and shows at
