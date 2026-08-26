@@ -231,8 +231,8 @@ The original HTML remains in customer storage; sanitization happens when the mes
   thread labels outside every individual message header. On desktop, put one Labels control in the
   top action toolbar directly before read or unread. Give it the same action treatment as the
   adjacent toolbar controls, but show the normal label icon and current label pills inside it. Below
-  640 CSS pixels, align the same control to the trailing edge in a row with minimal vertical padding
-  directly below the top toolbar and before the first message. Labels do not appear in **More
+  640 CSS pixels, align the same control to the trailing edge directly below the top toolbar. Give
+  the row a small top inset and no lower gap before the first message header. Labels do not appear in **More
   actions**. Align the icon at the control's leading edge with clear space before the label pills.
   When no label is assigned, the editable
   control says **Add label**; the compact control also uses a light dashed border. Apply label
@@ -330,6 +330,12 @@ or small button size; the installed app does not use an extra-large button size.
   `/settings/labels` and signature management at
   `/settings/signatures`. Unknown app paths normalize to `/mail/inbox`. Catch-all mail stays
   owner-only even after archive or trash actions.
+- The compact navigation drawer keeps the same quick-access rail as desktop beside the current
+  Mail, Contacts, or Settings navigation. The current navigation panel does not repeat primary
+  Mail, Contacts, or Settings links. Only deliberate content surfaces scroll; the application shell,
+  header, and navigation stay fixed and do not use native document scrolling.
+- Inbox lists, Contacts lists and details, and Settings pages use the same 960 CSS pixel maximum
+  content width on desktop. A conversation reader continues to use the full available mail area.
 - Every field has a persistent label and inline error. Loading buttons prevent duplicate
   submission. Errors stay limited and secret-free. Success messages say what happened, what
   remains safe, and what to do next.
