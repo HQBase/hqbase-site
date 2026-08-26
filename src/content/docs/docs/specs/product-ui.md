@@ -190,13 +190,14 @@ The original HTML remains in customer storage; sanitization happens when the mes
   On compact layouts, every assigned label sits in one non-wrapping, read-only row at the bottom
   trailing edge of the message preview, separate from the star action. The trailing edge stays
   aligned with the preview boundary. If the group is wider than the preview, it extends to the left
-  instead of clipping labels. The row does not show a label edit action; a person opens the
-  conversation to change its labels. Center the labels and star on the final preview line. The star
-  action has no rectangular hover surface; hover changes only its icon color. A thread count beside
-  the correspondent uses the same size, weight, and color as the correspondent. The header label
-  filter keeps its small label icon and restrained text. On desktop, its trailing edge aligns with
-  the row Labels buttons at the trailing edge of the preview and leaves clear space before the
-  conversation total.
+  instead of clipping labels. A soft five CSS pixel shadow in the current row-surface color extends
+  toward the preview text, giving compact rows the same edge fade as desktop with a smaller reach.
+  The row does not show a label edit action; a person opens the conversation to change its labels.
+  Center the labels and star on the final preview line. The star action has no rectangular hover
+  surface; hover changes only its icon color. A thread count beside the correspondent uses the same
+  size, weight, and color as the correspondent. The header label filter keeps its small label icon
+  and restrained text. On desktop, its trailing edge aligns with the row Labels buttons at the
+  trailing edge of the preview and leaves clear space before the conversation total.
 
 ### Conversation reader
 
@@ -337,8 +338,10 @@ or small button size; the installed app does not use an extra-large button size.
   owner-only even after archive or trash actions.
 - The compact navigation drawer keeps the same quick-access rail as desktop beside the current
   Mail, Contacts, or Settings navigation. The current navigation panel does not repeat primary
-  Mail, Contacts, or Settings links. Only deliberate content surfaces scroll; the application shell,
-  header, and navigation stay fixed and do not use native document scrolling.
+  Mail, Contacts, or Settings links. Selecting a quick-access section opens that section's default
+  page and keeps the drawer open. Selecting a destination in the current navigation panel closes
+  the drawer. Only deliberate content surfaces scroll; the application shell, header, and
+  navigation stay fixed and do not use native document scrolling.
 - Inbox lists, Contacts lists and details, and Settings pages use the same 960 CSS pixel maximum
   content width on desktop. A conversation reader continues to use the full available mail area.
 - Every field has a persistent label and inline error. Loading buttons prevent duplicate
