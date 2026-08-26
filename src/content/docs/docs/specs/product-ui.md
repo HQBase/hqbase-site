@@ -167,13 +167,12 @@ The original HTML remains in customer storage; sanitization happens when the mes
   correspondent and preview, so attachment icons align between rows. On desktop, the thread count
   uses a fixed 28 CSS pixel lane with two CSS pixels of inner horizontal padding. Compact and
   desktop rows use a fixed 64 CSS pixel time lane so the preview keeps the remaining width while
-  timestamps stay aligned. On desktop, a content-sized label lane sits immediately before the
-  fixed time lane, with clear space between labels and the time. It shows up to three small named
-  color pills, then stacks the remaining label colors. The preview uses the remaining width and
-  labels do not cover it. The
+  timestamps stay aligned. Labels do not reserve a column. On desktop, up to three small named
+  color pills, overflow colors, and the label action sit over the trailing edge of the preview. The
   fully rounded label container uses the current conversation-row surface, including its hover or
-  selected state, two CSS pixels of outer padding, and a solid shadow in the same color. It has no
-  blur or border. The container's
+  selected state, two CSS pixels of outer padding, and a solid shadow in the same color. The shadow
+  extends past the container edge so preview text cannot show through. It has no blur or border.
+  The preview keeps five CSS pixels of trailing padding below the label container. The container's
   trailing edge stays at the same desktop position so the label icons align between rows. The
   complete container is the Labels button, and selecting any visible part opens the assignment
   menu. The label icon has no separate
@@ -181,14 +180,16 @@ The original HTML remains in customer storage; sanitization happens when the mes
   translucent label-color background with darker color-matched text in light mode and lighter
   color-matched text in dark mode. It reserves at least a four-letter width and shows at least nine
   characters, including **Important**, before truncation.
-  On compact layouts, every assigned label sits in one non-wrapping, read-only group at the trailing
-  side of the correspondent line. The time appears directly below the label group. The labels
-  remain separate from the star. If the group is wider than its available space, it extends to the
-  left instead of clipping. The row does not show a label edit action; a person opens the
-  conversation to change its labels. A thread
+  On compact layouts, every assigned label sits in one non-wrapping, read-only row at the bottom
+  trailing edge of the message preview, separate from the star action. The trailing edge stays
+  aligned with the preview boundary. If the group is wider than the preview, it extends to the left
+  instead of clipping labels. The row does not show a label edit action; a person opens the
+  conversation to change its labels. Center the labels and star on the final preview line. A thread
   count beside the correspondent uses the same size, weight, and color as the correspondent. The
-  header label filter keeps its 11 CSS pixel label icon and restrained text. On desktop, its
-  trailing edge aligns with the row label lane and leaves clear space before the conversation total.
+  header label filter
+  keeps its small label icon and restrained text. On desktop, its trailing edge aligns with the row
+  Labels buttons at the trailing edge of the preview and leaves clear space before the conversation
+  total.
 
 ### Conversation reader
 
@@ -220,8 +221,7 @@ The original HTML remains in customer storage; sanitization happens when the mes
   the current labels form one control directly below the header. It keeps the current desktop pill
   size, always shows the normal label icon, and uses a very light gray surface. Labels
   do not appear in **More actions**. Align the control to the trailing edge, with the icon at its
-  leading edge and clear space before the label pills. The control uses four CSS pixels of
-  horizontal padding. When no label is assigned, the editable
+  leading edge and clear space before the label pills. When no label is assigned, the editable
   control says **Add label** and uses a light dashed border. Below 640 CSS pixels, the header shows
   only star or unstar and **More actions**, in addition to Back navigation. The subject stays on one
   line and continues
@@ -241,9 +241,8 @@ The original HTML remains in customer storage; sanitization happens when the mes
   access. See [Mailbox access](/docs/access-control/) for the permission levels.
 
 At widths below 640 CSS pixels, a conversation row uses the dense layout established by mobile mail
-clients: avatar or sender initial at the start; the sender and assigned labels on the first line;
-the time below the labels; an attachment marker, when present, before the subject and preview; and
-the star action at the trailing edge. A
+clients: avatar or sender initial at the start; sender and time on the first line; an attachment
+marker, when present, before the subject and preview; and the star action at the trailing edge. A
 thread count above one follows the sender on the first line as `(n)` instead of using a separate
 element. The mobile star is slightly larger and aligns with the bottom preview line. Rows keep
 compact outer padding and rounded corners instead of touching the screen edges. Do not hide the
@@ -252,9 +251,7 @@ desktop layouts keep their current horizontal row.
 
 Every folder can filter by multiple labels without changing its mailbox, search, or folder selection.
 Desktop conversation rows and the reader expose one **Labels** action that can add or remove a label
-in one step. A choice updates the visible assignment immediately, and the control stays fully
-opaque while the request runs. If the request fails, HQBase restores the previous assignment and
-reports the failure. Compact rows show assignments as read-only and require the person to open the
+in one step. Compact rows show assignments as read-only and require the person to open the
 conversation before changing them. See [Contacts and labels](/docs/specs/contacts-and-labels/) for
 permissions and API behavior.
 
