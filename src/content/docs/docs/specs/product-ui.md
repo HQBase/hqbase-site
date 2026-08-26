@@ -198,8 +198,11 @@ The original HTML remains in customer storage; sanitization happens when the mes
   same list, filters, loaded pages, and scroll position.
 - Show accessible messages in chronological order. Begin with the first and final message; when
   messages sit between them, one labelled divider reports the hidden count and reveals them in
-  place. Remove the divider after expansion and keep the messages visible until the reader closes,
-  including when synchronization adds another message to the open thread.
+  place. The collapsed divider has only one line segment on each side of a small gray circular
+  control. The control shows the count between two short bold outward arrows and has the same quiet
+  treatment as the quoted-history ellipsis. Remove the divider after expansion and keep the
+  messages visible until the reader closes, including when synchronization adds another message to
+  the open thread.
 - Show a decoded sender display name when the message provides one, and keep the exact sender
   address visible in the message header. Treat both values as untrusted message metadata.
 - Use the structural quote markers used by established mail clients. Split HTML into content before
