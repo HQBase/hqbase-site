@@ -11,15 +11,14 @@ You choose where the agent itself runs.
 Dedicated agent mailboxes appear in the header under **Agent mailboxes**. An existing mailbox keeps
 its normal position when you also give an agent access to it.
 
-## Choose an agent type
+## Choose a machine identity
 
-An owner or admin creates an agent from **Settings → Connect AI agents → Agentic mailbox** or
-manages existing agents in **Settings → Agents**.
+An owner or admin manages machine identities from the primary **Agents** section.
 
-| Agent type | What it does |
+| Page | What it does |
 | --- | --- |
-| **Mailbox agent** | Reads or acts on mail in one exact mailbox. |
-| **Provisioner agent** | Creates mailbox agents and mailboxes through the Management API. Its own credential cannot call the Mail API. |
+| **Mailbox agents** | Create identities that read or act on mail in one exact mailbox. |
+| **Provisioning keys** | Create credentials for trusted software that provisions mailbox agents through the Management API. A provisioning key cannot call the Mail API. |
 
 HQBase shows the new bearer credential once. After Settings creates, rotates, or reactivates a
 machine credential, the credential dialog also shows the skill URL for that agent type. Copy both
@@ -50,8 +49,8 @@ Give the agent the mailbox skill shown after credential creation:
 https://mail.example.com/skills/hqbase-mailbox/SKILL.md
 ```
 
-The **Mailbox agent** section in **Settings → Connect AI agents → Agentic mailbox** provides the
-create action and public skill URL. The skill contains no credential or mail content.
+**Agents → Mailbox agents** provides the create action, existing mailbox-agent list, and public
+skill URL. The skill contains no credential or mail content.
 
 Drafts remain private to the identity that created them. A person cannot open a machine agent's
 draft, even when both can use the same mailbox.
@@ -78,8 +77,8 @@ Give the provisioner its separate skill:
 https://mail.example.com/skills/hqbase-provisioner/SKILL.md
 ```
 
-The **Provisioner agent** section under the **Automate mailbox creation** divider shows the create
-action and this URL. Do not give a provisioner the mailbox skill.
+**Agents → Provisioning keys** shows the create action, existing keys, and this URL. Do not give a
+provisioning key the mailbox skill.
 
 It creates one mailbox agent per request:
 
@@ -114,10 +113,10 @@ control-plane service. Do not use an untrusted mail-processing agent as the prov
 
 ## Disable or deprovision safely
 
-Disabling an agent stops its credentials from authorizing new requests. It does not delete or
+Disabling a mailbox agent or provisioning key stops its credentials from authorizing new requests. It does not delete or
 deactivate the mailbox. For a mailbox agent, HQBase keeps the active mailbox, address, messages,
-and audit history. Mail sent to the address still belongs to that mailbox. Disabling a provisioner
-stops new provisioning but does not disable the mailbox agents that it already created.
+and audit history. Mail sent to the address still belongs to that mailbox. Disabling a provisioning
+key stops new provisioning but does not disable the mailbox agents that it already created.
 
 An owner or admin can select **Delete mailbox** in **Settings → Mailboxes**. This is a reversible
 soft deletion. It preserves the mailbox ID, address, messages, drafts, attachments, and audit
@@ -161,9 +160,9 @@ lists deleted mailboxes, and the third restores the same mailbox ID and messages
 The three connection roles are separate:
 
 ```text
-Mailbox agent  → mailbox skill      → mailbox credential     → /api/v2
-Provisioner    → provisioner skill  → provisioner credential → /management/v1
-Your account   → human skill or MCP → human OAuth approval   → mail you can access
+Mailbox agent    → mailbox skill      → mailbox credential       → /api/v2
+Provisioning key → provisioner skill  → provisioning credential  → /management/v1
+Connected app    → human skill or MCP → human OAuth approval     → mail you can access
 ```
 
 See [Mailbox access](/docs/access-control/) for access levels and the
