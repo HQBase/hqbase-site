@@ -7,8 +7,7 @@ This page is for an AI tool that acts for a signed-in person. It does not create
 or a dedicated mailbox. To give an automated service its own credential, see
 [Agent mailboxes](/docs/agent-mailboxes/).
 
-Open **Settings → Connect AI agents → Your account**. The other tab, **Agentic mailbox**, is for
-machine identities. **Your account** shows two connection methods as flat sections:
+Open **Agents → Connected apps**. This page shows two ways to connect software to your account:
 
 | Method | Use it when |
 | --- | --- |
@@ -25,13 +24,12 @@ MCP connects an AI tool to HQBase through a remote MCP server.
 
 ### How to connect
 
-1. Open **Settings → Connect AI agents**.
-2. Select **Your account**.
-3. Choose **Read-only** or **Mail actions**.
-4. Copy the connection URL.
-5. Add the URL to your MCP client.
-6. Follow the short-code verification link that the client displays.
-7. Sign in to HQBase, check the requested access, and select **Allow**.
+1. Open **Agents → Connected apps**.
+2. Choose **Read-only** or **Mail actions**.
+3. Copy the connection URL.
+4. Add the URL to your MCP client.
+5. Follow the short-code verification link that the client displays.
+6. Sign in to HQBase, check the requested access, and select **Allow**.
 
 Start with **Read-only**. Use **Mail actions** only when the agent must change or send mail.
 
@@ -103,7 +101,7 @@ The **Skill + API** section shows the human-delegated skill:
 https://mail.example.com/skills/hqbase-mail/SKILL.md
 ```
 
-In **Settings → Connect AI agents → Your account**, copy the skill URL or download the file and
+In **Agents → Connected apps**, copy the skill URL or download the file and
 give it to the agent. The agent uses `/api/v2`, displays a short-code verification link, and waits
 while you sign in and approve access. The public skill contains no credential or mail content.
 It links to the installation's exact OpenAPI document at `/api/v2/openapi.json`.
@@ -126,3 +124,14 @@ Access changes apply to the next request. This includes a revoked connection, ch
 access, banned user, changed role, or ended session. HQBase never sends passwords, app secrets, or
 browser session cookies to the AI agent. Logs and audit records do not contain access tokens or
 email content.
+
+## Review or revoke a connection
+
+**Agents → Connected apps** lists only the OAuth clients approved by the signed-in person. It shows
+the client name, approved access, and protected resource. It does not show another workspace
+member's connections.
+
+Select **Revoke** to remove the complete person-client connection. HQBase removes its consent and
+invalidates all access tokens and refresh-token families for that person and client in one
+operation. The client fails on its next request. This does not disable a mailbox agent, revoke
+another person's connection, or end the person's browser session.
