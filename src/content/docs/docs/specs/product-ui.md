@@ -307,13 +307,15 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
   **Connected apps**, **Mailbox agents**, and **Provisioning keys**. Connected apps act for the
   signed-in person through OAuth. Mailbox agents and provisioning keys are separate machine
   identities. The UI never calls a connected app an agent identity.
-- **Connected apps** is the authoritative human-delegated connection page. It shows **MCP** first,
-  with **Read only** and **Mail actions** as permission profiles. A visible divider labelled **or**
-  separates it from **Skill + API**, which shows the human OAuth Mail API skill. New Skill + API
-  instructions show only `/api/v2`; `/api/v1` remains a hidden compatibility surface. The page
-  also lists the signed-in person's approved clients, permissions, and resources. **Revoke** removes
-  that person's consent and invalidates every access token and refresh-token family for the client
-  before the request succeeds. The revoked connection fails on its next request.
+- **Connected apps** is the authoritative human-delegated connection page. A compact three-way tab
+  control has **MCP**, **Skill + API**, and **Connections**. Only the selected panel is visible. The
+  page selects **Connections** when the signed-in person has at least one connection; otherwise it
+  selects **MCP**. MCP has **Read only** and **Mail actions** permission profiles. Skill + API shows
+  the human OAuth Mail API skill and only `/api/v2`; `/api/v1` remains a hidden compatibility
+  surface. Connections lists the signed-in person's approved clients, permissions, and resources.
+  **Revoke** removes that person's consent and invalidates every access token and refresh-token
+  family for the client before the request succeeds. The revoked connection fails on its next
+  request.
 - **Mailbox agents** lets an owner or admin create, rotate, reactivate, and disable machine
   identities that can use one exact mailbox. **Provisioning keys** gives trusted control-plane
   software permission to create and deprovision child mailbox agents. Each page shows only its own

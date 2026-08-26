@@ -964,7 +964,7 @@ test("agent mailboxes keep machine identity and mail access separate", async () 
   assert.match(mailApi, /Soft-deleted mailboxes[\s\S]*drafts,[\s\S]*attachments do not appear/);
   assert.match(productUi, /\*\*Agents\*\* is a primary section beside Mail, Contacts, and Settings/);
   assert.match(productUi, /Deleted mailboxes[\s\S]*linked agents stay disabled/);
-  assert.match(productUi, /divider labelled \*\*or\*\*[\s\S]*\*\*Skill \+ API\*\*/);
+  assert.match(productUi, /\*\*MCP\*\*, \*\*Skill \+ API\*\*, and \*\*Connections\*\*/);
   assert.match(productUi, /\*\*Mailbox agents\*\*[\s\S]*\*\*Provisioning keys\*\*/);
 });
 
