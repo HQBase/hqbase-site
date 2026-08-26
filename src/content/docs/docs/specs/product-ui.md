@@ -347,7 +347,9 @@ or small button size; the installed app does not use an extra-large button size.
   primary section links. Selecting a quick-access section opens that section's default page and
   keeps the drawer open. Selecting a destination in the current navigation panel closes the drawer.
   While mailbox selection is open, tapping elsewhere inside the drawer dismisses only the mailbox
-  selector. Choosing a mailbox applies the filter and closes the drawer.
+  selector. Choosing a mailbox applies the filter and closes the drawer. The compact drawer uses two
+  flat, edge-to-edge panes with one full-height vertical divider between them. Controls in its narrow
+  quick-access rail stay horizontally centered. Desktop sidebar surfaces keep their existing shape.
   Only deliberate content surfaces scroll; the application shell, header, and navigation stay
   fixed and do not use native document scrolling.
 - Inbox lists, Contacts lists and details, Agents pages, and Settings pages use the same 960 CSS
