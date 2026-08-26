@@ -185,18 +185,15 @@ and privacy.
 A signature belongs to exactly one person, mailbox, or mail domain. Each scope can contain several
 signatures and no more than one default. A person can use only signatures that apply to the exact
 selected From address and a mailbox where they can send. Default selection uses the mailbox default,
-then the person&apos;s default, then the exact domain default. If no explicit default exists and exactly
-one signature applies, HQBase uses that signature. If several signatures apply without a default,
-HQBase uses no signature. HQBase uses one signature and never concatenates scopes.
+then the person&apos;s default, then the exact domain default, and finally no signature. HQBase uses one
+signature and never concatenates scopes.
 
 Every new web draft resolves and selects the most specific applicable default when the draft starts:
-mailbox, then person, then exact domain, then the sole applicable signature. A small **Signature**
-dropdown sits
+mailbox, then person, then exact domain. A small **Signature** dropdown sits
 directly below the rendered signature preview and outside the serialized email content. It shows the
-resolved signature by name, or **No signature** when no unambiguous choice applies. Its menu offers
-applicable personal, mailbox, and domain signatures, **No signature**, and **Manage signatures…**.
-It does not show an Automatic choice. The preview has no card or border. Compact layouts keep a 44px
-target.
+resolved signature by name, or **No signature** when no default applies. Its menu offers applicable
+personal, mailbox, and domain signatures, **No signature**, and **Manage signatures…**. It does not
+show an Automatic choice. The preview has no card or border. Compact layouts keep a 44px target.
 
 The draft stores `automatic`, `selected`, or `none` plus a sanitized name, HTML, and plain-text
 snapshot. Editing or deleting the source signature does not rewrite a saved draft. A From change
