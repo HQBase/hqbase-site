@@ -99,30 +99,32 @@ directly below the header. The control keeps the current desktop pill size on co
 layouts, always shows the normal label icon, and uses a very light gray surface. A person with
 Handle or Manager access can open that control and change the assignments. Read access shows the
 same control without an edit action. Align the reader control to the trailing edge, with its icon at
-the leading edge and clear space before the label pills. When no label is assigned, the editable
-control says **Add label** and uses a light dashed border. Labels do not appear in **More actions**.
-On desktop, the row
-shows up to three named pills over the trailing edge of the preview, then stacks the remaining
-labels so their colors stay visible. The fully rounded container uses the current conversation-row
-surface, including its hover or selected state, two CSS pixels of outer padding, and a solid shadow
-in the same color. The shadow
-extends past the container edge so preview text cannot show through. It has no blur or border. Its
-trailing edge stays fixed so the desktop label icons align between rows. The complete container is
-the Labels button, and selecting any visible part opens the assignment menu. The label icon has no
-separate button background. Hovering the container changes only the icon color. Each
+the leading edge and clear space before the label pills. The reader control uses four CSS pixels of
+horizontal padding. When no label is assigned, the editable control says **Add label** and uses a
+light dashed border. Labels do not appear in **More actions**. On desktop, a content-sized label
+lane sits immediately before the fixed time lane, with clear space between labels and the time. It
+shows up to three named pills, then stacks the remaining label colors. The preview uses the
+remaining width and labels do not cover it. The fully rounded container uses the current
+conversation-row surface, including its hover or selected state, two CSS pixels of outer padding,
+and a solid shadow in the same color. It has no blur or border. Its trailing edge stays fixed so the
+desktop label icons align between rows. The complete container is the Labels button, and selecting
+any visible part opens the assignment menu. The label icon has no separate button background.
+Hovering the container changes only the icon color. Each
 named pill uses a translucent label-color background with darker color-matched text in light mode
 and lighter color-matched text in dark mode. It reserves at least a four-letter width and shows at
 least nine characters, including **Important**, before truncation.
-The action menu lists current labels with checked state, applies a choice immediately, and reports
-success or failure. The same menu can remove a label. Compact layouts show every assigned label in
-one non-wrapping, read-only row at the bottom trailing edge of the message preview, separate from the
-star. The trailing edge stays aligned with the preview boundary. If the group is wider than the
-preview, it extends to the left instead of clipping labels. A compact row does not show the label
-action; a person opens the conversation to change its labels.
+The action menu lists current labels with checked state. A choice updates the visible assignment
+immediately, and the control stays fully opaque while the request runs. If the request fails,
+HQBase restores the previous assignment and reports the failure. The same menu can remove a label.
+On compact layouts, every assigned label sits in one non-wrapping, read-only group at the trailing
+side of the correspondent line. The time appears directly below the label group. The labels remain
+separate from the star. If the group is wider than its available space, it extends to the left
+instead of clipping. A compact row does not show the label action; a person opens the conversation
+to change its labels.
 
 The folder toolbar uses a small-text compact checkbox multiselect instead of a standard field
-dropdown. Its trigger shows selected label names and colors, not only their count. On desktop, its
-trailing edge aligns with the row Labels buttons at the trailing edge of the preview. A person can
+dropdown. Its trigger uses an 11 CSS pixel label icon and shows selected label names and colors,
+not only their count. On desktop, its trailing edge aligns with the row label lane. A person can
 add or remove more than one active filter without closing the menu after each choice.
 
 **Settings → Labels** uses compact rows and normal-size dropdowns. Add and edit actions use a
