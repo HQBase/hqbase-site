@@ -95,8 +95,10 @@ returns to the newest page and does not change the underlying folder.
 
 Conversation rows and the conversation reader have a one-click **Labels** action. The folder
 toolbar uses the normal label icon. At every reader width, the current labels form one control
-directly below the header. The control keeps the current desktop pill size on compact and desktop
-layouts, always shows the normal label icon, and uses a very light gray surface. A person with
+in the final message header. On desktop, put the control directly before the date. On compact
+layouts, put it to the right of the recipient line and put the date below it. The control keeps the
+current desktop pill size on compact and desktop layouts, always shows the normal label icon, and
+uses a very light gray surface. A person with
 Handle or Manager access can open that control and change the assignments. Read access shows the
 same control without an edit action. Align the reader control to the trailing edge, with its icon at
 the leading edge and clear space before the label pills. When no label is assigned, the editable
@@ -114,7 +116,9 @@ named pill uses a translucent label-color background with darker color-matched t
 and lighter color-matched text in dark mode. It reserves at least a four-letter width and shows at
 least nine characters, including **Important**, before truncation.
 The action menu lists current labels with checked state, applies a choice immediately, and reports
-success or failure. The same menu can remove a label. Compact layouts show every assigned label in
+success or failure. While the request runs, the control keeps its normal opacity and shows the new
+assignment immediately. If the request fails, it restores the previous assignment. The same menu
+can remove a label. Compact layouts show every assigned label in
 one non-wrapping, read-only row at the bottom trailing edge of the message preview, separate from the
 star. The trailing edge stays aligned with the preview boundary. If the group is wider than the
 preview, it extends to the left instead of clipping labels. A compact row does not show the label
