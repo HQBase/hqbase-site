@@ -98,12 +98,14 @@ folder toolbar and reader header use the normal label icon. On compact readers, 
 **More actions** menu. It starts as one collapsed item. Activating it shows the checked label
 choices directly below it in the same menu, and activating it again collapses the choices. On
 desktop, the row shows up to three named pills over the trailing edge of the preview, then stacks
-the remaining labels so their colors stay visible. The container has no background, blur, border,
-shadow, or decorative outer padding. Its trailing edge stays fixed so the desktop label icons align
-between rows. The row action has no separate button background. Hovering the container changes only
-the label icon color. Each named pill uses the label color as a solid, full-opacity background with
-black text in light mode and white text in dark mode. It reserves at least a four-letter width and
-shows at least nine characters, including **Important**, before truncation.
+the remaining labels so their colors stay visible. The fully rounded container uses the application
+background, two CSS pixels of outer padding, and a subtle shadow of the same color. It has no blur
+or border. Its trailing edge stays fixed so the desktop label icons align between rows. The complete
+container is the Labels button, and selecting any visible part opens the assignment menu. The label
+icon has no separate button background. Hovering the container changes only the icon color. Each
+named pill uses a translucent label-color background with darker color-matched text in light mode
+and lighter color-matched text in dark mode. It reserves at least a four-letter width and shows at
+least nine characters, including **Important**, before truncation.
 The action menu lists current labels with checked state, applies a choice immediately, and reports
 success or failure. The same menu can remove a label. Compact layouts show up to two small read-only
 named labels and overflow colors at the bottom trailing edge of the message preview, separate from
@@ -111,8 +113,9 @@ the star. A compact row does not show the label action; a person opens the conve
 its labels.
 
 The folder toolbar uses a small-text compact checkbox multiselect instead of a standard field
-dropdown. Its trigger shows selected label names and colors, not only their count. A person can add
-or remove more than one active filter without closing the menu after each choice.
+dropdown. Its trigger shows selected label names and colors, not only their count. On desktop, its
+trailing edge aligns with the row Labels buttons at the trailing edge of the preview. A person can
+add or remove more than one active filter without closing the menu after each choice.
 
 **Settings → Labels** uses compact rows and normal-size dropdowns. Add and edit actions use a
 labelled dialog. No large button size is used. The mailbox selector in the app header remains the
