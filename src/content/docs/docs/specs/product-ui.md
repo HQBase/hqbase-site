@@ -218,11 +218,14 @@ The original HTML remains in customer storage; sanitization happens when the mes
   other full-content views include every safe fragment without changing the stored original.
 - Keep subject, read/unread, star, archive, and Trash actions at the top. In Archived, replace
   archive with **Unarchive**. In Trash, replace archive and Trash with **Restore**. At every width,
-  the current labels form one control directly below the header. It keeps the current desktop pill
-  size, always shows the normal label icon, and uses a very light gray surface. Labels
-  do not appear in **More actions**. Align the control to the trailing edge, with the icon at its
-  leading edge and clear space before the label pills. When no label is assigned, the editable
-  control says **Add label** and uses a light dashed border. Below 640 CSS pixels, the header shows
+  the current labels form one control in the final message header. On desktop, put the control
+  directly before the date. Below 640 CSS pixels, put it to the right of the recipient line and put
+  the date below it. It keeps the current desktop pill size, always shows the normal label icon, and
+  uses a very light gray surface. Labels do not appear in **More actions**. Align the control to the
+  trailing edge, with the icon at its leading edge and clear space before the label pills. When no
+  label is assigned, the editable control says **Add label** and uses a light dashed border. Apply
+  label changes optimistically without lowering the control opacity, and restore the previous
+  assignment if the request fails. Below 640 CSS pixels, the top toolbar shows
   only star or unstar and **More actions**, in addition to Back navigation. The subject stays on one
   line and continues
   below the trailing actions when it is long. A toolbar-colored surface and matching soft shadow
