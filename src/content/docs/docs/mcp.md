@@ -128,7 +128,7 @@ email content.
 ## Review or revoke a connection
 
 **Agents → Connected apps** lists only the OAuth clients approved by the signed-in person. It shows
-the client name, approved access, and protected resource. It does not show another workspace
+the client name, approved access, and connection method. It does not show another workspace
 member's connections.
 
 Select **Revoke** to remove the complete person-client connection. HQBase removes its consent and
