@@ -174,7 +174,7 @@ The original HTML remains in customer storage; sanitization happens when the mes
   fully rounded label container uses the current conversation-row surface, including its hover or
   selected state, two CSS pixels of outer padding, and a solid shadow in the same color. The shadow
   extends past the container edge so preview text cannot show through. It has no blur or border.
-  The preview keeps five CSS pixels of trailing padding below the label container. The container's
+  The preview keeps eight CSS pixels of trailing padding below the label container. The container's
   trailing edge stays at the same desktop position so the label icons align between rows. The
   complete container is the Labels button, and selecting any visible part opens the assignment
   menu. The label icon has no separate
@@ -345,6 +345,8 @@ or small button size; the installed app does not use an extra-large button size.
 The header search is global while the person types. After a short debounce, an anchored result list
 shows matching conversations, contacts, private drafts, and app destinations that the person can
 access. Arrow keys move through results, Enter opens the active result, and Escape closes the list.
+When the query is not empty, a trailing Clear search action empties it and keeps focus in the search
+field.
 Selecting a conversation, contact, or draft opens that item. Pressing Enter with no active result
 applies the literal query as the Inbox search filter. Typing alone never changes the current route or
 mail list.
