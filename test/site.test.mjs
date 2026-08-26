@@ -924,7 +924,7 @@ test("agent mailboxes keep machine identity and mail access separate", async () 
   assert.match(config, /docsSlug\("agent-mailboxes"\)/);
   assert.match(overview, /Give an agent a mailbox/);
   assert.match(agents, /title: Agent mailboxes/);
-  assert.match(agents, /Mailbox agent[\s\S]*Provisioner/);
+  assert.match(agents, /Mailbox agents[\s\S]*Provisioning keys/);
   assert.match(agents, /one exact mailbox/);
   assert.match(agents, /HQBase shows the new bearer credential once/);
   assert.match(agents, /current and future messages and attachments/);
@@ -962,10 +962,10 @@ test("agent mailboxes keep machine identity and mail access separate", async () 
   assert.match(mailApi, /A provisioner credential[\s\S]*does not work with this API/);
   assert.match(mailApi, /wake-up channel,[\s\S]*not a second data API/);
   assert.match(mailApi, /Soft-deleted mailboxes[\s\S]*drafts,[\s\S]*attachments do not appear/);
-  assert.match(productUi, /agent management at `\/settings\/agents`/);
+  assert.match(productUi, /\*\*Agents\*\* is a primary section beside Mail, Contacts, and Settings/);
   assert.match(productUi, /Deleted mailboxes[\s\S]*linked agents stay disabled/);
   assert.match(productUi, /divider labelled \*\*or\*\*[\s\S]*\*\*Skill \+ API\*\*/);
-  assert.match(productUi, /divider labelled \*\*Automate mailbox creation\*\*/);
+  assert.match(productUi, /\*\*Mailbox agents\*\*[\s\S]*\*\*Provisioning keys\*\*/);
 });
 
 test("the design scaffold and local assets remain available", async () => {

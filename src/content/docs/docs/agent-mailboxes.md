@@ -20,7 +20,7 @@ An owner or admin manages machine identities from the primary **Agents** section
 | **Mailbox agents** | Create identities that read or act on mail in one exact mailbox. |
 | **Provisioning keys** | Create credentials for trusted software that provisions mailbox agents through the Management API. A provisioning key cannot call the Mail API. |
 
-HQBase shows the new bearer credential once. After Settings creates, rotates, or reactivates a
+HQBase shows the new bearer credential once. After **Agents** creates, rotates, or reactivates a
 machine credential, the credential dialog also shows the skill URL for that agent type. Copy both
 to the service that will run the agent, then close the dialog.
 
@@ -64,14 +64,14 @@ MCP remains a connection for an AI tool that acts for a signed-in person. A mach
 credential does not work with `/mcp` or `/mcp/full`. See [Connect an AI tool](/docs/mcp/) for that
 separate workflow.
 
-## Let a provisioner create mailboxes
+## Use a provisioning key
 
-A provisioner uses its bearer credential with `/management/v1`. It can create a dedicated mailbox
-with one address, a mailbox agent, and an explicit mailbox grant on a domain that is already
-connected to HQBase. It cannot connect a domain or use its Management API credential with the Mail
-API.
+A provisioning key uses its bearer credential with `/management/v1`. Internally, it represents a
+machine identity with the `provisioner` profile. It can create a dedicated mailbox with one address,
+a mailbox agent, and access to that mailbox on a domain that is already connected to HQBase. It
+cannot use its Management API credential with the Mail API. It cannot connect a domain.
 
-Give the provisioner its separate skill:
+Give the provisioning service its separate skill:
 
 ```text
 https://mail.example.com/skills/hqbase-provisioner/SKILL.md
@@ -113,10 +113,11 @@ control-plane service. Do not use an untrusted mail-processing agent as the prov
 
 ## Disable or deprovision safely
 
-Disabling a mailbox agent or provisioning key stops its credentials from authorizing new requests. It does not delete or
-deactivate the mailbox. For a mailbox agent, HQBase keeps the active mailbox, address, messages,
-and audit history. Mail sent to the address still belongs to that mailbox. Disabling a provisioning
-key stops new provisioning but does not disable the mailbox agents that it already created.
+Disabling a mailbox agent or provisioning key stops its credentials from authorizing new requests.
+It does not delete or deactivate the mailbox. For a mailbox agent, HQBase keeps the active mailbox,
+address, messages, and audit history. Mail sent to the address still belongs to that mailbox.
+Disabling a provisioning key stops new provisioning but does not disable the mailbox agents that it
+already created.
 
 An owner or admin can select **Delete mailbox** in **Settings → Mailboxes**. This is a reversible
 soft deletion. It preserves the mailbox ID, address, messages, drafts, attachments, and audit
@@ -143,8 +144,8 @@ disabled until an owner or admin separately reactivates them and receives a new 
 ## Technical details
 
 People and machine agents are separate principals. People can have workspace roles. Machine agents
-have no workspace role. A mailbox agent uses one explicit mailbox grant. A provisioner uses only
-its provisioning capability.
+have no workspace role. A mailbox agent uses access to one exact mailbox. A provisioning key can
+only provision mailboxes.
 
 The signed-in Settings routes are:
 
