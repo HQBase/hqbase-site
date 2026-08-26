@@ -108,6 +108,10 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
   operating-system changes.
 - **All mailboxes** and each accessible mailbox show their unread Inbox count, including zero.
   Catch-all remains an owner-only, unfiltered workspace count.
+- The browser title follows the selected Inbox and its unread Inbox count. **All mailboxes** uses
+  **Inbox (15) - Mail**. A selected mailbox uses its address, such as
+  **privacy@example.com (2) - Mail**. Omit the count and parentheses when the selected Inbox has no
+  unread messages.
 - The desktop header uses a compact mailbox dropdown that opens below its trigger. It lists **All
   mailboxes** and human mailboxes first. When dedicated agent mailboxes exist, an **Agent
   mailboxes** divider with an agent icon separates and labels them.
