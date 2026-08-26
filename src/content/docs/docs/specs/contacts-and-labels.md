@@ -94,15 +94,16 @@ returns to the newest page and does not change the underlying folder.
 ### Human controls
 
 Conversation rows and the conversation reader have a one-click **Labels** action. The folder
-toolbar uses the normal label icon. At every reader width, the current labels form one control
-in the final message header. On desktop, put the control directly before the date. On compact
-layouts, put it to the right of the recipient line and put the date below it. The control keeps the
-current desktop pill size on compact and desktop layouts, always shows the normal label icon, and
-uses a very light gray surface. A person with
+toolbar uses the normal label icon. The reader shows one thread-level control outside every
+individual message header. On desktop, put the control in the top action toolbar directly before
+the read or unread action. Give it the same action treatment as the adjacent toolbar controls, but
+show the normal label icon and current label pills inside it. On compact layouts, put the same
+control in a trailing row directly below the top toolbar and before the first message. A person with
 Handle or Manager access can open that control and change the assignments. Read access shows the
 same control without an edit action. Align the reader control to the trailing edge, with its icon at
 the leading edge and clear space before the label pills. When no label is assigned, the editable
-control says **Add label** and uses a light dashed border. Labels do not appear in **More actions**.
+control says **Add label**. The compact control uses a light dashed border in that empty state.
+Labels do not appear in **More actions**.
 On desktop, the row
 shows up to three named pills over the trailing edge of the preview, then stacks the remaining
 labels so their colors stay visible. The fully rounded container uses the current conversation-row

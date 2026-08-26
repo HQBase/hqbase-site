@@ -217,15 +217,16 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - When content before a recognized quote is empty, show the quote without an ellipsis. Printing and
   other full-content views include every safe fragment without changing the stored original.
 - Keep subject, read/unread, star, archive, and Trash actions at the top. In Archived, replace
-  archive with **Unarchive**. In Trash, replace archive and Trash with **Restore**. At every width,
-  the current labels form one control in the final message header. On desktop, put the control
-  directly before the date. Below 640 CSS pixels, put it to the right of the recipient line and put
-  the date below it. It keeps the current desktop pill size, always shows the normal label icon, and
-  uses a very light gray surface. Labels do not appear in **More actions**. Align the control to the
-  trailing edge, with the icon at its leading edge and clear space before the label pills. When no
-  label is assigned, the editable control says **Add label** and uses a light dashed border. Apply
-  label changes optimistically without lowering the control opacity, and restore the previous
-  assignment if the request fails. Below 640 CSS pixels, the top toolbar shows
+  archive with **Unarchive**. In Trash, replace archive and Trash with **Restore**. Keep the current
+  thread labels outside every individual message header. On desktop, put one Labels control in the
+  top action toolbar directly before read or unread. Give it the same action treatment as the
+  adjacent toolbar controls, but show the normal label icon and current label pills inside it. Below
+  640 CSS pixels, put the same control in a trailing row directly below the top toolbar and before
+  the first message. Labels do not appear in **More actions**. Align the icon at the control's
+  leading edge with clear space before the label pills. When no label is assigned, the editable
+  control says **Add label**; the compact control also uses a light dashed border. Apply label
+  changes optimistically without lowering the control opacity, and restore the previous assignment
+  if the request fails. Below 640 CSS pixels, the top toolbar shows
   only star or unstar and **More actions**, in addition to Back navigation. The subject stays on one
   line and continues
   below the trailing actions when it is long. A toolbar-colored surface and matching soft shadow
