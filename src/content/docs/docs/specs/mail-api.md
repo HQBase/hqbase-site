@@ -154,7 +154,7 @@ All paths below are available relative to `/api/v1` and `/api/v2`. New clients u
 | `GET /events` | `mail:read` | Open a WebSocket that wakes clients when a synchronization feed can have new work. |
 | `GET /messages/{id}` | `mail:read` | Get one message. |
 | `GET /messages/{id}/thread` | `mail:read` | Get the accessible messages in the same thread. |
-| `GET /messages/{id}/html` | `mail:read` | Get sanitized HTML rendering metadata, including visible content before and after any separately returned quoted reply history. |
+| `GET /messages/{id}/html` | `mail:read` | Get sanitized HTML rendering metadata, including visible content before and after any separately returned quoted reply history and remote-image flags for each fragment. |
 | `GET /messages/{id}/inline/{attachmentId}` | `mail:read` | Render a safe inline image from a message. |
 | `GET /attachments/{id}` | `mail:read` | Download an attachment. |
 | `GET /conversations` | `mail:read` | List or search conversation summaries with cursor pagination. |
