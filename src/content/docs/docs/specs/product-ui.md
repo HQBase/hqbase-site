@@ -164,16 +164,17 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - The folder header and conversation list use a shared maximum width of 960 CSS pixels. Desktop
   rows keep the correspondent and utility columns compact so the subject and preview use all
   remaining space, and align every column vertically. A fixed attachment lane sits between the
-  correspondent and preview, so attachment icons align between rows. The thread count uses a fixed
-  28 CSS pixel lane with two CSS pixels of inner horizontal padding. Compact and desktop rows use a
-  fixed 64 CSS pixel time lane so the preview keeps the remaining width while timestamps stay
-  aligned. Labels do not reserve a column. On desktop, up to three small named color pills,
-  overflow colors, and the label action sit over the trailing edge of the preview. The fully
-  rounded label container uses the application background, two CSS pixels of outer padding, and a
-  solid shadow in the same color. The shadow extends past the container edge so preview text cannot
-  show through. It has no blur or border. Its trailing edge stays at the same desktop position so
-  the label icons align between rows. The complete container is the Labels
-  button, and selecting any visible part opens the assignment menu. The label icon has no separate
+  correspondent and preview, so attachment icons align between rows. On desktop, the thread count
+  uses a fixed 28 CSS pixel lane with two CSS pixels of inner horizontal padding. Compact and
+  desktop rows use a fixed 64 CSS pixel time lane so the preview keeps the remaining width while
+  timestamps stay aligned. Labels do not reserve a column. On desktop, up to three small named
+  color pills, overflow colors, and the label action sit over the trailing edge of the preview. The
+  fully rounded label container uses the current conversation-row surface, including its hover or
+  selected state, two CSS pixels of outer padding, and a solid shadow in the same color. The shadow
+  extends past the container edge so preview text cannot show through. It has no blur or border. Its
+  trailing edge stays at the same desktop position so the label icons align between rows. The
+  complete container is the Labels button, and selecting any visible part opens the assignment
+  menu. The label icon has no separate
   button background. Hovering the container changes only the icon color. Each named pill uses a
   translucent label-color background with darker color-matched text in light mode and lighter
   color-matched text in dark mode. It reserves at least a four-letter width and shows at least nine
@@ -214,13 +215,14 @@ The original HTML remains in customer storage; sanitization happens when the mes
   other full-content views include every safe fragment without changing the stored original.
 - Keep subject, Labels, read/unread, star, archive, and Trash actions at the top. The Labels action
   uses the normal label icon. In Archived, replace archive with **Unarchive**. In Trash, replace
-  archive and Trash with **Restore**. Below 640 CSS pixels, keep read/unread and Trash visible and
-  put Labels, star or unstar, archive or unarchive, and Restore in one **More actions** menu. The
-  menu initially shows one collapsed **Labels** item instead of every label. Activating it shows the
-  checked label choices directly below it in the same menu. Activating it again collapses the
-  choices without closing the menu. Trash has no separate Trash action, so its compact reader keeps
-  read/unread visible and puts Restore in the menu. Put compact **Reply** and **Forward** actions
-  after every expanded message and larger conversation-level actions after the final message.
+  archive and Trash with **Restore**. Below 640 CSS pixels, the header shows only star or unstar and
+  **More actions**, in addition to Back navigation. The subject stays on one line and continues
+  below the trailing actions when it is long. A toolbar-colored surface and matching soft shadow
+  prevent subject text from showing through those actions. The current labels form an editable
+  control directly below the header and do not appear in **More actions**. **More actions** contains
+  read or unread, archive or unarchive, and Trash. In Trash, it contains read or unread and Restore.
+  It does not repeat star or unstar. Put compact **Reply** and **Forward** actions after every
+  expanded message and larger conversation-level actions after the final message.
 - Opening an unread conversation marks its accessible unread inbound messages read. Star and unstar
   affect every accessible message in the thread. Archive moves accessible Inbox and Catch-all
   messages without moving Sent copies. Trash moves the accessible messages represented by the
@@ -231,10 +233,12 @@ The original HTML remains in customer storage; sanitization happens when the mes
   access. See [Mailbox access](/docs/access-control/) for the permission levels.
 
 At widths below 640 CSS pixels, a conversation row uses the dense layout established by mobile mail
-clients: avatar or sender initial at the start; sender and time on the first line; subject on the
-second line; snippet on the third line; and the star action at the trailing edge. Rows keep compact
-outer padding and rounded corners instead of touching the screen edges. Do not hide the sender,
-subject, snippet, time, star, or compact label stack to make the row fit. Larger compact and desktop layouts
+clients: avatar or sender initial at the start; sender and time on the first line; an attachment
+marker, when present, before the subject and preview; and the star action at the trailing edge. A
+thread count above one follows the subject as `(n)` instead of using a separate element. The mobile
+star is slightly larger and optically aligned with the bottom text line. Rows keep compact outer
+padding and rounded corners instead of touching the screen edges. Do not hide the sender, subject,
+snippet, time, star, or compact label stack to make the row fit. Larger compact and desktop layouts
 keep their current horizontal row.
 
 Every folder can filter by multiple labels without changing its mailbox, search, or folder selection.
