@@ -176,10 +176,11 @@ The original HTML remains in customer storage; sanitization happens when the mes
   timestamps stay aligned. Labels do not reserve a column. On desktop, up to three small named
   color pills, overflow colors, and the label action sit over the trailing edge of the preview. The
   fully rounded label container uses the current conversation-row surface, including its hover or
-  selected state, two CSS pixels of outer padding, and a solid shadow in the same color. The shadow
-  extends past the container edge so preview text cannot show through. It has no blur or border.
-  The preview keeps eight CSS pixels of trailing padding below the label container. The container's
-  trailing edge stays at the same desktop position so the label icons align between rows. The
+  selected state, two CSS pixels of outer padding, and a soft directional shadow in the same color.
+  The shadow extends toward the preview text but not into the thread-count lane. The preview clips
+  eight CSS pixels before its trailing edge so no glyph can show past the label container. The
+  container has no border, and its trailing edge stays at the same desktop position so the label
+  icons align between rows. The
   complete container is the Labels button, and selecting any visible part opens the assignment
   menu. The label icon has no separate
   button background. Hovering the container changes only the icon color. Each named pill uses a
