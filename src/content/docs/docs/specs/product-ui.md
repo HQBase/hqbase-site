@@ -170,16 +170,19 @@ The original HTML remains in customer storage; sanitization happens when the mes
   aligned. Labels do not reserve a column. On desktop, up to three small named color pills,
   overflow colors, and the label action sit over the trailing edge of the preview. The fully
   rounded label container uses the application background, two CSS pixels of outer padding, and a
-  subtle shadow of the same color. It has no blur or border. Its trailing edge stays at the same
-  desktop position so the label icons align between rows. The complete container is the Labels
+  solid shadow in the same color. The shadow extends past the container edge so preview text cannot
+  show through. It has no blur or border. Its trailing edge stays at the same desktop position so
+  the label icons align between rows. The complete container is the Labels
   button, and selecting any visible part opens the assignment menu. The label icon has no separate
   button background. Hovering the container changes only the icon color. Each named pill uses a
   translucent label-color background with darker color-matched text in light mode and lighter
   color-matched text in dark mode. It reserves at least a four-letter width and shows at least nine
   characters, including **Important**, before truncation.
-  On compact layouts, up to two small read-only named labels and overflow colors sit at the bottom
-  trailing edge of the message preview, separate from the star action. The row does not show a
-  label edit action; a person opens the conversation to change its labels. The header label filter
+  On compact layouts, every assigned label sits in one non-wrapping, read-only row at the bottom
+  trailing edge of the message preview, separate from the star action. The trailing edge stays
+  aligned with the preview boundary. If the group is wider than the preview, it extends to the left
+  instead of clipping labels. The row does not show a label edit action; a person opens the
+  conversation to change its labels. The header label filter
   keeps its small label icon and restrained text. On desktop, its trailing edge aligns with the row
   Labels buttons at the trailing edge of the preview and leaves clear space before the conversation
   total.
