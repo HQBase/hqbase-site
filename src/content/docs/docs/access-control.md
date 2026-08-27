@@ -115,6 +115,21 @@ or connect an AI tool. Afterward, you still need to choose which mailboxes they 
 If an invitation expires, resend it. If a temporary password is lost while setup is still pending,
 generate a new one. Admins can see setup status, but never a password or invitation link.
 
+## Remove and restore people
+
+Owners and admins can remove a member or admin from **Settings → Users**. Only an owner can remove
+another owner. You cannot remove your own account or the last active owner.
+
+Removal takes effect immediately. HQBase ends the person's sessions, revokes connected-app access,
+cancels pending sign-in setup, stops notifications, and removes all mailbox access. Existing mail,
+drafts, contacts, signatures, and audit history stay in the workspace. The person appears as
+**Removed** in the Users table and cannot sign in.
+
+An owner or admin can restore a removed member or admin. Only an owner can restore another owner.
+The restored person signs in again with the same login identity. Sessions, connected apps,
+notifications, and mailbox access do not return. Assign mailbox access again when it is needed. A
+pending person also needs a new invitation or temporary password from the row's actions menu.
+
 ## How access is enforced
 
 The same mailbox access level applies in the web app, APIs, and MCP connections. An AI tool cannot
