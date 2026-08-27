@@ -197,11 +197,16 @@ Soft-deleted mailboxes and their messages, drafts, and attachments do not appear
 API. Their stored data remains subject to the current retention rules. Restoring the mailbox makes
 the same mailbox ID and mail available again under its current access rules.
 
-Inbound mail that did not match a mailbox is unassigned and has no mailbox grant. Only an owner can
-list, read, change, or download this mail through the REST API or MCP. The stored unassigned state
-stays authoritative after an owner archives, unarchives, trashes, or restores the message. A null
-mailbox reference by itself does not grant catch-all access, and a missing message still returns
-`404`.
+An exact active mailbox address always receives inbound mail before the domain's unmatched-mail
+policy is considered. A domain can reject unmatched mail, keep it as unassigned mail, or deliver it
+to one active human mailbox on that domain. Mail delivered to the selected mailbox is normal Inbox
+mail and uses that mailbox's REST, MCP, notification, and changes-feed access. It records the exact
+envelope recipient, but that unmatched address is not a sending identity.
+
+Unassigned mail has no mailbox grant. Only an owner can list, read, change, or download it through
+the REST API or MCP. The stored unassigned state stays authoritative after an owner archives,
+unarchives, trashes, or restores the message. A null mailbox reference by itself does not grant
+catch-all access, and a missing message still returns `404`.
 
 The changes feed applies the same live rule. An unassigned deletion tombstone has a null
 `mailboxId`; only owners receive it.

@@ -29,6 +29,8 @@ After deployment, HQBase opens `/setup`:
 2. Choose the primary email domain and the subdomain where the HQBase app will live.
 3. Select **Connect domain and continue**.
 4. Wait while HQBase configures Cloudflare and checks the result.
+5. For every domain, choose whether unknown addresses go to a mailbox, stay in owner-only
+   Catch-all, or are rejected.
 
 HQBase continues to owner setup only after the required checks pass. The owner's login email must
 remain available when HQBase is offline, so it cannot use a domain connected to this workspace.
@@ -46,6 +48,35 @@ With the temporary Cloudflare permission approved during setup, HQBase:
 The deployment flow has already created the Worker, D1 database, R2 bucket, queues, and bindings.
 The temporary Cloudflare access token is stored only as a masked Worker secret. HQBase deletes and
 revokes it after setup.
+
+Cloudflare sends domain mail to the HQBase Worker. HQBase gives an exact active mailbox address
+priority, then applies the domain's unknown-address policy. Changing that policy in **Settings →
+Email domains** affects new mail only.
+
+## Manage a connected domain
+
+**Settings → Email domains** keeps each domain, its combined readiness, its unknown-address policy,
+and its **Active in HQBase** switch in one table. Open the readiness status to see Receive, Send,
+and DNS separately. If one component needs attention, the table names it instead of showing only a
+general degraded state.
+
+Select **Recheck** to authorize one read-only Cloudflare inspection. HQBase updates the stored
+readiness snapshot and revokes the temporary grant. Recheck does not change Cloudflare. Reloading
+the page alone does not inspect Cloudflare again.
+
+The **Active in HQBase** switch does not disconnect Cloudflare or remove Email Routing, Email
+Sending, catch-all, or DNS configuration.
+
+Open the row actions and select **Disconnect domain** to stop receiving and sending through HQBase.
+After confirmation, authorize one Cloudflare change. HQBase disables the catch-all only when its
+only action points to this HQBase Worker. It leaves shared Email Routing, Email Sending, DNS, and
+the workspace portal unchanged. The domain's mailboxes and all existing mail stay available for
+reading.
+
+A disconnected row offers **Reconnect domain** and **Forget domain**. Reconnect uses the normal
+connection flow. Forget removes the local domain record and requires the exact domain name. It is
+available only when the domain has no mailbox, agent, domain signature, or stored mail history. You
+must keep at least one domain in the workspace.
 
 ## Fix a receiving problem
 

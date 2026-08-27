@@ -64,9 +64,14 @@ an existing human mailbox or another provisioner's mailbox.
 
 ## Unassigned catch-all mail
 
-Mail sent to an address that does not match a mailbox is unassigned. It belongs to no mailbox, so
-only a workspace owner can read it, organize it, download its attachments, or receive a
-notification for it. Admins and members cannot access unassigned mail.
+When a domain keeps unmatched mail for owner review, that mail is unassigned. It belongs to no
+mailbox, so only a workspace owner can read it, organize it, download its attachments, or receive
+a notification for it. Admins, members, and machine agents cannot access unassigned mail.
+
+When a domain instead delivers unmatched mail to a catch-all mailbox, the message uses that
+mailbox's normal access rules. People and machine agents with access to the mailbox can use the
+message according to their grant. The exact unmatched recipient remains visible, but it does not
+become a sending identity.
 
 HQBase keeps this rule when an owner archives or trashes the message. Historical mail from a
 mailbox that was later deleted does not become unassigned catch-all mail. New mail to that
