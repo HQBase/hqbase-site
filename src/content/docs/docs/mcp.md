@@ -28,13 +28,14 @@ MCP connects an AI tool to HQBase through a remote MCP server.
 
 1. Open **Agents → Connected apps**.
 2. Select **MCP**.
-3. Choose **Read-only** or **Mail actions**.
+3. Keep **Mail actions**, or choose **Read-only** when the client only needs to search and read.
 4. Copy the connection URL.
 5. Add the URL to your MCP client.
 6. Follow the short-code verification link that the client displays.
 7. Sign in to HQBase, check the requested access, and select **Allow**.
 
-Start with **Read-only**. Use **Mail actions** only when the agent must change or send mail.
+**Mail actions** is selected by default for complete email workflows. Choose **Read-only** when the
+client must not change or send mail.
 
 ### Choose an MCP profile
 
@@ -42,8 +43,8 @@ HQBase provides two separate MCP profiles.
 
 | Profile | URL | What it can do |
 | --- | --- | --- |
-| **Read-only** | `/mcp` | List accessible mailboxes, search mail, open messages and conversations, and download attachments. |
 | **Mail actions** | `/mcp/full` | Do everything in Read-only, organize mail, manage drafts and attachments, send mail, reply, and forward. |
+| **Read-only** | `/mcp` | List accessible mailboxes, search mail, open messages and conversations, and download attachments. |
 
 Each profile is a separate OAuth connection. Changing from **Read-only** to **Mail actions** needs a
 new connection and approval.
