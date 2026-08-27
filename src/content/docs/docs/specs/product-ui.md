@@ -290,6 +290,10 @@ owner completes setup.
 
 - Settings contains only active workspace and infrastructure destinations, and gains search,
   sorting, or pagination only when the behavior needs it.
+- **Labels** and **Signatures** use the same flat list language as Inbox and Contacts: full-width
+  rounded rows, a small gap between rows, and quiet hover feedback. Do not enclose these lists in a
+  bordered table or add divider lines between rows. Keep edit and delete actions compact and inline
+  with each row.
 - Tab controls use a rounded pill track with even inner padding and fully rounded triggers. The
   selected trigger stays inset from every edge of the track.
 - Add and create forms use labelled dialogs. A dialog closes only after an explicit close action,
