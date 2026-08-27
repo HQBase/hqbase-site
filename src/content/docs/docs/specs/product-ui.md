@@ -336,6 +336,19 @@ owner completes setup.
   owner or admin separately reactivates them. HQBase blocks disablement or deletion when the
   mailbox is a catch-all destination and directs the owner or admin to change the domain policy
   first.
+- **Users** gives every person a compact actions menu. Pending people can receive a new invitation
+  or temporary password from this menu. Active people can be removed after recent authentication
+  and a confirmation. Removed people stay in the table with a **Removed** status and can be
+  restored. Role controls are unavailable while a person is removed.
+- Removing a person disables sign-in, ends web sessions, revokes OAuth tokens and approvals,
+  cancels pending device and password-setup flows, removes push subscriptions, and removes mailbox
+  grants. Mail, drafts, contacts, signatures, audit history, and the login identity remain stored.
+  Restoration enables the same login identity, but it does not restore sessions, connected apps,
+  notifications, or mailbox grants. The person signs in again and receives new mailbox access
+  explicitly.
+- An owner or admin can remove or restore a member or admin. Only an owner can remove or restore
+  another owner. A person cannot remove their own account, and HQBase never removes the last active
+  owner. Each successful removal and restoration creates an audit event.
 - **Agents** is a primary section beside Mail, Contacts, and Settings. Its main navigation contains
   **Connected apps**, **Mailbox agents**, and **Provisioning keys**. Connected apps act for the
   signed-in person through OAuth. Mailbox agents and provisioning keys are separate machine
