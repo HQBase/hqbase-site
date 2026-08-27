@@ -290,10 +290,10 @@ owner completes setup.
 
 - Settings contains only active workspace and infrastructure destinations, and gains search,
   sorting, or pagination only when the behavior needs it.
-- **Labels** and **Signatures** use the same flat list language as Inbox and Contacts: full-width
-  rounded rows, a small gap between rows, and quiet hover feedback. Do not enclose these lists in a
-  bordered table or add divider lines between rows. Keep edit and delete actions compact and inline
-  with each row.
+- **Labels** and **Signatures** use the same responsive table language as other Settings pages: a
+  rounded bordered shell, a quiet header row, compact data rows, and a right-aligned **Actions**
+  column. Labels show their name and color. Signatures show their name and preview, scope, and
+  default state. Loading and empty states remain inside the table.
 - Tab controls use a rounded pill track with even inner padding and fully rounded triggers. The
   selected trigger stays inset from every edge of the track.
 - Add and create forms use labelled dialogs. A dialog closes only after an explicit close action,
@@ -359,10 +359,10 @@ owner completes setup.
   identities. The UI never calls a connected app an agent identity.
 - **Connected apps** is the authoritative human-delegated connection page. A compact three-way tab
   control has **MCP**, **Skill + API**, and **Connections**. Only the selected panel is visible. The
-  page selects **Connections** when the signed-in person has at least one connection; otherwise it
-  selects **MCP**. MCP has **Read only** and **Mail actions** permission profiles. Skill + API shows
-  the human OAuth Mail API skill and only `/api/v2`; `/api/v1` remains a hidden compatibility
-  surface. Connections lists the signed-in person's approved clients, permissions, and resources.
+  page selects **MCP** when it opens. MCP shows **Mail actions** first and selects it by default;
+  **Read only** remains available as the second profile. Skill + API shows the human OAuth Mail API
+  skill and only `/api/v2`; `/api/v1` remains a hidden compatibility surface. Connections lists the
+  signed-in person's approved clients, permissions, and resources.
   **Revoke** removes that person's consent and invalidates every access token and refresh-token
   family for the client before the request succeeds. The revoked connection fails on its next
   request.
