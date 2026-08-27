@@ -105,7 +105,8 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
   open conversation in place until the authoritative newest page replaces stale data.
 - The installed app offers explicit Light and Dark modes. Dark is the initial mode until the person
   chooses otherwise. The choice updates browser chrome, persists locally, and does not follow later
-  operating-system changes.
+  operating-system changes. On the compact shell, the initial page background, browser chrome, and
+  device safe areas use the main app canvas color for the selected appearance.
 - **All mailboxes** and each accessible mailbox show their unread Inbox count, including zero.
   Catch-all remains an owner-only, unfiltered workspace count.
 - The browser title follows the selected Inbox and its unread Inbox count. **All mailboxes** uses
@@ -400,8 +401,11 @@ or small button size; the installed app does not use an extra-large button size.
   keeps the drawer open. Selecting a destination in the current navigation panel closes the drawer.
   While mailbox selection is open, tapping elsewhere inside the drawer dismisses only the mailbox
   selector. Choosing a mailbox applies the filter and closes the drawer. The compact drawer uses two
-  flat, edge-to-edge panes with one full-height vertical divider between them. Controls in its narrow
-  quick-access rail stay horizontally centered. Desktop sidebar surfaces keep their existing shape.
+  adjacent panes without a divider. Its narrow quick-access rail is pure black and stays square.
+  Its wider navigation pane keeps the normal sidebar surface and stays square. Opening the drawer
+  uses the standard dimmed Sheet backdrop. The existing background strips keep the device safe
+  areas outside that tint. Controls in the narrow rail stay horizontally centered. Desktop sidebar
+  surfaces keep their existing shape.
   Only deliberate content surfaces scroll; the application shell, header, and navigation stay
   fixed and do not use native document scrolling.
 - Inbox lists, Contacts lists and details, Agents pages, and Settings pages use the same 960 CSS
