@@ -282,6 +282,12 @@ Setup is one quiet, resumable page. After temporary Cloudflare access is verifie
 becomes **Domain → Owner account → Mailboxes**, with Mailboxes owning the final action. The
 development-only `/__ui/setup` gallery uses deterministic fixtures and never reaches production.
 
+The Mailboxes step includes one **Mail sent to unknown addresses** choice for every selected
+domain. The choices are **Deliver to a mailbox**, **Keep in Catch-all for owner review**, and
+**Reject the message**. Delivery reveals a selector containing active human mailboxes from that
+domain. A new setup selects its first mailbox by default, but keeps the choice visible before the
+owner completes setup.
+
 - Settings contains only active workspace and infrastructure destinations, and gains search,
   sorting, or pagination only when the behavior needs it.
 - Tab controls use a rounded pill track with even inner padding and fully rounded triggers. The
@@ -296,13 +302,40 @@ development-only `/__ui/setup` gallery uses deterministic fixtures and never rea
   never on load, sign-in, navigation, or incoming mail.
 - Every signed-in person with a sending identity chooses a personal default From mailbox; replies
   continue to prefer the mailbox that received the original message.
+- **Email domains** uses one responsive table with **Domain**, **Readiness**, **Unknown-address
+  mail**, and **Active in HQBase**. The domain that contains the current workspace portal shows a
+  **Portal** badge. The unmatched-mail selector offers owner review, rejection, and each eligible
+  human mailbox on that domain. The selected mailbox shows **Catch-all for example.com** in mailbox
+  Settings. Changing the policy affects new mail only. Exact mailbox addresses always take
+  priority, which the page explains once below the table.
+- Domain readiness combines receiving, sending, and DNS into one compact status. **Ready** means
+  that all three components are ready. A pending or degraded status names the affected component
+  when there is one issue and gives an issue count when there are several. Hover, keyboard focus,
+  and press show the three component values; readiness details never require hover alone.
+- **Recheck** obtains a fresh operation-specific Cloudflare grant, reads the current receiving,
+  sending, and DNS state without changing Cloudflare, saves the new snapshot, and revokes the
+  grant. A save or recheck disables only that domain row. **Active in HQBase** changes HQBase's
+  domain flag; it does not disconnect the domain or remove Cloudflare mail configuration.
+- Each email-domain row has one compact actions menu. A connected domain offers **Disconnect
+  domain**. Its confirmation explains that HQBase will stop new receiving and sending, reject
+  delayed mail, reset unknown-address mail to rejection, and preserve all existing mail. After a
+  fresh Cloudflare authorization, HQBase removes its catch-all Worker route only when the route is
+  still owned by this Worker. Shared Email Routing, Email Sending, DNS, and the portal stay in
+  place.
+- A disconnected row shows **Disconnected** instead of readiness controls, disables the
+  unknown-address selector and active switch, and offers **Reconnect domain** and **Forget
+  domain**. Reconnect uses the existing domain connection flow. Forget requires the person to type
+  the exact domain name. HQBase blocks it until the domain has no mailbox, agent, domain signature,
+  or stored message history, and blocks forgetting the last stored domain.
 - **Mailboxes** lists active human and agent mailboxes. An owner or admin can select **Delete
   mailbox** after a confirmation explains that HQBase will hide the mailbox from normal mail views,
   stop receiving and sending, disable linked agents, and revoke their credentials while preserving
   the mailbox ID, messages, drafts, and attachments under the current retention rules. Deleted
   mailboxes do not appear in the header or default Settings list. **Deleted mailboxes** lists them
   for restoration. Restore reactivates the same mailbox, but linked agents stay disabled until an
-  owner or admin separately reactivates them.
+  owner or admin separately reactivates them. HQBase blocks disablement or deletion when the
+  mailbox is a catch-all destination and directs the owner or admin to change the domain policy
+  first.
 - **Agents** is a primary section beside Mail, Contacts, and Settings. Its main navigation contains
   **Connected apps**, **Mailbox agents**, and **Provisioning keys**. Connected apps act for the
   signed-in person through OAuth. Mailbox agents and provisioning keys are separate machine
@@ -341,7 +374,9 @@ or small button size; the installed app does not use an extra-large button size.
   `/agents/provisioning`. Earlier `/settings/mcp` and `/settings/agents` paths normalize to the
   matching Agent page. Settings routes live under `/settings/*`, including label management at
   `/settings/labels` and signature management at `/settings/signatures`. Unknown app paths
-  normalize to `/mail/inbox`. Catch-all mail stays owner-only even after archive or trash actions.
+  normalize to `/mail/inbox`. The Catch-all page explains that it contains owner-only unassigned
+  mail and links to Domain Settings for future delivery choices. Unassigned mail stays owner-only
+  even after archive or trash actions.
 - The compact navigation drawer keeps the same quick-access rail as desktop beside the current
   Mail, Contacts, Agents, or Settings navigation. The current navigation panel does not repeat
   primary section links. Selecting a quick-access section opens that section's default page and

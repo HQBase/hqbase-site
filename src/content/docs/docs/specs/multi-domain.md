@@ -71,10 +71,36 @@ in-app portal cutover.
 - An agent mailbox uses the same one-address model. A provisioner can create it only on a domain
   that is already connected to this workspace.
 - Messages record the exact envelope recipient and sender address.
+- Each domain has one policy for mail sent to an address that does not match an active mailbox.
+  Exact mailbox addresses always take priority. The domain can reject unmatched mail, keep it as
+  owner-only unassigned mail, or deliver it to one active human mailbox on that domain. A dedicated
+  agent mailbox cannot be the catch-all destination.
+- Mail delivered to a catch-all mailbox is normal Inbox mail for that mailbox. It keeps the exact
+  envelope recipient, uses the mailbox's access and retention rules, and replies from the mailbox
+  address instead of the unmatched recipient address.
+- A catch-all policy change affects only new mail. It never moves existing mailbox or unassigned
+  mail. An owner or admin must choose another destination or change the policy before disabling or
+  deleting the current catch-all mailbox.
 - Soft-deleting a mailbox preserves its mailbox ID, address, messages, and audit history. It
   disables receiving and sending without moving historical mail to Catch-all. New mail to its
   inactive address follows the domain's normal unmatched-mail policy. Restoring the mailbox
   reactivates the same mailbox and address.
+- Disconnecting an email domain stops new receiving and sending in HQBase but preserves the
+  domain, mailboxes, messages, drafts, attachments, and audit history. HQBase disables the
+  catch-all rule only when the enabled rule has one action and that action targets this HQBase
+  Worker. It does not disable shared Email Routing, Email Sending, or DNS, and it does not change a
+  catch-all rule that another destination controls. Delayed mail that still reaches the Worker is
+  rejected. Disconnect also changes the unknown-address policy to rejection so no mailbox remains
+  selected as the catch-all destination.
+- Connecting a disconnected domain again restores its connected state and current Cloudflare
+  readiness. The owner or admin must review the unknown-address policy, which remains set to
+  rejection until they change it.
+- Forgetting a domain is a separate local deletion. It requires the exact domain name, applies only
+  to a disconnected domain, and is blocked while any mailbox, agent, domain signature, or stored
+  message history belongs to that domain. HQBase keeps audit events that identify the forgotten
+  domain. If the domain is the workspace's primary domain, another connected domain becomes the
+  primary domain. HQBase blocks forgetting the last stored domain. Disconnecting or forgetting an
+  email domain does not detach a portal hostname on the same Cloudflare zone.
 - A connected email domain cannot match any workspace user's Login email domain. HQBase enforces
   the exclusion in both directions: user creation rejects connected domains, and later domain
   connection rejects domains already used for Login emails.
@@ -96,6 +122,24 @@ portal cutover, and service-origin changes require a fresh operation-specific OA
 never asks an owner to paste a Cloudflare API token. Domain disablement preserves mailbox and
 message history. Domain connection validates Login email independence before making Cloudflare
 changes.
+
+An owner or admin can recheck a connected domain with a fresh operation-specific OAuth grant. The
+recheck reads the Cloudflare zone, routing, catch-all Worker route, DNS, and Email Sending state. It
+updates only the stored receiving, sending, DNS, zone, account, and verification values. It does
+not repair or reconfigure Cloudflare. HQBase records the audit result and revokes the grant.
+
+An owner or admin can disconnect a domain after recent reauthentication and a fresh
+operation-specific OAuth grant. The operation verifies the stored zone before it changes the
+HQBase-owned catch-all rule, records success or failure, revokes the grant, and can be repeated
+safely. A disconnected domain stays reserved against workspace Login emails until an owner or admin
+forgets it.
+
+During initial setup, the owner chooses the unmatched-mail policy for every selected domain. New
+installations start with delivery to the first human mailbox on that domain selected in the form.
+Domains connected after setup start with owner-only review until an owner or admin chooses another
+policy.
+An upgrade preserves the earlier effective behavior by setting existing domains to owner-only
+unassigned mail until an owner or admin chooses a different policy.
 
 A provisioner uses the separate Management API to create a dedicated mailbox and its address, a
 mailbox agent, and an explicit grant. It cannot connect or reconfigure a domain. It receives the
