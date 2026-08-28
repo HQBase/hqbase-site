@@ -80,7 +80,9 @@ Each `list_mailboxes` item has one `address` and its `mailDomainId`. It does not
 - **Token boundary:** `/mcp` and `/mcp/full` issue tokens for different OAuth resources. A token for
   one profile does not work with the other profile or the Mail API.
 - **Attachments:** Each attachment transferred through MCP can be up to 10 MiB. Normal HQBase
-  recipient and total attachment limits still apply.
+  recipient and total attachment limits still apply. `add_draft_attachment` accepts `inline: true`
+  for a supported image and then returns its private `htmlSrc`. Use that exact source in the draft's
+  HTML through `update_draft`; do not construct it.
 - **Refresh:** MCP does not provide a live new-mail subscription. The client must search or list
   conversations again.
 - **Retries:** A repeated send, reply, or forward request can send mail more than once. Clients must

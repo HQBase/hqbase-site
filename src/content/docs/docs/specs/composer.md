@@ -111,6 +111,12 @@ current HTML still references, as content-ID inline MIME attachments. It never c
 URL or sends a data URL. Removing an image stops it from being sent; discarding or sending the draft
 removes staged objects that the final message does not use.
 
+The MCP `add_draft_attachment` tool accepts an optional `inline` value that defaults to `false`.
+For a supported inline image, the result includes the private `htmlSrc` value for that draft. The
+client adds an `img` element with that exact source through `update_draft`. Clients must not construct
+or reuse a source for another draft. The same type, ownership, count, and size checks apply to web
+and MCP uploads.
+
 A signature can contain at most five images and 256 KiB of decoded image data in total. The
 sanitized signature and each saved draft snapshot contain their own bounded copy, so editing or
 deleting the source signature does not break an older draft. HQBase converts the copy to a
