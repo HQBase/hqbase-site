@@ -45,6 +45,10 @@ When you have saved drafts, navigation shows **Drafts** with your private draft 
 `/drafts` puts the most recently changed draft first. Opening `/drafts/<draft-id>` restores the
 recipients, content, attachments, and reply or forward context in the same composer.
 
+The draft list uses the same grouped list surface, header alignment, responsive row grid, attachment
+lane, preview lane, and time lane as the conversation folders. Draft-only indicators use the existing
+utility lanes and do not change the row geometry.
+
 Restored complete recipients stay selected. Contact suggestions remain closed until you edit the
 active recipient.
 
