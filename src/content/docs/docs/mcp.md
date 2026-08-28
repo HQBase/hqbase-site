@@ -83,6 +83,10 @@ Each `list_mailboxes` item has one `address` and its `mailDomainId`. It does not
   recipient and total attachment limits still apply. `add_draft_attachment` accepts `inline: true`
   for a supported image and then returns its private `htmlSrc`. Use that exact source in the draft's
   HTML through `update_draft`; do not construct it.
+- **Signatures:** `create_draft`, `send_email`, `reply_to_message`, and `forward_message` use the
+  applicable default signature when `signature` is omitted. Use `signature: { mode: "none" }` when
+  the message must have no signature. An update that omits `signature` keeps the draft's current
+  choice.
 - **Refresh:** MCP does not provide a live new-mail subscription. The client must search or list
   conversations again.
 - **Retries:** A repeated send, reply, or forward request can send mail more than once. Clients must
