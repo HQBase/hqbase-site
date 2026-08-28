@@ -787,7 +787,7 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(mcp, /## Connect with MCP/);
   assert.match(mcp, /### Choose an MCP profile/);
   assert.match(mcp, /### MCP technical details/);
-  assert.match(mcp, /## Connect with Skill \+ API/);
+  assert.match(mcp, /## Connect via SKILL\.md/);
   assert.match(mcp, /### How SKILL\.md uses the Mail API/);
   assert.match(mcp, /Mail API reference/);
   assert.match(mcp, /\/api\/v2\/openapi\.json/);
@@ -952,8 +952,8 @@ test("agent mailboxes keep machine identity and mail access separate", async () 
   assert.match(access, /Owners and admins can soft-delete and restore mailboxes/);
   assert.match(access, /provisioner can deprovision only a dedicated child mailbox/);
   assert.match(architecture, /authenticated event WebSocket/);
-  assert.match(mcp, /acts for a signed-in person/);
-  assert.match(mcp, /Agent mailboxes/);
+  assert.match(mcp, /AI assistant that acts through your account/);
+  assert.match(mcp, /## Connect a machine identity/);
   assert.match(product, /A person and a machine agent are separate identities/);
   assert.match(multiDomain, /A provisioner uses the separate Management API/);
   assert.match(multiDomain, /New mail to its[\s\S]*normal unmatched-mail policy/);
@@ -962,10 +962,13 @@ test("agent mailboxes keep machine identity and mail access separate", async () 
   assert.match(mailApi, /A provisioner credential[\s\S]*does not work with this API/);
   assert.match(mailApi, /wake-up channel,[\s\S]*not a second data API/);
   assert.match(mailApi, /Soft-deleted mailboxes[\s\S]*drafts,[\s\S]*attachments do not appear/);
-  assert.match(productUi, /\*\*Agents\*\* is a primary section beside Mail, Contacts, and Settings/);
+  assert.match(productUi, /The \*\*Agents\*\* section is one page at `\/agents`/);
   assert.match(productUi, /Deleted mailboxes[\s\S]*linked agents stay disabled/);
-  assert.match(productUi, /\*\*MCP\*\*, \*\*Skill \+ API\*\*, and \*\*Connections\*\*/);
-  assert.match(productUi, /\*\*Mailbox agents\*\*[\s\S]*\*\*Provisioning keys\*\*/);
+  assert.match(productUi, /\*\*Add connection\*\*[\s\S]*\*\*AI assistant\*\*/);
+  assert.match(
+    productUi,
+    /\*\*Automation with its own mailbox\*\*[\s\S]*\*\*Provisioning key\*\*/,
+  );
 });
 
 test("the design scaffold and local assets remain available", async () => {

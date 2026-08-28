@@ -357,25 +357,6 @@ owner completes setup.
 - An owner or admin can remove or restore a member or admin. Only an owner can remove or restore
   another owner. A person cannot remove their own account, and HQBase never removes the last active
   owner. Each successful removal and restoration creates an audit event.
-- **Agents** is a primary section beside Mail, Contacts, and Settings. Its main navigation contains
-  **Connected apps**, **Mailbox agents**, and **Provisioning keys**. Connected apps act for the
-  signed-in person through OAuth. Mailbox agents and provisioning keys are separate machine
-  identities. The UI never calls a connected app an agent identity.
-- **Connected apps** is the authoritative human-delegated connection page. A compact three-way tab
-  control has **MCP**, **Skill + API**, and **Connections**. Only the selected panel is visible. The
-  page selects **MCP** when it opens. MCP shows **Mail actions** first and selects it by default;
-  **Read only** remains available as the second profile. Skill + API shows the human OAuth Mail API
-  skill and only `/api/v2`; `/api/v1` remains a hidden compatibility surface. Connections lists the
-  signed-in person's approved clients, permissions, and resources.
-  **Revoke** removes that person's consent and invalidates every access token and refresh-token
-  family for the client before the request succeeds. The revoked connection fails on its next
-  request.
-- **Mailbox agents** lets an owner or admin create, rotate, reactivate, and disable machine
-  identities that can use one exact mailbox. **Provisioning keys** gives trusted control-plane
-  software permission to create and deprovision child mailbox agents. Each page shows only its own
-  identity type and matching public skill. A credential dialog shows the new secret once and never
-  shows a saved credential again. Provisioning-key creation explains that the key receives each
-  child credential and must remain in a trusted service.
 - Cloudflare-backed actions never display an API-token field. Authorization starts OAuth with PKCE
   in a labelled modal. See [Cloudflare access](/docs/specs/cloudflare-oauth/) for the security
   rules.
@@ -385,15 +366,46 @@ Standard form choices use the shared dropdown control at the normal compact fiel
 mailbox selector in the header remains uniquely smaller. Primary and create actions use the normal
 or small button size; the installed app does not use an extra-large button size.
 
+## Agents
+
+The **Agents** section is one page at `/agents`. It joins delegated connections, which act for a
+person, and machine identities, which hold their own credentials.
+
+- The sidebar, compact navigation, and global search show one **Agents** destination with one
+  **All connections** entry. Legacy Agents and Settings URLs normalize to `/agents`.
+- One responsive **Connections** list shows OAuth connections and machine identities. Mobile rows
+  keep the row action visible and put secondary access and status details below the name instead of
+  requiring horizontal scrolling.
+- An OAuth row has **Authorized** status while its consent exists. A machine identity has
+  **Enabled**, **Disabled**, or **Mailbox deleted** status. **Enabled** means that its credential can
+  authenticate; it does not claim that the software is online. Provisioning rows also show their
+  current mailbox count and limit.
+- **Add connection** opens one dialog with a choice per connection kind: **AI assistant** for MCP or
+  the person-authorized Mail API skill, **Automation with its own mailbox** for mailbox agents, and,
+  for owners and admins, **Provisioning key**. Every nested step can return to the connection-kind
+  choice without closing the dialog.
+- MCP never pre-creates access. The person approves the client in their own browser. Creating a
+  machine identity reveals its credential once with the matching public skill URL.
+- Each enabled machine row menu contains **Setup instructions**, **Rotate credential**, and
+  **Disable** in that order. A disabled row contains **Setup instructions** and **Enable**. Enabling
+  it reveals a fresh credential once. Setup instructions show the public skill URL, explain that
+  the saved credential is required, offer the valid recovery action when it was lost, and link to
+  the public setup guide. A deleted mailbox must be restored before its identity can be enabled.
+- The page has no separate instructions tab or permanent developer-details section. First-time
+  instructions stay in **Add connection**. Recovery instructions stay with the machine row that
+  needs them.
+- Workspace members who cannot manage machine identities see their own OAuth connections and only
+  the **AI assistant** choice.
+
 ## Navigation and accessibility
 
 - Primary navigation has **Mail**, **Contacts**, **Agents**, and **Settings**. Canonical mail routes are
   `/mail/inbox`, `/mail/sent`, `/mail/starred`, `/mail/archived`, `/mail/trash`, `/mail/catch-all`,
   and private drafts at `/mail/drafts` and `/mail/drafts/<draft-id>`. Earlier root-level mail and
   draft paths remain accepted and normalize to the canonical route. Contacts use `/contacts` and
-  `/contacts/<contact-id>`. Agent routes are `/agents/connections`, `/agents/mailboxes`, and
-  `/agents/provisioning`. Earlier `/settings/mcp` and `/settings/agents` paths normalize to the
-  matching Agent page. Settings routes live under `/settings/*`, including label management at
+  `/contacts/<contact-id>`. The canonical Agent route is `/agents`. Earlier `/agents/connections`,
+  `/agents/mailboxes`, `/agents/provisioning`, `/settings/mcp`, and `/settings/agents` paths
+  normalize to `/agents`. Settings routes live under `/settings/*`, including label management at
   `/settings/labels` and signature management at `/settings/signatures`. Unknown app paths
   normalize to `/mail/inbox`. The Catch-all page explains that it contains owner-only unassigned
   mail and links to Domain Settings for future delivery choices. Unassigned mail stays owner-only
