@@ -99,11 +99,15 @@ knowing its identifier.
 ### Insert and resize images
 
 The message and signature editors accept safe raster images from an image picker, drop, or paste.
-HQBase inserts each image at the cursor. Clicking or tapping an image selects it and shows a resize
-box. Its edges and corners use the matching resize cursor on pointer devices and remain large enough
-to drag by touch. Mouse and touch resizing preserves the image aspect ratio. The saved width and
-height travel with the email, while the editor keeps the image within the available message width.
-Resizing does not change the original image bytes.
+HQBase inserts each image at the cursor. Clicking or tapping an image selects it with a clear border
+and shows one resize control at the bottom-right. The control uses the diagonal resize cursor on
+pointer devices and remains large enough to drag by touch. Mouse and touch resizing preserves the
+image aspect ratio. The saved width and height travel with the email, while the editor keeps the
+image within the available message width. Resizing does not change the original image bytes.
+
+Changing the draft signature does not change the authored message content or its inline attachment
+references. An authenticated inline image remains visible when the editor reloads its saved HTML,
+including when that image is already in the browser cache.
 
 Images inserted into a message use the draft's private R2 storage and count toward the normal limit
 of 20 files and 25 MiB. The editor uses an authenticated preview. HQBase sends only images that the
@@ -218,6 +222,11 @@ Sending assembles authored content, then the signature snapshot, then reply or f
 The selector never enters sent HTML or text. A signature alone does not make an empty new message or
 reply sendable. Existing API clients that omit the optional signature request field keep sending the
 body unchanged.
+
+The MCP Mail actions profile applies `automatic` when `create_draft`, `send_email`,
+`reply_to_message`, or `forward_message` omits the signature field. A caller can use `none`
+explicitly. Updating a draft without that field preserves its saved signature choice. Existing
+drafts are snapshots and HQBase does not rewrite them when this default changes.
 
 Every signed-in person can manage personal signatures in **Settings → Signatures**. Mailbox Managers
 can manage mailbox signatures. Owners and admins can manage domain signatures. Mailbox Handle-mail
