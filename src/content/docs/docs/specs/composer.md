@@ -210,7 +210,9 @@ mailbox, then person, then exact domain. A small **Signature** dropdown sits
 directly below the rendered signature preview and outside the serialized email content. It shows the
 resolved signature by name, or **No signature** when no default applies. Its menu offers applicable
 personal, mailbox, and domain signatures, **No signature**, and **Manage signatures…**. It does not
-show an Automatic choice. The preview has no card or border. Compact layouts keep a 44px target.
+show an Automatic choice. The preview and dropdown share the composer&apos;s message scroll area but
+stay outside the editable authored message, so editor actions cannot change the signature content.
+The preview has no card or border. Compact layouts keep a 44px target.
 
 The draft stores `automatic`, `selected`, or `none` plus a sanitized name, HTML, and plain-text
 snapshot. Editing or deleting the source signature does not rewrite a saved draft. A From change
