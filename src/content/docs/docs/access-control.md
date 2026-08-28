@@ -51,12 +51,15 @@ Workspace roles control administration. Mailbox access controls email. They are 
 
 - **Owner** is the recovery account and has Manager access to every mailbox. Only an owner can make
   another owner.
-- **Admin** can manage people, system settings, and mailbox access. An admin still cannot read a
-  mailbox unless you give them access to it.
+- **Admin** can manage people, system settings, agents, and mailbox access. An admin can give
+  themselves access to any mailbox, but cannot manage owners or access unassigned catch-all mail.
 - **Member** can use only the mailboxes you assign to them.
 
 Owners and admins can see the list of mailboxes so they can manage access, but that list does not
 reveal messages or attachments.
+
+An owner can view and end any person's sessions. An admin can view and end sessions for admins and
+members, but never for owners. A member can manage only their own sessions.
 
 Owners and admins can soft-delete and restore mailboxes. Mailbox agents cannot do either. A
 provisioner can deprovision only a dedicated child mailbox that it created; it cannot deprovision
