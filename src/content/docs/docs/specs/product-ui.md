@@ -37,6 +37,9 @@ Specialized topics live in their own specifications: sending in
   The product must not depend on Google Fonts, Vercel, or another remote font host.
 - Prefer a quiet visual style: near-black neutrals, visible focus, restrained shadows, and no
   decorative gradients in the installed app.
+- Customer-owned sign-in and password pages show **Self-hosted on Cloudflare · Powered by
+  HQBase** below the authentication card. **Powered by HQBase** links to `https://hqbase.io/` in a
+  new browser tab or window.
 
 ## Authorization surfaces
 
@@ -135,6 +138,8 @@ HQBase displays a message&apos;s HTML version when available and falls back to p
 is sanitized and rendered in a sandboxed iframe.
 
 - Preserve safe formatting, tables, links, and a limited inline-style set.
+- Open every retained message link in a new browser tab or window. A message link never navigates
+  the HQBase app or its email iframe.
 - Make the message feel native to the reader: no extra card, border, corner radius, background,
   inner padding, or minimum iframe height.
 - Keep the document transparent. Apply HQBase theme colors only where the sender did not provide a
