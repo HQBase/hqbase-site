@@ -260,6 +260,13 @@ not move Sent or Trash messages. `unarchive` applies only to accessible Archived
 represented by the active Archived folder. An action that does not match any message returns `200`
 with `affected: 0`. Clients must not remove a conversation optimistically when `affected` is zero.
 
+### Message attachments
+
+Each attachment in a message detail response includes `disposition` as `attachment` or `inline`.
+Clients must use this value to distinguish downloadable files from parts rendered inside the
+message body. A content ID does not make a part inline by itself because Gmail and other senders can
+give ordinary downloadable attachments a content ID.
+
 ### Draft attachments
 
 `POST /drafts/{id}/attachments` accepts one `file` part and an optional `inline` part. HQBase records
