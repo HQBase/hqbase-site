@@ -214,6 +214,9 @@ The original HTML remains in customer storage; sanitization happens when the mes
   the open thread.
 - Show a decoded sender display name when the message provides one, and keep the exact sender
   address visible in the message header. Treat both values as untrusted message metadata.
+- Show every MIME `attachment` part in the downloadable attachment list, even when the sender also
+  gave the part a content ID. Keep only MIME `inline` parts out of that list because the safe HTML
+  renderer displays them with the message body.
 - Use the structural quote markers used by established mail clients. Split HTML into content before
   the quote, the quoted block, and content after the quote. Keep content before and after the quote
   visible and in its original order. Keep a signature after the quote visible. When an established
