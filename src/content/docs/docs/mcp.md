@@ -3,22 +3,16 @@ title: Connect an AI tool
 description: Let an AI tool act on mail available to your signed-in HQBase account.
 ---
 
-This page is for an AI tool that acts for a signed-in person. It does not create a machine identity
-or a dedicated mailbox. To give an automated service its own credential, see
-[Agent mailboxes](/docs/agent-mailboxes/).
+For an AI assistant that acts through your account, HQBase supports two connection methods.
 
-Open **Agents → Connected apps**. Use the compact tabs to connect software or review existing
-connections:
-
-| Tab | Use it when |
+| Method | Use it when |
 | --- | --- |
 | **MCP** | Your AI client supports a remote MCP server. |
-| **Skill + API** | Your agent can install a skill and make HTTP requests. |
-| **Connections** | You want to review or revoke an existing connection. |
+| **SKILL.md** | Your agent can install instructions and make HTTP requests. |
 
 Both methods use your existing HQBase account and need your OAuth approval. They do not create
-another user or bypass your mailbox access. Machine agent credentials do not work with either
-method.
+another user or bypass your mailbox access. Machine identities use a separate credential and are
+described below.
 
 ## Connect with MCP
 
@@ -26,9 +20,9 @@ MCP connects an AI tool to HQBase through a remote MCP server.
 
 ### How to connect
 
-1. Open **Agents → Connected apps**.
-2. Select **MCP**.
-3. Keep **Mail actions**, or choose **Read-only** when the client only needs to search and read.
+1. Open **Agents** in the HQBase sidebar or compact navigation.
+2. Select **Add connection**, then **AI assistant**.
+3. Keep **Mail actions**, or choose **Read only** when the client only needs to search and read.
 4. Copy the connection URL.
 5. Add the URL to your MCP client.
 6. Follow the short-code verification link that the client displays.
@@ -101,23 +95,71 @@ MCP uses these OAuth permissions:
 | `mail:send` | Manage drafts and attachments, send new mail, reply, and forward. |
 | `offline_access` | Let a compatible client request an optional refresh token. |
 
-## Connect with Skill + API
+## Connect via SKILL.md
+
+`SKILL.md` is for agents that can install instructions and make HTTP requests. The skill does not
+use MCP. It uses the HQBase Mail API at `/api/v2`.
+
+### How to connect
+
+1. Open **Agents** in the HQBase sidebar or compact navigation.
+2. Select **Add connection**, then **AI assistant**.
+3. Open **Use the Mail API skill instead**.
+4. Select **Copy URL** or **Download Skill**.
+5. Give the URL or downloaded `SKILL.md` file to your agent.
+6. Let the agent read the skill and the linked OpenAPI document.
+7. Open the verification link that the agent displays.
+8. Sign in to HQBase, check the requested access, and select **Allow**.
+
+The agent must display the verification link and short code. It must not open the link in a remote,
+automated, or agent-controlled browser.
 
 ### How SKILL.md uses the Mail API
 
-The **Skill + API** section shows the human-delegated skill:
+The connection dialog shows the human-delegated skill:
 
 ```text
 https://mail.example.com/skills/hqbase-mail/SKILL.md
 ```
 
-In **Agents → Connected apps**, select **Skill + API**, then copy the skill URL or download the file
-and give it to the agent. The agent uses `/api/v2`, displays a short-code verification link, and
-waits while you sign in and approve access. The public skill contains no credential or mail
-content. It links to the installation's exact OpenAPI document at `/api/v2/openapi.json`.
+The agent uses `/api/v2`, displays a short-code verification link, and waits while you sign in and
+approve access. The public skill contains no credential or mail content. It links to the
+installation's exact OpenAPI document at `/api/v2/openapi.json`.
 
 The agent must not open the verification link in a remote or agent-controlled browser. See the
 [Mail API reference](/docs/specs/mail-api/) for the exact OAuth and API contract.
+
+## Connect a machine identity
+
+Owners and admins can create software identities that do not act through a person's OAuth access.
+
+| Identity | Use it when |
+| --- | --- |
+| **Mailbox agent** | Software needs its own identity and access to one exact mailbox. |
+| **Provisioning key** | A trusted control-plane service must create and deprovision mailbox agents on one approved domain. |
+
+### First-time setup
+
+1. Open **Agents** and select **Add connection**.
+2. Select **Automation with its own mailbox** or **Provisioning key**.
+3. Enter the identity's limits and select **Create**.
+4. Copy the one-time credential and the public skill URL before closing the dialog.
+5. Give both values to the software through a secure channel.
+
+The public skill explains which API the credential can use. The credential is secret. HQBase stores
+only its hash and cannot show it again.
+
+### Return to setup instructions
+
+Open the identity's row menu and select **Setup instructions**. HQBase shows the same public skill
+URL and a short setup recap. Use the credential that you saved when the identity was created. If it
+was lost, select **Rotate credential** for an enabled identity. Rotation stops the old credential
+immediately and reveals a new one once. For a disabled identity, select **Enable** to reveal a fresh
+credential once. Restore a deleted mailbox before you enable its identity.
+
+An OAuth connection shows **Authorized** while its consent exists. A machine identity shows
+**Enabled** when its credential can authenticate, **Disabled** after it is disabled, or **Mailbox
+deleted** when its mailbox must be restored. **Enabled** does not mean that the software is online.
 
 ## Access rules for both methods
 
@@ -137,9 +179,9 @@ email content.
 
 ## Review or revoke a connection
 
-In **Agents → Connected apps**, select **Connections**. This panel lists only the OAuth clients
-approved by the signed-in person. It shows the client name, approved access, and connection method.
-It does not show another workspace member's connections.
+Open **Agents**. The **Connections** list includes only the OAuth clients approved by the signed-in
+person. It shows the client name, approved access, and connection method. It does not show another
+workspace member's connections.
 
 Select **Revoke** to remove the complete person-client connection. HQBase removes its consent and
 invalidates all access tokens and refresh-token families for that person and client in one
