@@ -45,6 +45,9 @@ When you have saved drafts, navigation shows **Drafts** with your private draft 
 `/drafts` puts the most recently changed draft first. Opening `/drafts/<draft-id>` restores the
 recipients, content, attachments, and reply or forward context in the same composer.
 
+Restored complete recipients stay selected. Contact suggestions remain closed until you edit the
+active recipient.
+
 When a valid draft has plain text but no formatted content, the composer safely converts the plain
 text for editing. Opening the draft does not save a new version by itself. Existing formatted
 content, including inline images, remains unchanged.
