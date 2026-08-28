@@ -45,6 +45,10 @@ When you have saved drafts, navigation shows **Drafts** with your private draft 
 `/drafts` puts the most recently changed draft first. Opening `/drafts/<draft-id>` restores the
 recipients, content, attachments, and reply or forward context in the same composer.
 
+When a valid draft has plain text but no formatted content, the composer safely converts the plain
+text for editing. Opening the draft does not save a new version by itself. Existing formatted
+content, including inline images, remains unchanged.
+
 A saved reply or forward reopens with its accessible conversation. The composer attaches the draft
 to its exact saved target even if newer messages arrived after the save, and never repoints it at a
 different message. If the target is missing or no longer accessible, HQBase blocks sending and
