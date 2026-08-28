@@ -47,3 +47,6 @@ multi-domain administration.
 - Mailbox access is explicit and never inherited from role, domain ownership, or inference. The one
   exception is stated directly: workspace owners can reach every mailbox so the workspace stays
   recoverable.
+- An admin can manage the workspace and grant themselves access to any mailbox, but has no implicit
+  mailbox or unassigned catch-all access. Only an owner can manage owner membership and owner
+  sessions.
