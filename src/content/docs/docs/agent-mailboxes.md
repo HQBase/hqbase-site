@@ -40,8 +40,8 @@ organize, send, and reply from that mailbox. It cannot see `billing@example.com`
 ## Connect a mailbox agent
 
 Use the mailbox agent credential as a bearer token with the existing Mail API at `/api/v2`. The
-same message, conversation, attachment, draft, send, reply, and forward endpoints used by other
-clients apply the agent's current mailbox access on every request.
+same message, conversation, label, attachment, draft, send, reply, and forward endpoints used by
+other clients apply the agent's current mailbox access on every request.
 
 Give the agent the mailbox skill shown after credential creation:
 
@@ -53,7 +53,8 @@ https://mail.example.com/skills/hqbase-mailbox/SKILL.md
 skill URL. The skill contains no credential or mail content.
 
 Drafts remain private to the identity that created them. A person cannot open a machine agent's
-draft, even when both can use the same mailbox.
+draft, even when both can use the same mailbox. Private draft labels transfer to the new outbound
+message after a successful send.
 
 The authenticated WebSocket at `/api/v2/events` can wake the agent when a synchronization feed may
 have new work. A wake-up contains only a topic, not mail content or message identifiers. The agent
