@@ -82,14 +82,20 @@ A person or machine agent with **Handle mail** or **Manager** access can add or 
 label on mail they can organize. **Read** access can see labels but cannot change them. A label never
 grants mailbox access and never makes an inaccessible message visible.
 
-HQBase applies labels to messages. A conversation row shows the union of labels on its accessible
-messages. A conversation-level action adds or removes the label from every message in that
-conversation that the actor can organize. It does not change inaccessible copies.
+HQBase applies labels to messages and private drafts. A conversation row shows the union of labels
+on its accessible messages. A conversation-level action adds or removes the label from every
+message in that conversation that the actor can organize. It does not change inaccessible copies.
 
-Every mail folder supports an optional set of label filters. The filters combine with the active
-folder, mailbox, and literal search filters. A conversation matches when its accessible messages
-contain every selected label. Selecting no labels shows all labels. Changing the label filters
-returns to the newest page and does not change the underlying folder.
+A draft label belongs to the draft author and stays private with the draft. Applying a label to a
+saved reply or forward does not change the existing conversation. After a successful send, HQBase
+copies the draft labels to the new outbound message before it removes the draft. The labels then
+appear in the normal conversation union. Discarding a draft removes its label assignments.
+
+Every conversation folder and the Drafts folder support an optional set of label filters. The
+filters combine with the active folder, mailbox, and literal search filters. A conversation matches
+when its accessible messages contain every selected label. A draft matches when its private
+assignments contain every selected label. Selecting no labels shows all labels. Changing the label
+filters returns to the newest page and does not change the underlying folder.
 
 ### Human controls
 
@@ -126,6 +132,10 @@ star. The trailing edge stays aligned with the preview boundary. If the group is
 preview, it extends to the left instead of clipping labels. A compact row does not show the label
 action; a person opens the conversation to change its labels.
 
+Draft rows use the same desktop label control and compact label pills. A compact draft row uses the
+existing trailing utility lane for a label action because opening the row starts the composer, not a
+conversation reader. The action does not change the row grid.
+
 The folder toolbar uses a small-text compact checkbox multiselect instead of a standard field
 dropdown. Its trigger shows selected label names and colors, not only their count. On desktop, its
 trailing edge aligns with the row Labels buttons at the trailing edge of the preview. A person can
@@ -143,18 +153,21 @@ Both stable Mail API versions support labels without changing existing clients:
 - `PUT /messages/{id}/labels/{labelId}` and the matching `DELETE` add or remove one label.
 - `PUT /conversations/{id}/labels/{labelId}` and the matching `DELETE` apply the change to every
   accessible message that the caller can organize.
-- Repeating `labelIds` is an optional filter on message and conversation list requests. A result
-  must contain every requested label. The existing single `labelId` parameter keeps its behavior
-  and can be combined with `labelIds`.
+- `PUT /drafts/{id}/labels/{labelId}` and the matching `DELETE` add or remove one private draft
+  label for its author.
+- Repeating `labelIds` is an optional filter on message, conversation, and draft list requests. A
+  result must contain every requested label. The existing single `labelId` parameter keeps its
+  behavior and can be combined with `labelIds`.
 
 Session-authenticated `/api/labels` management routes let an owner or admin create, update, and
 delete label definitions. Machine credentials cannot change workspace label definitions. A label
 definition change sends a wake-only `labels` event so connected clients refresh the authoritative
 label list and visible mail.
 
-The MCP server exposes `list_labels`, `add_label`, and `remove_label`. Tool descriptions state that
-labels organize mail but never change mailbox access or message folders. Label changes use the same
-mailbox checks as the web app and Mail API.
+The MCP server exposes `list_labels`, `add_label`, and `remove_label`. The add and remove tools
+accept message, conversation, and private draft targets. Tool descriptions state that labels
+organize mail but never change mailbox access or message folders. Label changes use the same
+ownership and mailbox checks as the web app and Mail API.
 
 ## Errors and accessibility
 

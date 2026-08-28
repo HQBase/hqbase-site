@@ -29,6 +29,7 @@ A draft keeps:
 - the subject, formatted content, and plain-text version;
 - reply or forward context;
 - attachments;
+- private label assignments;
 - its signature mode and sanitized signature snapshot; and
 - a version number that prevents an older edit from silently replacing a newer one.
 
@@ -46,8 +47,8 @@ When you have saved drafts, navigation shows **Drafts** with your private draft 
 recipients, content, attachments, and reply or forward context in the same composer.
 
 The draft list uses the same grouped list surface, header alignment, responsive row grid, attachment
-lane, preview lane, and time lane as the conversation folders. Draft-only indicators use the existing
-utility lanes and do not change the row geometry.
+lane, preview lane, time lane, label controls, and label filters as the conversation folders.
+Draft-only indicators use the existing utility lanes and do not change the row geometry.
 
 Restored complete recipients stay selected. Contact suggestions remain closed until you edit the
 active recipient.
@@ -61,11 +62,15 @@ to its exact saved target even if newer messages arrived after the save, and nev
 different message. If the target is missing or no longer accessible, HQBase blocks sending and
 explains that the draft context is unavailable.
 
-Mailbox and search filters also apply to the draft list. When the count reaches zero, **Drafts** is
-hidden unless you are already on that page; it remains visible there so sending or discarding the
-last draft does not leave you stranded.
+Mailbox, search, and label filters also apply to the draft list. A draft must have every selected
+label to match. Draft labels stay private to the draft author. Labeling a saved reply or forward
+does not change its existing conversation before send.
 
-After a successful send, HQBase removes the saved draft.
+When the count reaches zero, **Drafts** is hidden unless you are already on that page; it remains
+visible there so sending or discarding the last draft does not leave you stranded.
+
+After a successful send, HQBase copies the draft labels to the new outbound message, then removes
+the saved draft. Discarding a draft removes its private label assignments.
 
 ## Choose the From mailbox
 

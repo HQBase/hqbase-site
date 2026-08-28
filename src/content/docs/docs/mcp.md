@@ -48,6 +48,7 @@ new connection and approval.
 The **Read-only** profile provides:
 
 - `list_mailboxes`
+- `list_labels`
 - `search_messages`
 - `list_conversations`
 - `get_message`
@@ -57,6 +58,7 @@ The **Read-only** profile provides:
 The **Mail actions** profile also provides:
 
 - `update_message` and `update_conversation`
+- `add_label` and `remove_label` for message, conversation, and private draft targets
 - `list_drafts`, `get_draft`, `create_draft`, `update_draft`, and `delete_draft`
 - `add_draft_attachment` and `remove_draft_attachment`
 - `send_email`, `reply_to_message`, and `forward_message`
@@ -92,7 +94,7 @@ MCP uses these OAuth permissions:
 | --- | --- |
 | `mail:read` | List visible mailboxes and conversations, search and open mail, and download attachments. |
 | `mail:write` | Mark mail read or unread, add or remove stars, archive mail, and move it to Trash. |
-| `mail:send` | Manage drafts and attachments, send new mail, reply, and forward. |
+| `mail:send` | Manage private drafts, draft labels, and attachments; send new mail, reply, and forward. |
 | `offline_access` | Let a compatible client request an optional refresh token. |
 
 ## Connect via SKILL.md

@@ -168,6 +168,8 @@ All paths below are available relative to `/api/v1` and `/api/v2`. New clients u
 | `DELETE /messages/{id}/labels/{labelId}` | `mail:write` | Remove a label from one organizable message. |
 | `PUT /conversations/{id}/labels/{labelId}` | `mail:write` | Add a label to accessible organizable messages in a conversation. |
 | `DELETE /conversations/{id}/labels/{labelId}` | `mail:write` | Remove a label from accessible organizable messages in a conversation. |
+| `PUT /drafts/{id}/labels/{labelId}` | `mail:send` | Add a private label to one draft owned by the caller. |
+| `DELETE /drafts/{id}/labels/{labelId}` | `mail:send` | Remove a private label from one draft owned by the caller. |
 | `POST /messages/{id}/{action}` | `mail:write` | Apply `read`, `unread`, `star`, `unstar`, `archive`, `unarchive`, `trash`, or `restore`. |
 | `POST /messages/{id}/remote-media/trust` | `mail:write` | A person can trust the message sender's remote images. Machine agents cannot change this preference. |
 | `POST /conversations/{id}/{action}` | `mail:write` | Apply a message action to the accessible part of a conversation. |
@@ -218,10 +220,10 @@ recipients, snippet, and plain-text body. The characters `%`, `_`, and `\` are o
 text. They do not enable wildcards or escapes. Mailbox access and the requested mailbox and folder
 filters still apply, and search does not change the activity-time order used by pagination.
 
-`labelId` remains the optional single-label message and conversation filter. Repeat `labelIds` to
-require more than one label. The server combines and deduplicates both parameters with mailbox,
-folder, and literal search filters. A message must carry every requested label. A conversation
-matches when its accessible messages collectively carry every requested label.
+`labelId` remains the optional single-label message, conversation, and draft filter. Repeat
+`labelIds` to require more than one label. The server combines and deduplicates both parameters with
+mailbox, folder, and literal search filters. A message or draft must carry every requested label. A
+conversation matches when its accessible messages collectively carry every requested label.
 An unknown label returns `404 LABEL_NOT_FOUND`; a label never broadens mailbox access.
 
 ### Labels
@@ -230,6 +232,12 @@ Labels are workspace organization, not folders or access controls. `GET /labels`
 human OAuth and machine mailbox clients with `mail:read`. A caller with `mail:write` can add or remove
 an existing label only where its live mailbox grant permits mail organization. Conversation label
 actions update accessible organizable messages and leave inaccessible copies unchanged.
+
+Draft responses include a `labels` array. A caller with `mail:send` can add or remove an existing
+label only on a draft that it owns and can still access. Draft label changes appear in the private
+draft changes feed. They do not change a related conversation before send. After a successful
+saved-draft send, HQBase copies the assignments to the new outbound message before it deletes the
+draft. Deleting a draft removes its assignments.
 
 Label-definition management remains in owner/admin installed-app routes. Machine credentials and
 OAuth Mail API tokens cannot create, rename, recolor, or delete workspace labels.
@@ -302,11 +310,12 @@ public `Draft` object. A delete is a tombstone:
 { "type": "delete", "draftId": "drf_example" }
 ```
 
-Creating or editing a draft, adding or removing an attachment, sending a saved draft, and deleting
-a draft all write to the draft journal. The monotonic sequence keeps rapid changes distinct and
-keeps deletion records after the draft row is removed. HQBase applies the caller's current draft
-ownership and mailbox access before it returns an upsert. When mailbox access changes, a
-client repeats the full draft bootstrap so drafts that became hidden or visible are reconciled.
+Creating or editing a draft, adding or removing an attachment or label, sending a saved draft, and
+deleting a draft all write to the draft journal. The monotonic sequence keeps rapid changes
+distinct and keeps deletion records after the draft row is removed. HQBase applies the caller's
+current draft ownership and mailbox access before it returns an upsert. When mailbox access
+changes, a client repeats the full draft bootstrap so drafts that became hidden or visible are
+reconciled.
 
 A new client uses this bootstrap order:
 
@@ -325,7 +334,8 @@ but current write paths do not store messages in that folder. Clients use `/draf
 are private composer state, not conversations.
 
 A draft belongs to the person or machine agent that created it. Another principal cannot list,
-open, edit, attach files to, or send that draft, even when both principals can use the same mailbox.
+open, edit, label, attach files to, or send that draft, even when both principals can use the same
+mailbox.
 
 ### Message pagination
 
