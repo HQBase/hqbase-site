@@ -300,8 +300,11 @@ domain. The choices are **Deliver to a mailbox**, **Keep in Catch-all for owner 
 domain. A new setup selects its first mailbox by default, but keeps the choice visible before the
 owner completes setup.
 
-- Settings contains only active workspace and infrastructure destinations, and gains search,
-  sorting, or pagination only when the behavior needs it.
+- Settings groups destinations by purpose. **Workspace** contains Mailboxes, Domains, and People;
+  **Mail** contains Labels and Signatures; **Personal** contains Preferences; and **System**
+  contains Updates. Hide Domains, People, and Updates from people who cannot manage them. Keep
+  Updates at the bottom of the navigation. Preferences contains Appearance and Notifications.
+  Settings gains search, sorting, or pagination only when the behavior needs it.
 - **Labels** and **Signatures** use the same responsive table language as other Settings pages: a
   rounded bordered shell, a quiet header row, compact data rows, and a right-aligned **Actions**
   column. Labels show their name and color. Signatures show their name and preview, scope, and
@@ -352,7 +355,7 @@ owner completes setup.
   owner or admin separately reactivates them. HQBase blocks disablement or deletion when the
   mailbox is a catch-all destination and directs the owner or admin to change the domain policy
   first.
-- **Users** gives every person a compact actions menu. Pending people can receive a new invitation
+- **People** gives every person a compact actions menu. Pending people can receive a new invitation
   or temporary password from this menu. Active people can be removed after recent authentication
   and a confirmation. Removed people stay in the table with a **Removed** status and can be
   restored. Role controls are unavailable while a person is removed.
@@ -368,8 +371,6 @@ owner completes setup.
 - Cloudflare-backed actions never display an API-token field. Authorization starts OAuth with PKCE
   in a labelled modal. See [Cloudflare access](/docs/specs/cloudflare-oauth/) for the security
   rules.
-- Debug contains read-only deployment diagnostics.
-
 Standard form choices use the shared dropdown control at the normal compact field height. The
 mailbox selector in the header remains uniquely smaller. Primary and create actions use the normal
 or small button size; the installed app does not use an extra-large button size.
@@ -414,7 +415,9 @@ person, and machine identities, which hold their own credentials.
   `/contacts/<contact-id>`. The canonical Agent route is `/agents`. Earlier `/agents/connections`,
   `/agents/mailboxes`, `/agents/provisioning`, `/settings/mcp`, and `/settings/agents` paths
   normalize to `/agents`. Settings routes live under `/settings/*`, including label management at
-  `/settings/labels` and signature management at `/settings/signatures`. Unknown app paths
+  `/settings/labels`, signature management at `/settings/signatures`, and personal appearance and
+  notification controls at `/settings/preferences`. Earlier Interface and Notifications Settings
+  routes normalize to Preferences. Unknown app paths
   normalize to `/mail/inbox`. The Catch-all page explains that it contains owner-only unassigned
   mail and links to Domain Settings for future delivery choices. Unassigned mail stays owner-only
   even after archive or trash actions.
