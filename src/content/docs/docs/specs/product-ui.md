@@ -119,6 +119,9 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
 - The desktop header uses a compact mailbox dropdown that opens below its trigger. It lists **All
   mailboxes** and human mailboxes first. When dedicated agent mailboxes exist, an **Agent
   mailboxes** divider with an agent icon separates and labels them.
+- A disabled mailbox stays in the desktop and compact mailbox filters so its historical mail
+  remains available. Show **Disabled** beside its address with muted text. A deleted mailbox does
+  not appear in either filter.
 - A small status indicator follows **Mail** in the sidebar. It starts gray, turns green when live
   events are connected, turns yellow while HTTP fallback synchronization is working, and turns red
   when neither connection works. Its accessible label and tooltip state the same meaning without
