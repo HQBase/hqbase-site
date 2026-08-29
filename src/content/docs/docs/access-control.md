@@ -120,13 +120,13 @@ generate a new one. Admins can see setup status, but never a password or invitat
 
 ## Remove and restore people
 
-Owners and admins can remove a member or admin from **Settings → Users**. Only an owner can remove
+Owners and admins can remove a member or admin from **Settings → People**. Only an owner can remove
 another owner. You cannot remove your own account or the last active owner.
 
 Removal takes effect immediately. HQBase ends the person's sessions, revokes connected-app access,
 cancels pending sign-in setup, stops notifications, and removes all mailbox access. Existing mail,
 drafts, contacts, signatures, and audit history stay in the workspace. The person appears as
-**Removed** in the Users table and cannot sign in.
+**Removed** in the People table and cannot sign in.
 
 An owner or admin can restore a removed member or admin. Only an owner can restore another owner.
 The restored person signs in again with the same login identity. Sessions, connected apps,
