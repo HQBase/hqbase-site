@@ -1,12 +1,11 @@
 import path from "node:path"
-import { fileURLToPath } from "node:url"
 
 import react from "@astrojs/react"
 import starlight from "@astrojs/starlight"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 
-const root = path.dirname(fileURLToPath(import.meta.url))
+const root = import.meta.dirname
 const repositoryUrl = "https://github.com/HQBase/hqbase"
 const discordUrl = "https://discord.gg/U67PB663nf"
 const docsSlug = (slug) => `docs/${slug}`

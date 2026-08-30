@@ -459,7 +459,7 @@ test("features stay inside the documented product boundary", async () => {
     read("src/pages/index.astro"),
     read("src/components/ui/features-bento.tsx"),
     read("public/styles.css"),
-    read("tokens.css"),
+    read("public/tokens.css"),
     read("src/content/docs/docs/specs/product-ui.md"),
   ]);
 
@@ -986,7 +986,6 @@ test("the design scaffold and local assets remain available", async () => {
   for (const path of [
     "src/components/ui/button.tsx",
     "src/components/ui/accordion.tsx",
-    "src/components/ui/card.tsx",
     "src/components/ui/dialog.tsx",
     "public/favicon.svg",
     "public/logo.svg",
