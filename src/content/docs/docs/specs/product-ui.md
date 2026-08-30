@@ -510,9 +510,10 @@ mail content. Activating a
 notification focuses or opens the represented message; authentication and current mailbox access
 remain authoritative. The service worker caches only the public shell and versioned static assets,
 never authenticated responses. When an update is ready, the app offers one deliberate reload in a
-compact, rounded notice. Reload asks the waiting service worker to activate. If that activation
-signal is stale or does not arrive, the app performs a normal page refresh after a short delay.
-Background offline mail storage requires a separate privacy and delivery design.
+compact, rounded notice with small semibold text and a restrained elevation shadow. Reload asks the
+waiting service worker to activate. If that activation signal is stale or does not arrive, the app
+performs a normal page refresh after a short delay. Background offline mail storage requires a
+separate privacy and delivery design.
 
 Testing requirements and repository ownership live in
 [Engineering Standards](/docs/maintainers/engineering-standards/).

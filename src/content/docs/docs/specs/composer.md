@@ -170,10 +170,13 @@ While writing a reply, the accessible conversation through the selected message 
 new content as collapsed quoted context. Messages that arrived after the selected target are not
 included. A small borderless gray ellipsis at the left expands or collapses the complete chain in
 one step. The newest message appears first, the expanded chain uses a subtle left border, and it
-does not add another nested disclosure. When a message already contains quoted history that is
-also stored as separate conversation messages, HQBase does not repeat that history. This preview is
-composer chrome: it is not copied into the draft body, and the server creates the same bounded
-chain when sending while the selected message remains the reply-header target.
+does not add another nested disclosure. Stored conversation messages stay at one visual level with
+quiet separators because this is a readable thread preview, not the serialized email quote. The
+plain-text email that HQBase sends still uses conventional nested `>` levels. When a message already
+contains quoted history that is also stored as separate conversation messages, HQBase does not
+repeat that history. This preview is composer chrome: it is not copied into the draft body, and the
+server creates the same bounded chain when sending while the selected message remains the
+reply-header target.
 
 ## Forward a message
 
@@ -199,13 +202,16 @@ disabled or an attachment is still uploading.
 New messages use a separate window on desktop and a full-screen composer on compact screens. The
 desktop window starts at the bottom-right, can be dragged by its header, and can be resized within
 the viewport. It keeps Minimize and Close controls and does not have a maximize control. Recipient
-and subject fields use subtle separators instead of large bright focus borders.
+and subject fields use subtle separators instead of large bright focus borders. Its editable
+message area uses the available flexible height, so unused space remains part of the editor and no
+dead area appears between the signature selector and the following quote, attachments, or footer.
 
 Replies and forwards appear after the conversation on desktop and above it in a focused editor on
-compact screens. A desktop reply or forward can detach into the same movable window without losing
-its draft state. Leaving the conversation does not detach an inline composer: HQBase keeps it active
-but hidden until its conversation returns. Only the explicit **Detach composer** action changes it
-into a window. Its **Return to conversation** action opens the exact conversation and restores the
+compact screens. Opening an inline composer scrolls it into view and moves keyboard focus into its
+editor. A desktop reply or forward can detach into the same movable window without losing its draft
+state. Leaving the conversation does not detach an inline composer: HQBase keeps it active but
+hidden until its conversation returns. Only the explicit **Detach composer** action changes it into
+a window. Its **Return to conversation** action opens the exact conversation and restores the
 composer to its inline place. Detached composers stay open while the person moves between app
 destinations, and more than one composer can remain open at the same time. Minimized desktop
 composers form one bottom-right row, cannot be dragged until restored, and keep their drafts active.
