@@ -55,8 +55,9 @@ active recipient.
 
 The composer shows the **To** field by default. A small down-arrow button beside it reveals the
 **Cc** and **Bcc** fields. If a saved or recovered draft already contains a Cc or Bcc recipient,
-HQBase reveals both optional fields when the composer opens. Once revealed, they stay visible for
-that composer session.
+HQBase reveals both optional fields when the composer opens. While both fields are empty, the
+button changes to an up arrow that can hide them again. After either field contains a recipient,
+the button disappears and the populated fields stay visible.
 
 When a valid draft has plain text but no formatted content, the composer safely converts the plain
 text for editing. Opening the draft does not save a new version by itself. Existing formatted
