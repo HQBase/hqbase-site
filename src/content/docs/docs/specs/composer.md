@@ -12,7 +12,7 @@ remain private to their author, and are checked again before anything is sent.
 | --- | --- |
 | Start a new message | Uses your default sending mailbox and saves a private draft. |
 | Reply | Replies to the exact message you selected and prefers the mailbox that received it. |
-| Forward | Starts with your default sending mailbox and adds the selected message as context. |
+| Forward | Starts with your default sending mailbox and adds the selected message and its files as context. |
 | Add a file | Uploads it to your installation and keeps it attached to that draft only. |
 | Insert an image | Keeps it private, places it at the cursor, and sends it inside the message. |
 | Send | Rechecks mailbox access, the From address, and the domain before delivering anything. |
@@ -180,14 +180,17 @@ reply-header target.
 
 ## Forward a message
 
-Forward opens the same editable To, Cc, and Bcc fields and includes a limited plain-text copy of the
-selected message as forwarded context. It uses your default From mailbox rather than assuming the
-address that received the original message.
+Forward opens the same editable To, Cc, and Bcc fields and includes a limited copy of the selected
+message as forwarded context. It uses your default From mailbox rather than assuming the address
+that received the original message. Formatted forwards can keep safe links, tables, formatting,
+remote image references, and matching content-ID images. HQBase removes active content, unsafe
+URLs, unsafe CSS, and unrelated inline files.
 
 When you send from the web composer, HQBase includes the selected message's original attachments
-and any files that you added to the draft. The combined files must meet the normal attachment count
-and size limits. If an original attachment is unavailable or the combined files exceed a limit,
-HQBase does not send the message and keeps the draft.
+and any files that you added to the draft. The composer lists the original attachments as included
+before send. The combined files must meet the normal attachment count and size limits. If an
+original attachment is unavailable or the combined files exceed a limit, HQBase does not send the
+message and keeps the draft.
 
 ## Use the composer on desktop and mobile
 
