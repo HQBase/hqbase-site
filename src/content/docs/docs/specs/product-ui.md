@@ -315,6 +315,12 @@ owner completes setup.
   rounded bordered shell, a quiet header row, compact data rows, and a right-aligned **Actions**
   column. Labels show their name and color. Signatures show their name and preview, scope, and
   default state. Loading and empty states remain inside the table.
+- Every table **Actions** column uses one three-dot icon button for each row. The button opens a
+  labelled dropdown with the available row actions. Do not put separate edit, delete, or revoke
+  icon buttons in that column.
+- Contextual dropdowns prefer the space below their trigger. They open above it when the lower
+  viewport edge does not have enough space. Keep at least eight CSS pixels from viewport edges and
+  constrain long menus to the available height so their contents can scroll.
 - Tab controls use a rounded pill track with even inner padding and fully rounded triggers. The
   selected trigger stays inset from every edge of the track.
 - Add and create forms use labelled dialogs. A dialog closes only after an explicit close action,
