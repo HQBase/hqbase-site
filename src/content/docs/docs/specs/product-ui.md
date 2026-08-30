@@ -212,7 +212,8 @@ The original HTML remains in customer storage; sanitization happens when the mes
 
 - Selecting a conversation replaces the conversation list with a full-page reader that uses the
   complete mail content area on desktop and compact layouts. A labelled Back action returns to the
-  same list, filters, loaded pages, and scroll position.
+  same list, filters, loaded pages, and scroll position. Keep the Back action in the same position
+  while the conversation loads and after the reader appears.
 - Show accessible messages in chronological order. Begin with the first and final message; when
   messages sit between them, one labelled divider reports the hidden count and reveals them in
   place. The collapsed divider has only one line segment on each side of a small gray circular
@@ -386,7 +387,7 @@ person, and machine identities, which hold their own credentials.
   keep the row action visible and put secondary access and status details below the name instead of
   requiring horizontal scrolling.
 - An OAuth row has **Authorized** status while its consent exists. A machine identity has
-  **Enabled**, **Disabled**, or **Mailbox deleted** status. **Enabled** means that its credential can
+  **Enabled**, **Disabled**, or **Deleted** status. **Enabled** means that its credential can
   authenticate; it does not claim that the software is online. Provisioning rows also show their
   current mailbox count and limit.
 - **Add connection** opens one dialog with a choice per connection kind: **AI assistant** for MCP or
