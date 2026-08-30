@@ -176,6 +176,9 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - Changing a filter returns to the newest page. Opening a conversation and returning preserves
   loaded pages and scroll position. Background refresh updates the newest page without discarding
   older loaded pages. Paging cursors stay opaque and never bypass mailbox access.
+- Every mail folder, including Drafts, uses the same list geometry as Inbox. Each mail-list scroll
+  surface always reserves its vertical scrollbar gutter, so short and long folders keep the same
+  horizontal position.
 - The folder header and conversation list use a shared maximum width of 960 CSS pixels. Desktop
   rows keep the correspondent and utility columns compact so the subject and preview use all
   remaining space, and align every column vertically. A fixed attachment lane sits between the
@@ -293,7 +296,9 @@ permissions and API behavior.
 
 Setup is one quiet, resumable page. After temporary Cloudflare access is verified, progress
 becomes **Domain → Owner account → Mailboxes**, with Mailboxes owning the final action. The
-development-only `/__ui/setup` gallery uses deterministic fixtures and never reaches production.
+development-only `/__ui/setup` and `/__ui/design` galleries use deterministic fixtures and never
+reach production. The design gallery inventories the real shared components, common product
+patterns, and representative screen states for visual review.
 
 The Mailboxes step includes one **Mail sent to unknown addresses** choice for every selected
 domain. The choices are **Deliver to a mailbox**, **Keep in Catch-all for owner review**, and
@@ -374,7 +379,18 @@ owner completes setup.
   rules.
 Standard form choices use the shared dropdown control at the normal compact field height. The
 mailbox selector in the header remains uniquely smaller. Primary and create actions use the normal
-or small button size; the installed app does not use an extra-large button size.
+or small button size; the installed app does not use an extra-large button size. Shared buttons use
+compact visual heights: 30px for normal and icon buttons, 27px for small buttons, and 33px for large
+buttons. Special-purpose controls can keep a larger interaction target where the layout requires it.
+Text inputs, text areas, dropdown fields, and grouped search inputs use the same 10px corner radius.
+Shared single-line text inputs and grouped inputs use a 38px height. Shared dropdown fields use a 34px
+height. An action directly beside a field uses the same 38px height as that field. Context-specific
+controls can keep a required layout or touch height. Shared data tables use 13px body text and 11px
+header text. Table headers use a 32px height and 10px horizontal padding. Standard body cells use 10px
+horizontal padding and 4px vertical padding. Page-specific tables do not add larger desktop cell
+padding or action controls. Shared action and field sizes do not change sidebar navigation
+dimensions. Desktop sidebar destination rows remain 40px high, drawer destination rows remain 44px
+high, and quick-access controls remain 40px in both layouts.
 
 ## Agents
 
