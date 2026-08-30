@@ -154,8 +154,8 @@ For a reply, HQBase:
   message, while leaving To, Cc, and Bcc editable;
 - creates standards-compliant reply headers from the selected message;
 - places your new response first;
-- follows it with a timestamped attribution and a limited copy of the selected message, including
-  its safe stored quote history; and
+- follows it with timestamped attributions and a limited copy of every accessible conversation
+  message through the selected message; and
 - creates both formatted HTML and conventional `>`-quoted plain text.
 
 Formatted quotes can keep safe links, tables, formatting, and supported images. Matching
@@ -166,12 +166,14 @@ HQBase removes active content, unsafe URLs, unsafe CSS, and unrelated attachment
 copy. It adds the quote on the server only when sending, so the saved draft contains what you wrote
 and a quote by itself cannot make an empty reply sendable.
 
-While writing a reply, the selected message appears below the new content as collapsed quoted
-context. A small borderless gray ellipsis at the left expands or collapses the selected message and
-its complete stored quote chain in one step. The expanded chain uses a subtle left border and does
-not add another nested disclosure. This preview is composer chrome: it is not copied into the draft
-body, and the server still creates the final reply quote from the exact selected message when
-sending.
+While writing a reply, the accessible conversation through the selected message appears below the
+new content as collapsed quoted context. Messages that arrived after the selected target are not
+included. A small borderless gray ellipsis at the left expands or collapses the complete chain in
+one step. The newest message appears first, the expanded chain uses a subtle left border, and it
+does not add another nested disclosure. When a message already contains quoted history that is
+also stored as separate conversation messages, HQBase does not repeat that history. This preview is
+composer chrome: it is not copied into the draft body, and the server creates the same bounded
+chain when sending while the selected message remains the reply-header target.
 
 ## Forward a message
 
