@@ -15,7 +15,8 @@ and a deployment dry-run; it does not create a customer release.
 
 In `HQBase/hqbase`:
 
-1. Set the new version and minimum supported version in `package.json`.
+1. Set the new stable `X.Y.Z` version and minimum supported version in `package.json`. The signed
+   stable channel does not accept a prerelease suffix.
 2. Update database compatibility when the release needs it.
 3. Add public release notes to `CHANGELOG.md`.
 4. Commit those changes to `main`.
