@@ -54,8 +54,9 @@ pnpm dev
 ```
 
 Sign in at `http://localhost:8787/` as `owner@hqbase.test` with that password. The seed command
-writes directly to local D1 and does not add an application route, contact Cloudflare OAuth, or
-change production authentication behavior.
+writes representative mail across every folder, shared workspace labels, labeled conversations,
+and private draft labels directly to local D1. It does not add an application route, contact
+Cloudflare OAuth, or change production authentication behavior.
 
 To discard all local D1 data, rebuild the current schema, and recreate the demo workspace:
 
