@@ -27,16 +27,17 @@ is an accessible outbound recipient.
 Opening a contact shows:
 
 - the saved name and exact email address;
-- editable private notes;
+- a collapsed **Private contact details** section for the editable saved name and private notes;
 - every accessible conversation with that address, loaded in stable pages; and
 - a **New email** action that opens the normal composer with the address in **To**.
 
-The private contact fields inherit the contact page background. They do not use a separate card,
-border, or raised surface. The exchange list uses the same responsive conversation rows, date
-groups, labels, star action, spacing, and focus treatment as the Inbox. It uses exact sender and
-recipient matching. A person can load older pages until all accessible exchanges are visible. It
-never reveals a conversation from a mailbox the person cannot currently read. Losing mailbox
-access removes those exchanges on the next request.
+The private contact section expands in place and contains the save and remove actions with its
+fields. The fields inherit the contact page background. They do not use a separate card, border, or
+raised surface. The exchange list uses the same responsive conversation rows, date groups, labels,
+star action, spacing, and focus treatment as the Inbox. It uses exact sender and recipient matching.
+A person can load older pages until all accessible exchanges are visible. It never reveals a
+conversation from a mailbox the person cannot currently read. Losing mailbox access removes those
+exchanges on the next request.
 
 ### Recipient suggestions
 
