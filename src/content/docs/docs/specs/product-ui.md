@@ -326,6 +326,9 @@ owner completes setup.
 - Add and create forms use labelled dialogs. A dialog closes only after an explicit close action,
   successful submission, or Escape. A backdrop click, including one that dismisses a nested
   dropdown, must not close the dialog.
+- On compact screens, every dialog starts below the device top safe area with extra breathing room.
+  Its maximum height also preserves the bottom safe area, and overflow scrolls inside the dialog so
+  the close control stays reachable around camera cutouts and Dynamic Island hardware.
 - Every dialog footer uses the normal 30px action height. Actions in one footer never mix normal,
   small, field, or custom heights.
 - A drawer closes once toward its anchored edge. Its close animation must not replay its entrance.
@@ -424,10 +427,12 @@ person, and machine identities, which hold their own credentials.
 - MCP never pre-creates access. The person approves the client in their own browser. Creating a
   machine identity reveals its credential once with the matching public skill URL.
 - Each enabled machine row menu contains **Setup instructions**, **Rotate credential**, and
-  **Disable** in that order. A disabled row contains **Setup instructions** and **Enable**. Enabling
-  it reveals a fresh credential once. Setup instructions show the public skill URL, explain that
-  the saved credential is required, offer the valid recovery action when it was lost, and link to
-  the public setup guide. A deleted mailbox must be restored before its identity can be enabled.
+  **Disable** in that order. A disabled row contains **Enable** first and **Setup instructions**
+  second. Enabling it reveals a fresh credential once. A deleted mailbox identity contains only
+  **Restore mailbox**. After restoration, the identity remains disabled and offers **Enable** and
+  **Setup instructions**. Setup instructions show the public skill URL, explain that the saved
+  credential is required, and link to the public setup guide. Status and credential recovery
+  actions stay in the row menu.
 - The page has no separate instructions tab or permanent developer-details section. First-time
   instructions stay in **Add connection**. Recovery instructions stay with the machine row that
   needs them.
@@ -455,11 +460,12 @@ person, and machine identities, which hold their own credentials.
   keeps the drawer open. Selecting a destination in the current navigation panel closes the drawer.
   While mailbox selection is open, tapping elsewhere inside the drawer dismisses only the mailbox
   selector. Choosing a mailbox applies the filter and closes the drawer. The compact drawer uses two
-  adjacent panes without a divider. Its narrow quick-access rail is pure black and stays square.
-  Its wider navigation pane keeps the normal sidebar surface and stays square. Opening the drawer
-  uses the standard dimmed Sheet backdrop. The existing background strips keep the device safe
-  areas outside that tint. Controls in the narrow rail stay horizontally centered. Desktop sidebar
-  surfaces keep their existing shape.
+  adjacent panes without a divider. Its narrow quick-access rail uses the theme rail surface and
+  stays square, so it is light in light mode and dark in dark mode. Its wider navigation pane keeps
+  the normal sidebar surface and stays square. Opening the drawer uses the standard dimmed Sheet
+  backdrop. The existing background strips keep the device safe areas outside that tint. Controls
+  in the narrow rail stay horizontally centered. Desktop sidebar surfaces keep their existing
+  shape.
   Only deliberate content surfaces scroll; the application shell, header, and navigation stay
   fixed and do not use native document scrolling. Scroll surfaces use a compact transparent track
   and a rounded six-pixel thumb. The thumb stays quiet until hover, when it becomes slightly more
