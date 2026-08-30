@@ -394,16 +394,22 @@ or small button size; the installed app does not use an extra-large button size.
 compact visual heights: 30px for normal and icon buttons, 27px for small buttons, and 33px for large
 buttons. Special-purpose controls can keep a larger interaction target where the layout requires it.
 Text inputs, text areas, dropdown fields, and grouped search inputs use the same 10px corner radius.
-Shared single-line text inputs and grouped inputs use a 38px height. Shared dropdown fields use a 34px
-height. An action directly beside a field uses the same 38px height as that field. Context-specific
-controls can keep a required layout or touch height. Keyboard focus on a bordered field changes its
-border color without adding a glow, ring, or focus shadow. Borderless interactive controls use a
-thin one-pixel outline so focus remains visible. Shared data tables use 13px body text and 11px
-header text. Table headers use a 32px height and 10px horizontal padding. Standard body cells use 10px
-horizontal padding and 4px vertical padding. Page-specific tables do not add larger desktop cell
-padding or action controls. Shared action and field sizes do not change sidebar navigation
-dimensions. Desktop sidebar destination rows remain 40px high, drawer destination rows remain 44px
-high, and quick-access controls remain 40px in both layouts.
+Shared single-line text inputs and grouped inputs use a 38px normal height and a 30px compact height.
+Use the compact height in dense tables and inline field-and-action rows. Keep the normal height in
+regular forms and on compact-screen form rows where the larger interaction target is useful. Shared
+dropdown fields use a 34px normal height and a 30px compact height. A direct action beside a field
+uses the same height as that field. Context-specific controls can keep a required layout or touch
+height. Keyboard focus on a bordered field changes its border color without adding a glow, ring, or
+focus shadow. Borderless interactive controls use a thin one-pixel outline so focus remains visible.
+When a person creates a mailbox address, the field accepts the local part and selects from the email
+domains available for that flow. When only one domain is available, show it as a fixed suffix. The
+workspace-hostname field follows the same pattern with a subdomain and an available connected domain.
+Shared data tables use 13px body text and 11px header text. Table headers use a 32px height and 10px
+horizontal padding. Standard body cells use 10px horizontal padding and 4px vertical padding.
+Page-specific tables do not add larger desktop cell padding or action controls. Shared action and
+field sizes do not change sidebar navigation dimensions. Desktop sidebar destination rows remain
+40px high, drawer destination rows remain 44px high, and quick-access controls remain 40px in both
+layouts.
 
 ## Agents
 
@@ -503,7 +509,9 @@ tag that lets newer notifications replace older ones, and the recipient&apos;s u
 mail content. Activating a
 notification focuses or opens the represented message; authentication and current mailbox access
 remain authoritative. The service worker caches only the public shell and versioned static assets,
-never authenticated responses. When an update is ready, the app offers one deliberate reload.
+never authenticated responses. When an update is ready, the app offers one deliberate reload in a
+compact, rounded notice. Reload asks the waiting service worker to activate. If that activation
+signal is stale or does not arrive, the app performs a normal page refresh after a short delay.
 Background offline mail storage requires a separate privacy and delivery design.
 
 Testing requirements and repository ownership live in
