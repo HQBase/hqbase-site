@@ -271,8 +271,10 @@ The original HTML remains in customer storage; sanitization happens when the mes
   for Archive or Unarchive and **Move to trash** or Restore on that exact message. Trash is not a
   permanent delete. A message moved to Trash disappears from conversation readers outside Trash.
   The Trash reader shows only messages that are in Trash. If no visible messages remain after an
-  exact-message action, return to the folder list. Use the larger Reply and Forward treatment after
-  the final message; those actions target that final message.
+  exact-message action, return to the folder list. The thread summary, message count, and unread
+  count use the same visible messages: non-Trash views exclude messages in Trash, and Trash includes
+  only messages in Trash. Use the larger Reply and Forward treatment after the final message; those
+  actions target that final message.
 - Opening an unread conversation marks its accessible unread inbound messages read. Star and unstar
   affect every accessible message in the thread. Archive moves accessible Inbox and Catch-all
   messages without moving Sent copies. Trash moves the accessible messages represented by the
