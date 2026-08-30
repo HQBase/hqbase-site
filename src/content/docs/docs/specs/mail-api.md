@@ -478,8 +478,10 @@ the app usable while it reconnects. A failed fallback refresh means that neither
 the HTTP API is available. Opening a socket stops fallback polling and drains the synchronization
 feeds again. A connected socket can miss a wake-up if notification delivery fails. Another event
 can recover the change sooner. The lease expires no later than 10 minutes after upgrade and forces
-a reconnect; the next successful connection drains all feeds. The green connection indicator
-reports WebSocket transport health; it does not prove that every wake-up arrived.
+a reconnect; the next successful connection drains all feeds. Normal socket reconnects and
+successful fallback synchronization stay silent. The web app shows a **Connection lost** dialog
+only after fallback synchronization also fails, which means that neither path is available.
+Recovery closes the dialog automatically.
 
 HQBase routes authenticated connections through a hibernating Durable Object. Successful message,
 draft, mailbox, and mailbox-access mutations notify it after the durable database write. If a

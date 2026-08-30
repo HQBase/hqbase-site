@@ -122,11 +122,11 @@ Do not add pricing, invented customers or usage claims, or a separate hosted-pro
 - A disabled mailbox stays in the desktop and compact mailbox filters so its historical mail
   remains available. Show **Disabled** beside its address with muted text. A deleted mailbox does
   not appear in either filter.
-- A small status indicator follows **Mail** in the sidebar. It starts gray, turns green when live
-  events are connected, turns yellow while HTTP fallback synchronization is working, and turns red
-  when neither connection works. Its accessible label and tooltip state the same meaning without
-  relying on color. Green reports WebSocket transport health, not synchronization completeness;
-  the event lease reconnect remains the bounded recovery path for a missed wake-up.
+- Do not show a normal connection status indicator. Socket reconnects, browser-tab changes, and
+  successful HTTP fallback synchronization stay silent. When neither the live event socket nor the
+  HTTP API is available, show a **Connection lost** dialog. It explains that HQBase reconnects and
+  refreshes mail automatically when the connection returns. Recovery closes the dialog. A person
+  can dismiss it for the current outage; a later outage can show it again.
 - New-message Compose is a non-modal window on desktop and full-screen on compact layouts. Reply
   and Forward open within the conversation by default. Active primary-navigation icons keep their
   selected background on hover; only inactive icons gain a hover background. Buttons and dropdowns
@@ -326,6 +326,8 @@ owner completes setup.
 - Add and create forms use labelled dialogs. A dialog closes only after an explicit close action,
   successful submission, or Escape. A backdrop click, including one that dismisses a nested
   dropdown, must not close the dialog.
+- Every dialog footer uses the normal 30px action height. Actions in one footer never mix normal,
+  small, field, or custom heights.
 - A drawer closes once toward its anchored edge. Its close animation must not replay its entrance.
 - Directly editable active or enabled values use labelled switches in their Settings table rows.
   Keep these frequent switches out of detail panels and dialogs when the table has room for them.
@@ -391,7 +393,9 @@ buttons. Special-purpose controls can keep a larger interaction target where the
 Text inputs, text areas, dropdown fields, and grouped search inputs use the same 10px corner radius.
 Shared single-line text inputs and grouped inputs use a 38px height. Shared dropdown fields use a 34px
 height. An action directly beside a field uses the same 38px height as that field. Context-specific
-controls can keep a required layout or touch height. Shared data tables use 13px body text and 11px
+controls can keep a required layout or touch height. Keyboard focus on a bordered field changes its
+border color without adding a glow, ring, or focus shadow. Borderless interactive controls use a
+thin one-pixel outline so focus remains visible. Shared data tables use 13px body text and 11px
 header text. Table headers use a 32px height and 10px horizontal padding. Standard body cells use 10px
 horizontal padding and 4px vertical padding. Page-specific tables do not add larger desktop cell
 padding or action controls. Shared action and field sizes do not change sidebar navigation
@@ -415,7 +419,8 @@ person, and machine identities, which hold their own credentials.
 - **Add connection** opens one dialog with a choice per connection kind: **AI assistant** for MCP or
   the person-authorized Mail API skill, **Automation with its own mailbox** for mailbox agents, and,
   for owners and admins, **Provisioning key**. Every nested step can return to the connection-kind
-  choice without closing the dialog.
+  choice without closing the dialog. Each choice centers an unframed 20px icon vertically beside
+  its title and description.
 - MCP never pre-creates access. The person approves the client in their own browser. Creating a
   machine identity reveals its credential once with the matching public skill URL.
 - Each enabled machine row menu contains **Setup instructions**, **Rotate credential**, and
@@ -456,7 +461,9 @@ person, and machine identities, which hold their own credentials.
   areas outside that tint. Controls in the narrow rail stay horizontally centered. Desktop sidebar
   surfaces keep their existing shape.
   Only deliberate content surfaces scroll; the application shell, header, and navigation stay
-  fixed and do not use native document scrolling.
+  fixed and do not use native document scrolling. Scroll surfaces use a compact transparent track
+  and a rounded six-pixel thumb. The thumb stays quiet until hover, when it becomes slightly more
+  visible. Scrollbars never show an opaque default track or corner.
 - Inbox lists, Contacts lists and details, Agents pages, and Settings pages use the same 960 CSS
   pixel maximum content width on desktop. A conversation reader continues to use the full
   available mail area.
