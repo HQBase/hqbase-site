@@ -53,6 +53,11 @@ Draft-only indicators use the existing utility lanes and do not change the row g
 Restored complete recipients stay selected. Contact suggestions remain closed until you edit the
 active recipient.
 
+The composer shows the **To** field by default. A small down-arrow button beside it reveals the
+**Cc** and **Bcc** fields. If a saved or recovered draft already contains a Cc or Bcc recipient,
+HQBase reveals both optional fields when the composer opens. Once revealed, they stay visible for
+that composer session.
+
 When a valid draft has plain text but no formatted content, the composer safely converts the plain
 text for editing. Opening the draft does not save a new version by itself. Existing formatted
 content, including inline images, remains unchanged.
