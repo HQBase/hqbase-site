@@ -399,8 +399,10 @@ Use the compact height in dense tables and inline field-and-action rows. Keep th
 regular forms and on compact-screen form rows where the larger interaction target is useful. Shared
 dropdown fields use a 34px normal height and a 30px compact height. A direct action beside a field
 uses the same height as that field. Context-specific controls can keep a required layout or touch
-height. Keyboard focus on a bordered field changes its border color without adding a glow, ring, or
-focus shadow. Borderless interactive controls use a thin one-pixel outline so focus remains visible.
+height. Inputs, text areas, grouped inputs, search fields, and dropdown fields use the same neutral
+focus border in Light and Dark modes. Keyboard focus on a bordered field changes only this border
+color; it does not add a brand color, glow, ring, or focus shadow. Borderless interactive controls
+use a thin one-pixel neutral outline so focus remains visible.
 When a person creates a mailbox address, the field accepts the local part and selects from the email
 domains available for that flow. When only one domain is available, show it as a fixed suffix. The
 workspace-hostname field follows the same pattern with a subdomain and an available connected domain.
