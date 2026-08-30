@@ -268,9 +268,11 @@ The original HTML remains in customer storage; sanitization happens when the mes
   menu contains read or unread and Restore. It does not repeat star or unstar. The top toolbar
   actions always apply to the accessible conversation. Put compact **Reply** and **Forward** actions
   after every expanded message. Each expanded message also has one **More message actions** control
-  for Archive or Unarchive and **Move to Trash** or Restore on that exact message. Trash is not a
-  permanent delete. Use the larger Reply and Forward treatment after the final message; those
-  actions target that final message.
+  for Archive or Unarchive and **Move to trash** or Restore on that exact message. Trash is not a
+  permanent delete. A message moved to Trash disappears from conversation readers outside Trash.
+  The Trash reader shows only messages that are in Trash. If no visible messages remain after an
+  exact-message action, return to the folder list. Use the larger Reply and Forward treatment after
+  the final message; those actions target that final message.
 - Opening an unread conversation marks its accessible unread inbound messages read. Star and unstar
   affect every accessible message in the thread. Archive moves accessible Inbox and Catch-all
   messages without moving Sent copies. Trash moves the accessible messages represented by the
@@ -476,7 +478,8 @@ person, and machine identities, which hold their own credentials.
   the normal sidebar surface and stays square. Opening the drawer uses the standard dimmed Sheet
   backdrop. The existing background strips keep the device safe areas outside that tint. Controls
   in the narrow rail stay horizontally centered. Desktop sidebar surfaces keep their existing
-  shape.
+  shape. The account menu shows the current person's name and sign-out action. It does not repeat
+  their workspace role.
   Only deliberate content surfaces scroll; the application shell, header, and navigation stay
   fixed and do not use native document scrolling. Scroll surfaces use a compact transparent track
   and a rounded six-pixel thumb. The thumb stays quiet until hover, when it becomes slightly more
