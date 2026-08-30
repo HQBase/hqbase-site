@@ -411,7 +411,9 @@ uses the same height as that field. Context-specific controls can keep a require
 height. Inputs, text areas, grouped inputs, search fields, and dropdown fields use the same neutral
 focus border in Light and Dark modes. Keyboard focus on a bordered field changes only this border
 color; it does not add a brand color, glow, ring, or focus shadow. Borderless interactive controls
-use a thin one-pixel neutral outline so focus remains visible.
+use a thin one-pixel neutral outline so focus remains visible. The persistent composer message
+editor is the exception: keep its editing surface borderless without a separate focus outline, and
+use the caret to show the editing position.
 When a person creates a mailbox address, the field accepts the local part and selects from the email
 domains available for that flow. When only one domain is available, show it as a fixed suffix. The
 workspace-hostname field follows the same pattern with a subdomain and an available connected domain.
