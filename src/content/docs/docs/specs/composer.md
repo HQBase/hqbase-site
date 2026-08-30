@@ -150,10 +150,12 @@ after the final message remain shortcuts for the conversation's latest message.
 
 For a reply, HQBase:
 
-- puts the original sender in **To** while leaving To, Cc, and Bcc editable;
+- puts an inbound sender in **To**, or keeps the non-sender recipients of a selected outbound
+  message, while leaving To, Cc, and Bcc editable;
 - creates standards-compliant reply headers from the selected message;
 - places your new response first;
-- follows it with a timestamped attribution and a limited copy of the selected message; and
+- follows it with a timestamped attribution and a limited copy of the selected message, including
+  its safe stored quote history; and
 - creates both formatted HTML and conventional `>`-quoted plain text.
 
 Formatted quotes can keep safe links, tables, formatting, and supported images. Matching
@@ -165,9 +167,11 @@ copy. It adds the quote on the server only when sending, so the saved draft cont
 and a quote by itself cannot make an empty reply sendable.
 
 While writing a reply, the selected message appears below the new content as collapsed quoted
-context. A small borderless gray ellipsis at the left expands or collapses it. This preview is
-composer chrome: it is not copied into the draft body, and the server still creates the final reply
-quote from the exact selected message when sending.
+context. A small borderless gray ellipsis at the left expands or collapses the selected message and
+its complete stored quote chain in one step. The expanded chain uses a subtle left border and does
+not add another nested disclosure. This preview is composer chrome: it is not copied into the draft
+body, and the server still creates the final reply quote from the exact selected message when
+sending.
 
 ## Forward a message
 
