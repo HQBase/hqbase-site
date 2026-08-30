@@ -155,7 +155,7 @@ For a reply, HQBase:
 - creates standards-compliant reply headers from the selected message;
 - places your new response first;
 - follows it with timestamped attributions and a limited copy of every accessible conversation
-  message through the selected message; and
+  message through the selected message that has the same Trash state; and
 - creates both formatted HTML and conventional `>`-quoted plain text.
 
 Formatted quotes can keep safe links, tables, formatting, and supported images. Matching
@@ -167,16 +167,17 @@ copy. It adds the quote on the server only when sending, so the saved draft cont
 and a quote by itself cannot make an empty reply sendable.
 
 While writing a reply, the accessible conversation through the selected message appears below the
-new content as collapsed quoted context. Messages that arrived after the selected target are not
-included. A small borderless gray ellipsis at the left expands or collapses the complete chain in
-one step. The newest message appears first, the expanded chain uses a subtle left border, and it
-does not add another nested disclosure. Stored conversation messages stay at one visual level with
-quiet separators because this is a readable thread preview, not the serialized email quote. The
-plain-text email that HQBase sends still uses conventional nested `>` levels. When a message already
-contains quoted history that is also stored as separate conversation messages, HQBase does not
-repeat that history. This preview is composer chrome: it is not copied into the draft body, and the
-server creates the same bounded chain when sending while the selected message remains the
-reply-header target.
+new content as collapsed quoted context. The chain follows the selected message's Trash state:
+normal views exclude messages in Trash, and a reply from Trash includes only messages in Trash.
+Messages that arrived after the selected target are not included. A small borderless gray ellipsis
+at the left expands or collapses the complete chain in one step. The newest message appears first,
+the expanded chain uses a subtle left border, and it does not add another nested disclosure. Stored
+conversation messages stay at one visual level with quiet separators because this is a readable
+thread preview, not the serialized email quote. The plain-text email that HQBase sends still uses
+conventional nested `>` levels. When a message already contains quoted history that is also stored
+as separate conversation messages, HQBase does not repeat that history. This preview is composer
+chrome: it is not copied into the draft body, and the server creates the same bounded chain when
+sending while the selected message remains the reply-header target.
 
 ## Forward a message
 
