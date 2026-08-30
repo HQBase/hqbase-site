@@ -140,8 +140,8 @@ see or change mail that its connected user cannot access. A machine credential c
 agent's assigned mailbox access. You can give an MCP connection fewer abilities, but never more.
 
 Access changes take effect on the next request. With no mailbox access, messages, attachments,
-sender identities, exports, and mailbox details do not appear at all. Unassigned mail appears only
-to owners.
+sender identities, exports, and mailbox contents do not appear. Owners and admins can still see
+mailbox metadata that they need to manage access. Unassigned mail appears only to owners.
 
 HQBase records who performs sensitive actions such as changing access, deleting data, recovering
 an account, or managing sessions. These audit records do not contain email content, passwords,
