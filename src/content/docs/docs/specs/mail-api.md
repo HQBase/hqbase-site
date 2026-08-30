@@ -185,6 +185,10 @@ All paths below are available relative to `/api/v1` and `/api/v2`. New clients u
 | `POST /reply` | `mail:send` | Reply to an existing message. |
 | `POST /forward` | `mail:send` | Forward an existing message with optional staged and original attachments. |
 
+`GET /conversations` excludes messages in Trash unless `folder=trash`. With that filter, it uses
+only messages in Trash. The summary message, message count, unread count, star state, and attachment
+state use this same visible set.
+
 Mailbox access still applies after OAuth permission or machine-capability checks. Read access is
 required to receive mail content, **Handle mail** access is required for organization and sending
 actions, and Manager access is not granted by this API. **Handle mail** uses the internal value
