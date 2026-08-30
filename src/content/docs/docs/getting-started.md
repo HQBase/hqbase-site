@@ -3,16 +3,18 @@ title: Getting started
 description: Install HQBase in your Cloudflare account and create your workspace.
 ---
 
-HQBase runs in your Cloudflare account. Before you install it, you only need a paid Workers plan,
-an active R2 subscription, and a domain using Cloudflare DNS.
+HQBase runs in your Cloudflare account. A receive-only workspace can use Workers Free. Sending mail
+to external recipients requires Workers Paid. Every installation also needs an active R2
+subscription and a domain using Cloudflare DNS.
 
 ## What you need
 
 Complete these three steps in the Cloudflare account where HQBase will run:
 
-1. **Enable Workers Paid.** Review the
-   [Workers plans](https://developers.cloudflare.com/workers/platform/pricing/) and enable Workers
-   Paid for the account. This is separate from any Free, Pro, or Business plan attached to your
+1. **Choose whether HQBase will send mail.** Workers Free supports a receive-only workspace within
+   Cloudflare's free limits. To send mail to external recipients, review the
+   [Workers plans](https://developers.cloudflare.com/workers/platform/pricing/) and enable Workers Paid
+   for the account. This is separate from any Free, Pro, or Business plan attached to your
    domain.
 2. **Activate the R2 subscription.** In the Cloudflare dashboard, open **Storage & databases → R2
    → Overview** and complete the R2 checkout. R2 includes free monthly usage, but its subscription
@@ -22,8 +24,8 @@ Complete these three steps in the Cloudflare account where HQBase will run:
    review the imported DNS records, update the nameservers at your registrar, and wait for
    Cloudflare to mark the domain **Active**.
 
-You do not need to turn on Email Routing or Email Sending yourself. HQBase configures both after
-you give it permission during setup.
+You do not need to turn on Email Routing or Email Sending yourself. HQBase always configures Email
+Routing. It configures Email Sending when you select outbound sending during setup.
 
 ## Install HQBase
 
@@ -44,6 +46,10 @@ HQBase guides you through four steps:
 2. connect one or more email domains;
 3. create the workspace owner account;
 4. create your shared mailboxes, such as `support@example.com` or `hello@example.com`.
+
+Outbound sending is selected by default. Turn it off to finish setup as a receive-only workspace.
+You can enable sending later from **Settings → Domains** after the Cloudflare account has Workers
+Paid.
 
 Use a personal or company login address that will remain available if HQBase is offline. For
 example, if the workspace uses `example.com`, the owner could sign in with a Gmail address or an

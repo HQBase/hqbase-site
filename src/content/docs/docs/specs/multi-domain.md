@@ -69,6 +69,8 @@ in-app portal cutover.
 - Multiple addresses may share one mailbox. If addresses need different access, they must use
   different mailboxes.
 - Messages record the exact receiving and sending address identities.
+- A domain may operate in receive-only mode. Its addresses can receive mail, but HQBase does not
+  offer them as sending identities until Cloudflare Email Sending is ready for that domain.
 - A connected email domain cannot match any workspace user's Login email domain. HQBase enforces
   the exclusion in both directions: user creation rejects connected domains, and later domain
   connection rejects domains already used for Login emails.
@@ -84,9 +86,15 @@ explicit mailbox grants; there is no implicit future domain grant.
 
 Initial setup uses a short-lived Cloudflare OAuth grant held by the customer-owned Worker and
 supports active zones selected during Cloudflare consent. The portal, service origin, and every
-selected email domain are inspected and provisioned with retry-safe Cloudflare operations. HQBase
-revokes the grant and deletes its masked setup secret after setup completes. Additional domains,
-portal cutover, and service-origin changes require a fresh operation-specific OAuth grant. HQBase
-never asks an owner to paste a Cloudflare API token. Domain disablement preserves mailbox, address,
-and message history. Domain connection validates Login email independence before making Cloudflare
-changes.
+selected email domain are inspected and provisioned with retry-safe Cloudflare operations. An
+operator may skip outbound sending during setup. HQBase then requires receiving DNS and the
+catch-all Worker route, records the domain's sending state as `disabled`, does not require a default
+From mailbox, and blocks all send operations through that domain.
+
+Enabling sending later requires a fresh operation-specific OAuth grant. HQBase changes the domain
+to `ready` only after Cloudflare reports Email Sending ready. It then offers send-enabled addresses
+from that domain as sending identities. Additional domains, portal cutover, and service-origin
+changes also require a fresh operation-specific OAuth grant. HQBase revokes each grant after the
+operation and never asks an owner to paste a Cloudflare API token. Domain disablement preserves
+mailbox, address, and message history. Domain connection validates Login email independence before
+making Cloudflare changes.
