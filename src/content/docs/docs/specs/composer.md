@@ -202,9 +202,13 @@ disabled or an attachment is still uploading.
 New messages use a separate window on desktop and a full-screen composer on compact screens. The
 desktop window starts at the bottom-right, can be dragged by its header, and can be resized within
 the viewport. It keeps Minimize and Close controls and does not have a maximize control. Recipient
-and subject fields use subtle separators instead of large bright focus borders. Its editable
-message area uses the available flexible height, so unused space remains part of the editor and no
-dead area appears between the signature selector and the following quote, attachments, or footer.
+and subject fields use subtle separators instead of large bright focus borders. The message editor
+does not add a separate focus outline inside that borderless field group. The desktop window and
+the shared message editor use compact default heights, while the desktop window remains resizable.
+The authored message and signature use one scrolling surface. A long message scrolls before the
+signature and never overlaps it. Unused space remains part of the editor, so no dead area appears
+between the signature selector and the following quote, attachments, or footer. The signature
+editor uses the same compact editor height.
 
 Replies and forwards appear after the conversation on desktop and above it in a focused editor on
 compact screens. Opening an inline composer scrolls it into view and moves keyboard focus into its
