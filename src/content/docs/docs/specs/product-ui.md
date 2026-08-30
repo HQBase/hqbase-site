@@ -265,9 +265,12 @@ The original HTML remains in customer storage; sanitization happens when the mes
   below the trailing actions when it is long. A toolbar-colored surface and matching soft shadow
   prevent subject text from showing through those actions. **More actions** contains read or
   unread, archive or unarchive, and Trash. The unread action is named **Mark Unread**. In Trash, the
-  menu contains read or unread and Restore. It does not repeat star or unstar. Put compact **Reply**
-  and **Forward** actions after every expanded message and larger conversation-level actions after
-  the final message.
+  menu contains read or unread and Restore. It does not repeat star or unstar. The top toolbar
+  actions always apply to the accessible conversation. Put compact **Reply** and **Forward** actions
+  after every expanded message. Each expanded message also has one **More message actions** control
+  for Archive or Unarchive and **Move to Trash** or Restore on that exact message. Trash is not a
+  permanent delete. Use the larger Reply and Forward treatment after the final message; those
+  actions target that final message.
 - Opening an unread conversation marks its accessible unread inbound messages read. Star and unstar
   affect every accessible message in the thread. Archive moves accessible Inbox and Catch-all
   messages without moving Sent copies. Trash moves the accessible messages represented by the
