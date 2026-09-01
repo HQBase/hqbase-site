@@ -24,10 +24,10 @@ multi-domain administration.
   version they reviewed. The build cannot silently switch to another release, and later automatic
   builds stay on the approved version until the user approves another update. A custom-source setup
   must use its own CI or CLI deployment path. Only one update can start at a time.
-- A signed release carries and validates every release-managed Worker binding and migration that its
-  code requires. The release build restores this configuration before upload, including when the
-  previous stable updater runs the build. The current updater and release staging also confirm the
-  required bindings on Cloudflare's active Worker version.
+- A signed release carries and validates every release-managed Worker binding, migration, and asset
+  routing rule that its code requires. The release build restores this configuration before upload,
+  including when the previous stable updater runs the build. The current updater and release staging
+  also confirm the required configuration on Cloudflare's active Worker version.
 - The legal text in each repository controls if this summary differs from it.
 
 ## Boundaries
