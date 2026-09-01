@@ -58,9 +58,10 @@ storage that the deployment record marks as reused.
 
 ## What logs contain
 
-Logs and audit records may contain internal identifiers, operation names, results, durations,
-counts, and request IDs. They do not contain credentials, email addresses, subjects, message
-bodies, attachment names, or raw email.
+Logs and audit records may contain internal identifiers, fixed operation names, results, durations,
+counts, provider status and error codes, and request IDs when the provider supplies them. They do not
+contain credentials, authorization data, cookies, request headers or bodies, updater-loader values,
+email addresses, subjects, message bodies, attachment names, or raw email.
 
 The public health check reveals only basic availability. Detailed readiness and diagnostic results
 require an authenticated owner or admin.
@@ -71,6 +72,9 @@ HQBase verifies every public release before it changes your Cloudflare resources
 signature, product, downloaded file, installed version, and database compatibility. If something
 fails after the recovery checkpoint, the updater prints exact recovery commands instead of
 silently restoring data.
+
+For the HQBase 1.3.3 update-action failure, use the one-time procedure in
+[Recover the HQBase 1.3.3 repair action](/docs/guides/updates/#recover-the-hqbase-133-repair-action).
 
 ## Related guides
 

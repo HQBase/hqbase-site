@@ -21,12 +21,21 @@ multi-domain administration.
   unreleased changes on `main`. Only the signed-release workflow can advance it.
 - The in-app updater works only with the standard HQBase production build at the repository root.
   The first managed update can start through the historical `pnpm deploy` bootstrap. HQBase then
-  replaces that snapshot with a canonical updater whose source, digest, and protocol are in the
-  signed release record. This changes the Cloudflare build configuration, not the customer-owned
-  repository. When a user approves an update, HQBase locks the exact signed version they reviewed.
-  The build cannot silently switch to another release, and later automatic builds stay on the
-  approved version until the user approves another update. A custom-source setup must use its own
-  CI or CLI deployment path. Only one update can start at a time.
+  replaces that snapshot with one short, stable deploy command. A non-secret Workers Builds
+  variable named `HQBASE_UPDATER_LOADER` contains a verified loader for the updater whose source,
+  digest, and protocol are in the signed release record. Another non-secret variable locks the exact
+  signed version that the user reviewed. HQBase verifies the command, loader, and version before it
+  starts the build. This changes the Cloudflare build configuration, not the customer-owned
+  repository. The build cannot silently switch to another release, and later automatic builds stay
+  on the approved version until the user approves another update. A custom-source setup must use its
+  own CI or CLI deployment path. Only one update can start at a time.
+- HQBase reports a managed Workers Builds failure with a fixed operation name, bounded Cloudflare
+  status and error codes, and a request ID when Cloudflare supplies one. It never labels a confirmed
+  configuration or dispatch failure as unavailable authorization. It does not claim that a build
+  failed to start when Cloudflare returns an ambiguous dispatch result. Diagnostics never include a
+  grant, cookie, header, request body, updater-loader value, credential, or mail content. If an
+  installed updater cannot start its replacement, recovery begins outside that broken route through
+  the signed public release procedure. It does not patch a customer source repository.
 - A signed release carries and validates every release-managed Worker binding, migration, and asset
   routing rule that its code requires. The release build restores this configuration before upload,
   including when the oldest supported bootstrap runs the first build. If that bootstrap cannot
