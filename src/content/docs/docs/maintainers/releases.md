@@ -77,6 +77,13 @@ warning but does not invalidate an otherwise verified signed release.
 Manual staging is still available for a reviewed commit, but the signed-release workflow is the
 only path that publishes an official customer release.
 
+HQBase 1.3.4 has one reviewed compatibility exception. Its committed `hqbaseRelease` metadata pins
+`updaterCommit` to the HQBase 1.3.3 bootstrap commit and limits that pin with
+`updaterCommitVersion: 1.3.4`. The two bootstrap files must have identical bytes. This keeps the
+signed updater identity unchanged for a 1.3.3 installation whose current inline command already
+matches it. Packaging and public-release verification stop if the pin is missing, unavailable, or
+used for another version. Remove both fields before the next release.
+
 The official Deploy to Cloudflare button targets `HQBase/hqbase` at the `deploy` branch. Do not
 move that branch by hand. Moving it before publication fails closed because its committed product
 version is newer than the previous stable release. Publishing first would expose a new signed
