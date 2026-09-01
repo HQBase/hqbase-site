@@ -30,12 +30,16 @@ updates to the exact candidate. It proves that the candidate restores `MAIL_EVEN
 authenticated event WebSocket while the old bootstrap still omits the post-deploy database phase.
 It then completes the detected same-release repair through the canonical updater and proves that
 both migration ledgers and the final schema are healthy. The GitHub Release stays in draft until
-this passes.
+this passes. The WebSocket probe sends both the Cloudflare Access service-token headers and the
+authenticated HQBase session cookie on its upgrade request. A browser WebSocket does not add the
+service-token headers from Playwright's normal HTTP settings.
 
 Each signed-release run uses a new Worker name and new D1, R2, and Queue names. A failed first
 Worker deployment therefore cannot leave state that changes a later release test. The protected
 staging hostname remains stable and points to the Worker for the active run. Cleanup removes the
-exact recorded run resources, including an empty Worker service left by a failed first deployment.
+exact recorded run resources. Before cleanup, it reconciles an active run Worker into the manifest
+so the Worker is deleted before its bound Queues. It directly deletes a Worker service only when
+Cloudflare reports that the exact run Worker has no deployments. An unknown state fails closed.
 
 Retries, permanently failed queue jobs, unused-object cleanup, log redaction, and failure branches
 are covered by lower-level integration tests. Staging should not claim to prove behavior it does not
@@ -56,7 +60,8 @@ Use the HQBase staging Cloudflare account with:
 - Cloudflare Access in front of the staging app.
 
 Never use production email domains, data, or credentials. Wait for hostname changes by checking
-whether they are ready; do not guess with a fixed sleep.
+whether they are ready; do not guess with a fixed sleep. Workflows that use the same staging
+hostname must share one concurrency group so they cannot move the hostname at the same time.
 
 ## GitHub secrets and variables
 
