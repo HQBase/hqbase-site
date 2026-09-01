@@ -44,10 +44,11 @@ URL as a credential because anyone who has it can post to that channel.
    omits the post-deploy database phase. Staging then exercises the candidate's same-release
    canonical repair.
 6. Staging checks that the authenticated event WebSocket opens before and after database repair. It
-   also checks the active Worker's required bindings and asset routes, both D1 migration ledgers,
-   the final schema, preserved data, the installed database marker, the deployed app, sign-in,
-   mailbox access, diagnostics, backup, and restore. It waits until the public health response
-   reports the exact candidate version, so an old healthy Worker cannot pass the gate.
+   sends the Cloudflare Access service-token headers on the WebSocket upgrade itself. Staging also
+   checks the active Worker's required bindings and asset routes, both D1 migration ledgers, the
+   final schema, preserved data, the installed database marker, the deployed app, sign-in, mailbox
+   access, diagnostics, backup, and restore. It waits until the public health response reports the
+   exact candidate version, so an old healthy Worker cannot pass the gate.
 7. The workflow advances the `deploy` branch to the exact validated candidate commit. If
    publication fails while the release is still a draft, it restores the previous branch commit.
 8. The workflow publishes the draft only if those checks and the branch update pass.
