@@ -27,8 +27,9 @@ mail interface; owners and admins can still see the failed check in Settings.
 4. Leave the page open while HQBase pins, verifies, installs, and checks that exact release.
 5. When the new app is ready, choose when to reload it.
 
-HQBase revokes the temporary Cloudflare permission after the build starts. The replacement app
-never refreshes the page without asking you first.
+HQBase attempts to revoke the temporary Cloudflare permission after the build starts and always
+removes its local grant cookie. The replacement app never refreshes the page without asking you
+first.
 
 An installation created with an older Deploy to Cloudflare button can show **Finish installation
 repair** after its first update. Approve Cloudflare access once more. HQBase then replaces the old
@@ -40,13 +41,58 @@ a newer release while the update starts. Future automatic builds also stay on th
 you approve another update.
 
 In-app updates require the standard HQBase build setup at the repository root. HQBase accepts its
-historical `pnpm deploy` bootstrap and the signed HQBase updater command recorded by the product. If
-your production build enables `HQBASE_FORCE_SOURCE_DEPLOY`, uses another directory, or runs another
-deploy command, update it the same way you deploy your own source changes. This is usually your CI
-pipeline or a trusted local checkout.
+historical `pnpm deploy` bootstrap, the updater form used by HQBase 1.3.3, and the current short
+HQBase updater command. The short command reads the non-secret `HQBASE_UPDATER_LOADER` build
+variable. HQBase creates this verified loader from the immutable updater source and digest in the
+signed release record. If your production build enables `HQBASE_FORCE_SOURCE_DEPLOY`, uses another
+directory, or runs another deploy command, update it the same way you deploy your own source
+changes. This is usually your CI pipeline or a trusted local checkout.
 
 Only one update can start at a time. If an update is already starting, wait a moment and check
 again.
+
+## Recover the HQBase 1.3.3 repair action
+
+HQBase 1.3.3 can show **Invalid request body** after Cloudflare authorization when you select
+**Finish repair**. In this observed failure, the installed update action cannot start its
+replacement. Repeating authorization does not fix it. The installation remains in the repair state
+that HQBase detected after the earlier update.
+
+Use this recovery only if all these conditions are true:
+
+- HQBase reports version 1.3.3 and **Repair required**;
+- Workers Builds runs from the repository root;
+- `package.json` still defines `pnpm deploy` as `node scripts/release/deploy.mjs`;
+- `HQBASE_FORCE_SOURCE_DEPLOY` is not enabled; and
+- the customer source checkout does not contain custom deployment changes.
+
+For a custom-source installation, use its normal reviewed CI or local deployment process instead.
+
+After HQBase 1.3.4 is public, complete this one-time recovery:
+
+1. Open the production HQBase Worker in the Cloudflare dashboard, then open its Workers Builds
+   configuration.
+2. Record the current deploy command and the current value, or absence, of
+   `HQBASE_EXPECTED_RELEASE_VERSION`. Keep this record with the build log until repair is complete.
+3. Set the production deploy command to `pnpm deploy`.
+4. Set the plain Workers Builds variable `HQBASE_EXPECTED_RELEASE_VERSION` to `1.3.4`.
+5. Start one production build for `main`. Do not continue until the Worker reports HQBase 1.3.4.
+6. Return to **Settings → Updates** and select **Finish repair** once.
+7. Wait until HQBase no longer reports **Repair required**, then confirm that Connections loads and
+   that the live event connection opens.
+
+If the first build fails, stop. Keep its complete log and do not select **Finish repair**. The legacy
+updater prints the recorded Worker version and D1 bookmark when recovery instructions are required.
+Restore D1 only after you confirm a data problem because a restore can discard newer mail and other
+changes.
+
+The first build uses the installed legacy updater to verify and install the public signed HQBase
+1.3.4 release. It can deploy a new Worker version, apply normal D1 migrations, and record a recovery
+bookmark. The 1.3.4 action then creates a fresh checkpoint, installs the short managed command and
+`HQBASE_UPDATER_LOADER`, restores the release-managed Worker configuration, completes the pending
+post-deploy migration phase, and verifies the result. These steps change the customer-owned Worker,
+Workers Builds configuration, and D1 database. They do not patch, reset, or synchronize the
+customer source repository.
 
 ## What HQBase protects before updating
 
@@ -82,17 +128,19 @@ notes. Compatibility comes from this signed release data rather than a version h
 app.
 
 The signed release record also identifies the HQBase updater protocol, immutable source, and
-SHA-256 digest. HQBase pins that updater in the Cloudflare build before it starts. The updater
-verifies the signed record again, downloads the immutable archive from the official public
-repository, records the recovery checkpoint, applies compatible forward database changes,
-deploys, checks Cloudflare's deployment status, completes post-deploy database changes, and then
-records the installed release. A same-release repair records a fresh checkpoint before it completes
-an omitted post-deploy phase. The archive prepares and validates its required Worker configuration
-before upload, so an update from an older supported release cannot omit a new release-managed
-binding. The current updater also checks the required bindings and final migration ledger on
-Cloudflare. Before the build starts, HQBase records the exact signed version that you reviewed. The
-deploy command refuses a different version. HQBase keeps the reviewed version for later automatic
-builds until you approve another update.
+SHA-256 digest. Before a build starts, HQBase writes `HQBASE_UPDATER_LOADER` and the exact reviewed
+version to plain Workers Builds variables, installs the short managed command, and verifies those
+values. The loader verifies the immutable updater before it runs. The updater verifies the signed
+record again, downloads the immutable archive from the official public repository, records the
+recovery checkpoint, applies compatible forward database changes, deploys, checks Cloudflare's
+deployment status, completes post-deploy database changes, and then records the installed release.
+A same-release repair records a fresh checkpoint before it completes an omitted post-deploy phase.
+The archive prepares and validates its required Worker configuration before upload, so an update
+from an older supported release cannot omit a new release-managed binding. The current updater also
+checks the required bindings and final migration ledger on Cloudflare. The deploy command refuses a
+different version. HQBase keeps the reviewed version for later automatic builds until you approve
+another update. HQBase reports a Cloudflare configuration or build-dispatch failure as the exact
+failed operation. It does not report that failure as unavailable authorization.
 
 Release archives, signed records, checksums, and notes are public GitHub Release assets. See
 [Publishing a release](/docs/maintainers/releases/) for the maintainer workflow.

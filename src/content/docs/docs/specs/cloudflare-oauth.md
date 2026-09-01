@@ -43,8 +43,9 @@ code, receives an access or refresh token, or calls customer APIs.
 
 The customer-owned Worker generates the PKCE verifier and exchanges the returned code directly
 with Cloudflare. Runtime grants stay in short-lived encrypted HTTP-only cookies. HQBase may carry
-an installation grant as a masked Worker secret through initial setup. HQBase revokes the grant and
-removes temporary credentials after the authorized operation completes. No refresh token is stored.
+an installation grant as a masked Worker secret through initial setup. HQBase attempts to revoke
+the grant and removes temporary credentials after the authorized operation completes. No refresh
+token is stored.
 
 The relay presents an HQBase-owned confirmation screen before redirecting to Cloudflare. The form
 posts only the signed relay state. Continuation requires a same-origin form POST with the exact
@@ -74,6 +75,13 @@ HQBase does not expose a manual API-token fallback. If an organization blocks th
 client, the affected flow stops with a specific administrator-facing recovery message that links
 to customer-managed OAuth client setup. Invalid or incomplete customer-managed configuration fails
 closed before Cloudflare authorization begins.
+
+A successful callback and a later Cloudflare API rejection are different states. HQBase never
+labels a Workers Builds configuration or dispatch failure as unavailable authorization. It attempts
+to revoke the temporary grant after either result and always removes the grant cookie. It reports
+the failed operation with bounded Cloudflare status and error-code data, plus a request ID when
+Cloudflare supplies one. It does not return or log the grant, request headers, request body, or
+updater-loader value.
 
 ## Security properties
 
