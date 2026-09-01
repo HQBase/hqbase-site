@@ -33,7 +33,10 @@ multi-domain administration.
   finish a current deployment phase, the installed app detects the exact unfinished phase and offers
   a same-release repair through the canonical updater. The repair creates a new recovery checkpoint
   before it changes D1. The current updater and release staging also confirm the required
-  configuration and final migration state on Cloudflare.
+  configuration and final migration state on Cloudflare. The updater divides its read-only schema
+  inspection into statements with no more than five compound `SELECT` terms, then validates the
+  combined result. A failed inspection shows the Cloudflare diagnostic and stops before repair. It
+  does not log credentials or mail content.
 - Installation records an unfinished create before it asks Cloudflare to create each D1 database,
   R2 bucket, or Queue. It sends each create request once. If Cloudflare accepts the create before
   its control-plane read can find the resource, HQBase retries only the exact identity read for a
