@@ -227,6 +227,11 @@ composers form one bottom-right row, cannot be dragged until restored, and keep 
 Opening a saved reply or forward uses the same conversation-first layout. Composer chrome respects
 device safe areas.
 
+Each open composer initializes its exact new-message, draft, reply, or forward target once. A
+mailbox refresh, draft-feed refresh, event reconnection, or fallback synchronization can update the
+surrounding interface, but it does not initialize that composer again. Unsaved input stays in place,
+and a new-message composer creates no more than one draft for its session.
+
 The **To**, **Cc**, and **Bcc** fields show saved contacts and recent accessible outbound recipients
 while the person types. Available From mailboxes can appear as separate suggestions labelled
 **Mailbox**. The fields validate completed addresses after blur and before save or send, not after

@@ -48,6 +48,7 @@ Before changing your installation, HQBase:
 
 - verifies that the release was signed by HQBase and has not been changed;
 - confirms that it is for HQBase and works with your installed version and database;
+- validates that the release build contains every required Worker binding and migration;
 - records the active Worker version; and
 - creates a D1 Time Travel bookmark.
 
@@ -76,9 +77,12 @@ app.
 
 The production build downloads the immutable archive from the official public repository, records
 the recovery checkpoint, applies compatible forward database changes, deploys, checks Cloudflare's
-deployment status, and records the installed release. Before the build starts, HQBase records the
-exact signed version that you reviewed. The deploy command refuses a different version. HQBase
-keeps the reviewed version for later automatic builds until you approve another update.
+deployment status, completes post-deploy database changes, and then records the installed release.
+The archive prepares and validates its required Worker configuration before upload, so an update
+from an older supported release cannot omit a new release-managed binding. The current updater also
+checks the required bindings on Cloudflare's active Worker version. Before the build starts, HQBase
+records the exact signed version that you reviewed. The deploy command refuses a different version.
+HQBase keeps the reviewed version for later automatic builds until you approve another update.
 
 Release archives, signed records, checksums, and notes are public GitHub Release assets. See
 [Publishing a release](/docs/maintainers/releases/) for the maintainer workflow.
