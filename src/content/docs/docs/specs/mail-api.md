@@ -472,6 +472,11 @@ Clients reconnect with bounded exponential backoff. The server can close a conne
 including for deployment, authentication renewal, or resource control. An `Upgrade` request that
 does not request `websocket` returns `426 WEBSOCKET_UPGRADE_REQUIRED`.
 
+If the event service is not configured or cannot accept the upgrade, an authenticated request
+returns `503 EVENT_SERVICE_UNAVAILABLE` or `503 EVENT_CONNECTION_FAILED` with an `X-Request-Id`.
+The server records only a stable diagnostic code and the request ID. It does not log credentials,
+mail content, or request headers. This failure does not stop the HTTP synchronization journals.
+
 A connected client can send the exact text frame `ping`; the server replies with the exact text
 frame `pong`. Clients can use this application heartbeat to detect a connection that stopped
 delivering data. The heartbeat carries no mail or authentication data. A client closes and
@@ -486,6 +491,10 @@ a reconnect; the next successful connection drains all feeds. Normal socket reco
 successful fallback synchronization stay silent. The web app shows a **Connection lost** dialog
 only after fallback synchronization also fails, which means that neither path is available.
 Recovery closes the dialog automatically.
+
+Socket setup, reconnection, and fallback synchronization do not replace active local input. In
+particular, they do not reinitialize an open composer, discard unsaved edits, or create another
+draft for the same composer session.
 
 HQBase routes authenticated connections through a hibernating Durable Object. Successful message,
 draft, mailbox, and mailbox-access mutations notify it after the durable database write. If a
