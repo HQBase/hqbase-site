@@ -86,4 +86,6 @@ policy.
 
 Each run uploads only its non-secret deployment record, then removes its temporary Cloudflare
 resources. If cleanup fails, use that record to identify the exact resources; never delete by a
-broad name pattern.
+broad name pattern. Resource creation can briefly precede control-plane visibility. Staging must
+retry exact identity reads without repeating a create request, and it must keep ambiguous ownership
+fail-closed if the bounded verification period expires.
