@@ -34,6 +34,12 @@ multi-domain administration.
   a same-release repair through the canonical updater. The repair creates a new recovery checkpoint
   before it changes D1. The current updater and release staging also confirm the required
   configuration and final migration state on Cloudflare.
+- Installation records an unfinished create before it asks Cloudflare to create each D1 database,
+  R2 bucket, or Queue. It sends each create request once. If Cloudflare accepts the create before
+  its control-plane read can find the resource, HQBase retries only the exact identity read for a
+  bounded period. It records ownership only after that read matches. If verification still fails,
+  it keeps the fail-closed unfinished state for explicit recovery instead of recreating, adopting,
+  or deleting an unverified resource.
 - The legal text in each repository controls if this summary differs from it.
 
 ## Boundaries
