@@ -32,6 +32,11 @@ It then completes the detected same-release repair through the canonical updater
 both migration ledgers and the final schema are healthy. The GitHub Release stays in draft until
 this passes.
 
+Each signed-release run uses a new Worker name and new D1, R2, and Queue names. A failed first
+Worker deployment therefore cannot leave state that changes a later release test. The protected
+staging hostname remains stable and points to the Worker for the active run. Cleanup removes the
+exact recorded run resources, including an empty Worker service left by a failed first deployment.
+
 Retries, permanently failed queue jobs, unused-object cleanup, log redaction, and failure branches
 are covered by lower-level integration tests. Staging should not claim to prove behavior it does not
 exercise.
@@ -44,7 +49,8 @@ dedicated automation.
 Use the HQBase staging Cloudflare account with:
 
 - app and email hostnames used only for staging;
-- the stable `hqbase-e2e-staging` Worker name and new D1, R2, and queue resources for each run;
+- the stable `hqbase-e2e-staging` Worker name for manual staging;
+- run-specific Worker, D1, R2, and Queue names for signed-release staging;
 - a separate Cloudflare API token with only the permissions staging needs;
 - secrets stored in the GitHub `hqbase-staging` Environment; and
 - Cloudflare Access in front of the staging app.

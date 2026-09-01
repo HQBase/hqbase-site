@@ -40,6 +40,9 @@ multi-domain administration.
   bounded period. It records ownership only after that read matches. If verification still fails,
   it keeps the fail-closed unfinished state for explicit recovery instead of recreating, adopting,
   or deleting an unverified resource.
+- A Cloudflare Worker service that has no deployment is an uninstalled Worker, not an active
+  release. The canonical updater can initialize this exact state after a failed first deployment.
+  It continues to fail closed for every other unexpected Worker inspection error.
 - The legal text in each repository controls if this summary differs from it.
 
 ## Boundaries
