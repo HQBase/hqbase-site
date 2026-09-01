@@ -58,6 +58,10 @@ HQBase 1.3.3 can show **Invalid request body** after Cloudflare authorization wh
 replacement. Repeating authorization does not fix it. The installation remains in the repair state
 that HQBase detected after the earlier update.
 
+HQBase 1.3.4 keeps the same verified updater identity as 1.3.3 for this recovery. An installation
+whose current updater command already has that identity can install 1.3.4 through the normal update
+action. Use the steps below only if the action still reports **Invalid request body**.
+
 Use this recovery only if all these conditions are true:
 
 - HQBase reports version 1.3.3 and **Repair required**;
