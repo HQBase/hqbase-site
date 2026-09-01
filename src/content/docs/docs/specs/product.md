@@ -19,15 +19,21 @@ multi-domain administration.
 - The official Deploy to Cloudflare button clones the canonical repository's `deploy` branch. That
   branch identifies the exact source commit of the latest signed public release and never follows
   unreleased changes on `main`. Only the signed-release workflow can advance it.
-- The in-app updater works only with the standard HQBase production build: the repository root and
-  the managed `pnpm deploy` command. When a user approves an update, HQBase locks the exact signed
-  version they reviewed. The build cannot silently switch to another release, and later automatic
-  builds stay on the approved version until the user approves another update. A custom-source setup
-  must use its own CI or CLI deployment path. Only one update can start at a time.
+- The in-app updater works only with the standard HQBase production build at the repository root.
+  The first managed update can start through the historical `pnpm deploy` bootstrap. HQBase then
+  replaces that snapshot with a canonical updater whose source, digest, and protocol are in the
+  signed release record. This changes the Cloudflare build configuration, not the customer-owned
+  repository. When a user approves an update, HQBase locks the exact signed version they reviewed.
+  The build cannot silently switch to another release, and later automatic builds stay on the
+  approved version until the user approves another update. A custom-source setup must use its own
+  CI or CLI deployment path. Only one update can start at a time.
 - A signed release carries and validates every release-managed Worker binding, migration, and asset
   routing rule that its code requires. The release build restores this configuration before upload,
-  including when the previous stable updater runs the build. The current updater and release staging
-  also confirm the required configuration on Cloudflare's active Worker version.
+  including when the oldest supported bootstrap runs the first build. If that bootstrap cannot
+  finish a current deployment phase, the installed app detects the exact unfinished phase and offers
+  a same-release repair through the canonical updater. The repair creates a new recovery checkpoint
+  before it changes D1. The current updater and release staging also confirm the required
+  configuration and final migration state on Cloudflare.
 - The legal text in each repository controls if this summary differs from it.
 
 ## Boundaries

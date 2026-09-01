@@ -24,9 +24,13 @@ Each run checks:
 - operator diagnostics; and
 - backup and restore with a populated D1 database.
 
-The signed-release workflow adds one critical update test: it installs the previous stable release,
-creates data, updates through the normal customer path to the exact candidate, and repeats the
-checks. The GitHub Release stays in draft until this passes.
+The signed-release workflow adds one critical update test: it uses the oldest supported bootstrap
+to install the previous stable release, creates data, recreates the legacy configuration gap, and
+updates to the exact candidate. It proves that the candidate restores `MAIL_EVENTS` and the
+authenticated event WebSocket while the old bootstrap still omits the post-deploy database phase.
+It then completes the detected same-release repair through the canonical updater and proves that
+both migration ledgers and the final schema are healthy. The GitHub Release stays in draft until
+this passes.
 
 Retries, permanently failed queue jobs, unused-object cleanup, log redaction, and failure branches
 are covered by lower-level integration tests. Staging should not claim to prove behavior it does not

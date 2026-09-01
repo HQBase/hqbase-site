@@ -38,13 +38,16 @@ URL as a credential because anyone who has it can post to that channel.
 3. It creates and signs two small release records: one for the version and one for the stable
    channel.
 4. It uploads the records and archive to a draft GitHub Release named `vX.Y.Z`.
-5. Disposable staging installs the previous stable release, creates a workspace, and uses that
-   release's updater to install the exact candidate. This tests the code that a real existing
-   installation uses, not the candidate's newer updater.
-6. Staging checks the active Worker's required bindings and asset routes, an authenticated event
-   WebSocket, the installed database marker, the deployed app, sign-in, mailbox access, diagnostics,
-   backup, and restore. It waits until the public health response reports the exact candidate version,
-   so an old healthy Worker cannot pass the gate.
+5. Disposable staging uses the oldest supported bootstrap to install the previous stable release,
+   creates data, reproduces its legacy Worker configuration, and installs the exact candidate. It
+   must prove that the candidate restores the `MAIL_EVENTS` binding while the old bootstrap still
+   omits the post-deploy database phase. Staging then exercises the candidate's same-release
+   canonical repair.
+6. Staging checks that the authenticated event WebSocket opens before and after database repair. It
+   also checks the active Worker's required bindings and asset routes, both D1 migration ledgers,
+   the final schema, preserved data, the installed database marker, the deployed app, sign-in,
+   mailbox access, diagnostics, backup, and restore. It waits until the public health response
+   reports the exact candidate version, so an old healthy Worker cannot pass the gate.
 7. The workflow advances the `deploy` branch to the exact validated candidate commit. If
    publication fails while the release is still a draft, it restores the previous branch commit.
 8. The workflow publishes the draft only if those checks and the branch update pass.
@@ -94,10 +97,13 @@ Local tests must cover:
 - an update when the same version is already installed;
 - supported and unsupported source versions;
 - bad signatures and checksum mismatches; and
-- preparation of required Worker bindings and asset routing rules when a supported older updater
-  supplies the deployment configuration;
+- preparation of required Worker bindings and asset routing rules when the oldest supported
+  bootstrap supplies the deployment configuration;
+- exact detection and repair of each supported post-deploy migration prefix, with a fresh recovery
+  checkpoint and an idempotent same-release retry;
 - failure handling and the recovery instructions shown to an operator.
 
-Release staging must run the candidate through the previous stable release's real updater and pass
-the full check list of step 6 above. Receiving real public email through Cloudflare Email Routing
-remains a separate candidate check until dedicated automation exists.
+Release staging must run the previous stable application and the candidate through the oldest
+supported real bootstrap, then finish through the signed canonical updater and pass the full check
+list of step 6 above. Receiving real public email through Cloudflare Email Routing remains a
+separate candidate check until dedicated automation exists.
