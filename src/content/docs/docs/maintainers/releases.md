@@ -37,10 +37,13 @@ URL as a credential because anyone who has it can post to that channel.
 3. It creates and signs two small release records: one for the version and one for the stable
    channel.
 4. It uploads the records and archive to a draft GitHub Release named `vX.Y.Z`.
-5. Disposable staging installs the previous stable release, creates a workspace, and updates it to
-   the exact candidate through the normal customer update path. It waits until the public health
-   response reports that exact candidate version, so an old healthy Worker cannot pass the gate.
-6. Staging checks the deployed app, sign-in, mailbox access, diagnostics, backup, and restore.
+5. Disposable staging installs the previous stable release, creates a workspace, and uses that
+   release's updater to install the exact candidate. This tests the code that a real existing
+   installation uses, not the candidate's newer updater.
+6. Staging checks the active Worker's required bindings, an authenticated event WebSocket, the
+   installed database marker, the deployed app, sign-in, mailbox access, diagnostics, backup, and
+   restore. It waits until the public health response reports the exact candidate version, so an old
+   healthy Worker cannot pass the gate.
 7. The workflow advances the `deploy` branch to the exact validated candidate commit. If
    publication fails while the release is still a draft, it restores the previous branch commit.
 8. The workflow publishes the draft only if those checks and the branch update pass.
@@ -90,8 +93,10 @@ Local tests must cover:
 - an update when the same version is already installed;
 - supported and unsupported source versions;
 - bad signatures and checksum mismatches; and
+- preparation of required Worker bindings when a supported older updater supplies the deployment
+  configuration;
 - failure handling and the recovery instructions shown to an operator.
 
-Release staging must run the candidate through the normal customer update path from the previous
-stable release and pass the full check list of step 6 above. Receiving real public email through
-Cloudflare Email Routing remains a separate candidate check until dedicated automation exists.
+Release staging must run the candidate through the previous stable release's real updater and pass
+the full check list of step 6 above. Receiving real public email through Cloudflare Email Routing
+remains a separate candidate check until dedicated automation exists.
