@@ -37,6 +37,11 @@ HQBase waits briefly while you type, then saves changes in order. Local crash re
 work that has not reached the server yet. If two browser tabs edit the same draft, the older copy
 cannot overwrite the newer version without a conflict.
 
+The database checks the expected version in the save itself. A draft involved in a pending or
+uncertain send cannot be edited, discarded, or sent again. If the provider accepted a send but
+storage is still incomplete, retrying that same operation completes storage without another
+delivery. An uncertain provider result stays blocked for investigation.
+
 Returning an empty editor to its last saved state cancels any pending save and shows **Draft
 saved**.
 
@@ -143,6 +148,10 @@ content-ID attachment when it sends. SVG and other active image formats cannot b
 Plain-text output uses the image's alternative text and keeps the surrounding text.
 
 ## Reply to the right message
+
+For inbound mail, the default recipient is the validated `Reply-To` address list when present,
+otherwise the sender. You can change the recipients before sending. Existing messages without
+stored `Reply-To` information continue to use the sender.
 
 Every expanded message has **Reply** and **Forward** actions. Choosing one targets that exact
 message, including a message revealed from behind the earlier-message divider. The larger actions
@@ -304,3 +313,6 @@ Apple Mail, Thunderbird, Outlook, and mobile web rendering remain human release-
 HQBase does not report them as automated guarantees.
 
 </details>
+
+The draft list displays 50 rows at first. **Load more drafts** adds 50 rows.
+Filters apply to the full synchronized draft set. Opening a draft keeps its editor state.
