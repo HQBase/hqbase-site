@@ -175,7 +175,10 @@ The most limited result wins. For example, an agent can work with `support@examp
 connected person can also access that mailbox.
 
 Access changes apply to the next request. This includes a revoked connection, changed mailbox
-access, banned user, changed role, or ended session. HQBase never sends passwords, app secrets, or
+access, banned user, or changed role. Tokens without `offline_access` also require the approving
+browser session. With `offline_access` in the token and current consent, a client can refresh its
+tokens after browser expiry or sign-out. Revoke the connection in **Settings > Connections** to
+stop that access. Password reset also revokes OAuth tokens. HQBase never sends passwords, app secrets, or
 browser session cookies to the AI agent. Logs and audit records do not contain access tokens or
 email content.
 
