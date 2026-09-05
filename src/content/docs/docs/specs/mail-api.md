@@ -128,6 +128,7 @@ reverse-domain scheme with no authority component, for example `com.example.mail
 | `mail:read` | List visible mailboxes and conversations, search and open mail, render message HTML, and download attachments. |
 | `mail:write` | Trust a sender's remote media and mark mail read or unread, add or remove stars, archive or unarchive mail, move it to Trash, and restore it. |
 | `mail:send` | Manage drafts and draft attachments, send new mail, reply, and forward. |
+| `signatures:manage` | List, create, change, and delete signatures within the person's current management access. |
 | `offline_access` | Ask the authorization server for an optional refresh token. It is not an API endpoint permission. |
 
 For a machine credential, `mail:read`, `mail:write`, and `mail:send` are credential capabilities,
@@ -135,8 +136,14 @@ not OAuth permissions. `offline_access` never applies to a machine credential.
 
 OAuth tokens are further limited by the connected person's current account and mailbox access.
 Machine credentials are limited by the agent's capabilities and exact mailbox grants. The most
-limited result wins. Revoking consent, ending a session, banning a person, requiring password
-setup, disabling an agent, or changing mailbox access takes effect on the next request.
+limited result wins. Revoking consent, banning a person, requiring password setup, disabling an
+agent, or changing mailbox access takes effect on the next request. Tokens with `offline_access`
+in both the token and current consent can outlive the approving browser session. Browser sign-out
+can invalidate an access token; the client can use its refresh token to continue. Tokens without
+`offline_access` require an active approving session. Password reset revokes all OAuth tokens and
+approvals.
+Use **Settings > Connections** to revoke an app's access. Offline access does not extend the
+browser session or remove the access-token and refresh-token expiry limits.
 
 HQBase rotates refresh tokens. A second matching refresh request that uses the previous token
 within 30 seconds returns the same rotated token response. Reuse after that window remains a replay
@@ -232,6 +239,14 @@ An unknown label returns `404 LABEL_NOT_FOUND`; a label never broadens mailbox a
 
 ### Labels
 
+V2 includes label membership in message, thread, conversation, and message-change responses.
+V1 includes the same fields when the request has `includeLabels=true`. The parameter is supported
+on `GET /messages`, `/messages/{id}`, `/messages/{id}/thread`, `/conversations`, and `/changes`.
+Message action responses also accept this option. Message next-page links keep the option.
+Without that exact value, v1 keeps its existing response shape. This parameter does not filter the
+changes feed or change its cursor. Draft responses include labels on both versions without an
+opt-in parameter.
+
 Labels are workspace organization, not folders or access controls. `GET /labels` is available to
 human OAuth and machine mailbox clients with `mail:read`. A caller with `mail:write` can add or remove
 an existing label only where its live mailbox grant permits mail organization. Conversation label
@@ -255,8 +270,33 @@ selected mode also requires an ID. Draft responses include the saved mode and sa
 
 Direct send, reply, and forward requests accept the same optional object. When it is present, HQBase
 resolves and snapshots the signature before message assembly. When it is omitted, the supplied body
-is unchanged. This preserves existing clients. Signature management remains in session-authenticated
-installed-app routes.
+is unchanged. This preserves existing clients.
+
+Draft inputs use `SignatureSelection`; draft responses use `SignatureSnapshot`. The shared
+`DraftFields` schema has no signature property. A snapshot can have mode `selected` with a null ID
+after signature deletion. The saved content remains in the draft. A save without a signature
+selection keeps the snapshot when the From address is unchanged. Changing the From address resolves
+that deleted selection through the automatic rules.
+
+Signature management is available on both versions with the separate `signatures:manage` OAuth
+permission, or a browser session. `mail:send` alone does not permit management. Machine credentials
+cannot manage signatures. The client registration must allow the management permission. Existing
+grants need new consent for that permission.
+
+| Endpoint | Result |
+| --- | --- |
+| `GET /signatures/manage` | List signatures the person can manage. |
+| `POST /signatures` | Create a signature; return `201`. |
+| `PATCH /signatures/{id}` | Change a signature; return `200`. |
+| `DELETE /signatures/{id}` | Delete a signature; return `204`. |
+
+Create accepts `name`, `html`, `scope: {type, id}`, and optional `isDefault`. Scope type is `user`,
+`mailbox`, or `domain`. Update accepts one or more of `name`, `html`, and `isDefault`. A person can
+manage only their own personal signatures, mailbox signatures where they have Manager access, and
+domain signatures if they are an owner or admin. The existing sanitizer, inline-image limits, and
+content-free audit records apply. HTML input is limited to 400,000 characters. Invalid content returns
+`400 SIGNATURE_INVALID`; denied access returns `403 SIGNATURE_FORBIDDEN`; a missing signature returns
+`404 SIGNATURE_NOT_FOUND`; a duplicate name within the scope returns `409 SIGNATURE_NAME_CONFLICT`.
 
 ### Message actions
 
