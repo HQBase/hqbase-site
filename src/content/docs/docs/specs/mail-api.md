@@ -482,7 +482,11 @@ frame `pong`. Clients can use this application heartbeat to detect a connection 
 delivering data. The heartbeat carries no mail or authentication data. A client closes and
 reconnects a socket that does not answer within its heartbeat deadline.
 
-The web app polls only while its event socket is unavailable. A successful fallback refresh keeps
+The web app checks synchronization state every two minutes while its event socket is connected,
+so a lost wake-up does not need to wait for the socket lease to end. These checks keep loaded
+conversation pages and active composer input. Draft refreshes read the draft journal after one
+initial snapshot; access changes start a fresh snapshot. While the socket is unavailable,
+a successful fallback refresh keeps
 the app usable while it reconnects. A failed fallback refresh means that neither live events nor
 the HTTP API is available. Opening a socket stops fallback polling and drains the synchronization
 feeds again. A connected socket can miss a wake-up if notification delivery fails. Another event
@@ -510,15 +514,32 @@ JSON requests use `Content-Type: application/json`. Draft attachment uploads use
 `multipart/form-data`. List endpoints use the documented query parameters in the OpenAPI document;
 message and conversation cursors are opaque and clients must return them unchanged.
 
+JSON bodies are limited to 2 MiB before parsing. Draft upload requests are limited to 26 MiB,
+including multipart metadata; attachment content remains limited to 25 MiB. An oversized request
+returns `413 REQUEST_TOO_LARGE`. A JSON request with another media type returns
+`415 UNSUPPORTED_MEDIA_TYPE`. Unsafe session-authenticated methods require an `Origin` equal to
+the request URL's origin. A missing, null, or different origin returns `403 ORIGIN_FORBIDDEN`.
+Bearer-token clients do not need an origin header.
+
 JSON errors have an `error` object with stable `code` and human-readable `message` fields. A missing
 or invalid token returns `401`. A valid token without the required permission returns `403`.
 Authentication errors include a `WWW-Authenticate` challenge containing the required scope and a
 link to the protected-resource metadata. Every response includes `X-Request-Id`; API JSON responses
 are not stored by shared caches.
 
-Sending, replying, and forwarding are not idempotent. A client that repeats any of these requests
-can send more than once and must not retry it blindly. State and draft operations should still use
-the returned state or draft version to avoid overwriting newer work.
+Sending, replying, and forwarding accept an optional `idempotencyKey` of up to 100 characters.
+Reuse that key only for the same request and principal. A saved draft also identifies one send
+operation. A repeated identified operation never calls the provider again: it returns the stored
+result, completes an accepted operation's storage, or reports that its delivery is still pending
+or uncertain. If retention removed the sent message, the completed operation returns
+`410 SEND_RESULT_UNAVAILABLE` and is not sent again. A different request under the same key returns
+a conflict. Without a draft or key,
+a repeated request can still send more than once and must not be retried blindly. State and draft
+operations use the returned state or draft version to avoid overwriting newer work.
+
+Message detail includes an optional `replyTo` address list. Replies use it when no explicit
+recipient list is supplied. Full plain-text message detail is loaded from R2 when necessary;
+search covers the first 256 KiB of plain text plus the existing searchable headers and snippet.
 
 Clients use the changes feed for normal message synchronization and the event WebSocket only to
 wake that process sooner. They still use full message and conversation listings for bootstrap,
