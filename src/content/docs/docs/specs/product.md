@@ -81,3 +81,10 @@ multi-domain administration.
 - An admin can manage the workspace and grant themselves access to any mailbox, but has no implicit
   mailbox or unassigned catch-all access. Only an owner can manage owner membership and owner
   sessions.
+- A role change or user removal must leave at least one active owner. The database checks this
+  condition in the mutation, including when several requests arrive together.
+- Inbound mail becomes complete only after its body and attachments are stored. A retry must not
+  treat a partially stored message as a completed delivery. Full plain-text bodies stay retrievable
+  from R2; D1 stores a byte-bounded search projection when the text is large.
+- Session-authenticated writes require the request's own origin. Bearer authentication does not
+  depend on browser origin headers. JSON and upload requests have byte limits before parsing.
