@@ -524,8 +524,9 @@ Bearer-token clients do not need an origin header.
 JSON errors have an `error` object with stable `code` and human-readable `message` fields. A missing
 or invalid token returns `401`. A valid token without the required permission returns `403`.
 Authentication errors include a `WWW-Authenticate` challenge containing the required scope and a
-link to the protected-resource metadata. Every response includes `X-Request-Id`; API JSON responses
-are not stored by shared caches.
+link to the protected-resource metadata. Every response includes `X-Request-Id`. Principal-specific
+API JSON responses use `Cache-Control: no-store`, so browser and shared caches must not retain
+one principal's response for use after an identity change.
 
 Sending, replying, and forwarding accept an optional `idempotencyKey` of up to 100 characters.
 Reuse that key only for the same request and principal. A saved draft also identifies one send

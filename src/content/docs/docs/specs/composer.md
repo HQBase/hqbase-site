@@ -38,9 +38,10 @@ work that has not reached the server yet. If two browser tabs edit the same draf
 cannot overwrite the newer version without a conflict.
 
 The database checks the expected version in the save itself. A draft involved in a pending or
-uncertain send cannot be edited, discarded, or sent again. If the provider accepted a send but
-storage is still incomplete, retrying that same operation completes storage without another
-delivery. An uncertain provider result stays blocked for investigation.
+uncertain send cannot be edited, discarded, or started as a new delivery. Retrying the same
+identified operation remains allowed. If the provider accepted a send but storage is still
+incomplete, the retry completes storage without another delivery. An uncertain provider result
+stays blocked for investigation.
 
 Returning an empty editor to its last saved state cancels any pending save and shows **Draft
 saved**.
