@@ -64,7 +64,7 @@ multi-domain administration.
   restores a database. Each update still needs the normal review and Cloudflare authorization.
 - Nightly offers signed candidates from the same public repository. Its discovery record is
   separate from `stable.json`. A missing Nightly record falls back to Stable; a bad signature stops
-  the check. The newer compatible release is selected, without a version downgrade.
+  the check. The newer release is selected. Incompatible updates and version downgrades are blocked.
 - A return to Stable keeps the installed version until Stable catches up. The UI states this when
   the stable version is older. Database recovery stays a separate action.
 - Each candidate has a unique, increasing `X.Y.Z` version, even if it never becomes stable. This
@@ -73,9 +73,10 @@ multi-domain administration.
   records identify the same source archive and updater. The selected channel is stored under
   `update_channel` in the existing settings table, independently of the installed release marker.
 - Candidate publication creates a GitHub prerelease and updates only the signed Nightly pointer.
-  It cannot move `deploy` or GitHub Latest. Stable promotion selects an existing candidate, verifies
+  It cannot move `deploy` or GitHub Latest, and it does not publish `stable.json` on the candidate.
+  Stable promotion selects an existing candidate, verifies
   its signature, archive digest and source commit, and preserves its version and all archive bytes.
-  Only promotion advances `deploy` and GitHub Latest. Promotion does not rebuild or repackage.
+  Only promotion attaches `stable.json` and advances `deploy` and GitHub Latest. Promotion does not rebuild or repackage.
 - Promotion requires at least 72 hours since candidate publication, a recorded human mail-use
   report with no open release blockers, and successful public upgrade evidence for Stable to the
   candidate and the candidate to a later candidate. Evidence must identify the exact versions,

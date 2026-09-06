@@ -59,7 +59,8 @@ URL as a credential because anyone who has it can post to that channel.
    `package.json`; do not type a different version into a form.
 2. The workflow creates one release archive and calculates its SHA-256 checksum.
 3. It signs a versioned installation record, an identical `stable.json`, and a `nightly.json`
-   discovery record. All identify the same archive, source commit, and updater. The versioned
+   discovery record. The local `stable.json` is used in staging but is not uploaded to Nightly.
+   All records identify the same archive, source commit, and updater. The versioned
    installation format retains `channel: stable` so supported older updaters can install it.
 4. It uploads the records and archive to a draft GitHub Release named `vX.Y.Z`.
 5. Disposable staging uses the oldest supported bootstrap to install the previous stable release,
@@ -149,6 +150,10 @@ workflow evidence; they cannot prove that a human used the app. Review it before
 From `main`, run **Promote tested candidate to Stable** with the candidate version. It uses the
 protected `release` environment. It rejects missing evidence, a short test period, a schema
 downgrade, changed archives, or unverified upgrade paths. There is no bypass input.
+
+After the evidence passes, the workflow attaches `stable.json` by copying the existing signed
+installation record. This keeps accidental GitHub Latest changes from offering an untested
+candidate. Candidate releases must remain unlocked until this file is attached.
 
 The workflow advances `deploy` to the tested source commit, then changes the existing GitHub
 prerelease to Stable and Latest. It does not compile, repackage, rename, or replace the candidate
