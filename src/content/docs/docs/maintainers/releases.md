@@ -149,7 +149,7 @@ workflow evidence; they cannot prove that a human used the app. Review it before
 ## Promote to Stable
 
 From `main`, run **Promote tested candidate to Stable** with the candidate version. It uses the
-protected `release` environment. It rejects missing evidence, a short test period, a schema
+protected `release` environment. It rejects missing evidence, invalid test dates, a schema
 downgrade, changed archives, or unverified upgrade paths. There is no bypass input.
 
 After the evidence passes, the workflow attaches `stable.json` by copying the existing signed
