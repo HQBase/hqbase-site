@@ -60,7 +60,8 @@ multi-domain administration.
 ## Release channels
 
 - Stable is the default for existing and new installations. Only an owner can change the workspace
-  update channel. A channel change never starts a build, changes the installed release marker, or
+  update channel. The setting can be read and changed even when release discovery is unavailable.
+  A channel change never starts a build, changes the installed release marker, or
   restores a database. Each update still needs the normal review and Cloudflare authorization.
 - Nightly offers signed candidates from the same public repository. Its discovery record is
   separate from `stable.json`. A missing Nightly record falls back to Stable; a bad signature stops

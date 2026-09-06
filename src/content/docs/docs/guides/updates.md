@@ -16,6 +16,8 @@ To leave Nightly, turn the setting off. HQBase keeps your installed version and 
 Stable** if Stable is older. When a compatible Stable release catches up, you can install it. If
 your exact candidate becomes Stable, no replacement installation is needed.
 
+You can change this setting even when the release check is unavailable.
+
 This choice applies to the whole workspace. It does not restore a backup or install an older
 version. Restoring an older database is a separate recovery action and can remove newer mail.
 
