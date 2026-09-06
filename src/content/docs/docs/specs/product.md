@@ -13,12 +13,12 @@ multi-domain administration.
   OAuth relay lives in `HQBase/hqbase-cloudflare-auth`. Both are public under AGPL-3.0-only. There
   is no private product implementation.
 - Preserve third-party license notices and provenance.
-- One signed public release channel. Installation and updates consume release artifacts from the
+- Stable updates by default, with an owner-selected Nightly channel. Installation and updates consume release artifacts from the
   canonical repository only, and every artifact is verified by a signed manifest with SHA-256
   digests before it changes anything.
 - The official Deploy to Cloudflare button clones the canonical repository's `deploy` branch. That
   branch identifies the exact source commit of the latest signed public release and never follows
-  unreleased changes on `main`. Only the signed-release workflow can advance it.
+  unreleased changes on `main`. Only the stable-promotion workflow can advance it.
 - The in-app updater works only with the standard HQBase production build at the repository root.
   The first managed update can start through the historical `pnpm deploy` bootstrap. HQBase then
   replaces that snapshot with one short, stable deploy command. A non-secret Workers Builds
@@ -56,6 +56,36 @@ multi-domain administration.
   release. The canonical updater can initialize this exact state after a failed first deployment.
   It continues to fail closed for every other unexpected Worker inspection error.
 - The legal text in each repository controls if this summary differs from it.
+
+## Release channels
+
+- Stable is the default for existing and new installations. Only an owner can change the workspace
+  update channel. The setting can be read and changed even when release discovery is unavailable.
+  A channel change never starts a build, changes the installed release marker, or
+  restores a database. Each update still needs the normal review and Cloudflare authorization.
+- Nightly offers signed candidates from the same public repository. Its discovery record is
+  separate from `stable.json`. A missing Nightly record falls back to Stable; a bad signature stops
+  the check. The newer release is selected. Incompatible updates and version downgrades are blocked.
+- A return to Stable keeps the installed version until Stable catches up. The UI states this when
+  the stable version is older. Database recovery stays a separate action.
+- Each candidate has a unique, increasing `X.Y.Z` version, even if it never becomes stable. This
+  keeps old updaters compatible. The versioned installation manifest retains `channel: stable` as
+  the legacy artifact format; the signed Nightly discovery record uses `channel: nightly`. Both
+  records identify the same source archive and updater. The selected channel is stored under
+  `update_channel` in the existing settings table, independently of the installed release marker.
+- Candidate publication creates a GitHub prerelease and updates only the signed Nightly pointer.
+  It cannot move `deploy` or GitHub Latest, and it does not publish `stable.json` on the candidate.
+  Stable promotion selects an existing candidate, verifies
+  its signature, archive digest and source commit, and preserves its version and all archive bytes.
+  Only promotion attaches `stable.json` and advances `deploy` and GitHub Latest. Promotion does not rebuild or repackage.
+- Promotion requires a recorded human mail-use report with no open release blockers, and
+  successful public upgrade evidence for Stable to the
+  candidate and the candidate to a later candidate. Evidence must identify the exact versions,
+  archive digests, and workflow. Maintainers choose the test duration; there is no minimum waiting
+  period. A new candidate needs its own evidence. There is no automatic
+  stable promotion or untested hotfix bypass.
+- Source archives are fixed; deployment still compiles them with the frozen dependency lockfile.
+  This does not promise identical compiled output on different build machines.
 
 ## Boundaries
 
