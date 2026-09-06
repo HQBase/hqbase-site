@@ -13,7 +13,7 @@ pull-request workflow](/docs/maintainers/contributing/).
 1. **Prepare a candidate.** Give it a new version and release notes. Merge the reviewed code.
 2. **Publish Nightly.** Run **Publish Nightly candidate** in GitHub Actions. Wait for all checks.
    Stable customers receive no new upgrade offer.
-3. **Use it for 72 hours.** Opt your test workspace into Nightly. Check sending, receiving,
+3. **Test it in real use.** Opt your test workspace into Nightly. Check sending, receiving,
    attachments, search, background jobs, and backup/restore. Record results in a GitHub issue.
 4. **Test the next upgrade.** Publish a later candidate. Run **Verify public candidate upgrades**
    with both version numbers. Both upgrade paths must pass.
@@ -22,8 +22,9 @@ pull-request workflow](/docs/maintainers/contributing/).
 6. **Promote.** Run **Promote tested candidate to Stable** with the tested version. The workflow
    verifies the report and keeps the exact archive. Stable customers can then review the upgrade.
 
-If a check fails, fix it in a new candidate and restart its test period. Do not reuse a version.
-Hotfixes follow the same path. Promotion never happens just because time has passed.
+You choose how long to test. There is no minimum waiting period.
+If a check fails, fix it in a new candidate and test again. Do not reuse a version.
+Hotfixes follow the same path. Promotion is always a maintainer decision.
 
 ## How publication works
 
@@ -116,7 +117,7 @@ expires, rerun the test. If Stable changes, rerun it against the new Stable vers
 
 Open a GitHub issue or discussion for the test report. Record the candidate version and archive
 checksum, test start and end times, results, and any faults. Do not include mail content or
-credentials. After at least 72 hours of use, add `release/evidence/X.Y.Z.json` in `HQBase/hqbase`
+credentials. When you decide testing is sufficient, add `release/evidence/X.Y.Z.json` in `HQBase/hqbase`
 through a reviewed pull request. Use this structure with your actual values:
 
 ```json
@@ -142,7 +143,7 @@ through a reviewed pull request. Use this structure with your actual values:
 ```
 
 The source commit and checksum are in the decoded signed candidate record. The report is a human
-statement of observed use. Automated checks verify its identity, duration, required results, and
+statement of observed use. Automated checks verify its identity, valid dates, required results, and
 workflow evidence; they cannot prove that a human used the app. Review it before merging.
 
 ## Promote to Stable

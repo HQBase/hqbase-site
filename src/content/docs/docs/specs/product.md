@@ -78,10 +78,11 @@ multi-domain administration.
   Stable promotion selects an existing candidate, verifies
   its signature, archive digest and source commit, and preserves its version and all archive bytes.
   Only promotion attaches `stable.json` and advances `deploy` and GitHub Latest. Promotion does not rebuild or repackage.
-- Promotion requires at least 72 hours since candidate publication, a recorded human mail-use
-  report with no open release blockers, and successful public upgrade evidence for Stable to the
+- Promotion requires a recorded human mail-use report with no open release blockers, and
+  successful public upgrade evidence for Stable to the
   candidate and the candidate to a later candidate. Evidence must identify the exact versions,
-  archive digests, and workflow. A new candidate starts a new test period. There is no automatic
+  archive digests, and workflow. Maintainers choose the test duration; there is no minimum waiting
+  period. A new candidate needs its own evidence. There is no automatic
   stable promotion or untested hotfix bypass.
 - Source archives are fixed; deployment still compiles them with the frozen dependency lockfile.
   This does not promise identical compiled output on different build machines.
