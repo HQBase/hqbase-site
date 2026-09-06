@@ -853,13 +853,13 @@ test("Starlight keeps the complete public guides, reference, and maintainer work
   assert.match(engineering, /## Check the interface as a person would use it/);
   assert.match(engineering, /Notification changes must cover/);
   assert.match(engineering, /## Before you call it done/);
-  assert.match(releases, /## Publish the release/);
+  assert.match(releases, /## Short playbook/);
   assert.match(releases, /previous stable release/);
-  assert.match(releases, /advances the `deploy` branch to the exact validated candidate commit/);
+  assert.match(releases, /advances `deploy` to the tested source commit/);
   assert.match(releases, /## Evidence required/);
   assert.match(
     releases,
-    /^---[\s\S]*?---\n\n:::caution\[Authorized release maintainers only\][\s\S]*?:::\n\nPublishing is/m,
+    /^---[\s\S]*?---\n\n:::caution\[Authorized release maintainers only\][\s\S]*?:::\n\n## Short playbook/m,
   );
   assert.match(releases, /protected release and staging environments/);
   assert.match(staging, /title: Checking a deployed change/);

@@ -3,8 +3,21 @@ title: Updates
 description: Check for a new HQBase release, install it, and recover if something goes wrong.
 ---
 
-HQBase publishes updates through one public stable channel. Owners and admins can check and start
-an update from **Settings → Updates**.
+HQBase offers Stable updates by default. Owners and admins can check and start an update from
+**Settings → Updates**.
+
+## Choose Stable or Nightly
+
+Leave **Receive Nightly updates** off for tested Stable releases. An owner can turn it on to help
+test new releases before they become Stable. Nightly releases can contain faults. Review each
+release before installing it; turning on Nightly does not start an update.
+
+To leave Nightly, turn the setting off. HQBase keeps your installed version and shows **Waiting for
+Stable** if Stable is older. When a compatible Stable release catches up, you can install it. If
+your exact candidate becomes Stable, no replacement installation is needed.
+
+This choice applies to the whole workspace. It does not restore a backup or install an older
+version. Restoring an older database is a separate recovery action and can remove newer mail.
 
 ## Check for an update
 

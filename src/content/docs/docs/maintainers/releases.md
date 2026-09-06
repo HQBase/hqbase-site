@@ -1,6 +1,6 @@
 ---
 title: Publishing a release
-description: Package, test, sign, and publish an official HQBase release.
+description: Test a Nightly candidate, then promote that exact candidate to Stable.
 ---
 
 :::caution[Authorized release maintainers only]
@@ -8,15 +8,38 @@ Requires access to HQBase's protected release and staging environments. [Contrib
 pull-request workflow](/docs/maintainers/contributing/).
 :::
 
-Publishing is a separate action from merging code to `main`. A push to `main` runs the quality check
-and a deployment dry-run; it does not create a customer release.
+## Short playbook
+
+1. **Prepare a candidate.** Give it a new version and release notes. Merge the reviewed code.
+2. **Publish Nightly.** Run **Publish Nightly candidate** in GitHub Actions. Wait for all checks.
+   Stable customers receive no new upgrade offer.
+3. **Use it for 72 hours.** Opt your test workspace into Nightly. Check sending, receiving,
+   attachments, search, background jobs, and backup/restore. Record results in a GitHub issue.
+4. **Test the next upgrade.** Publish a later candidate. Run **Verify public candidate upgrades**
+   with both version numbers. Both upgrade paths must pass.
+5. **Record the evidence.** Add the small report below through a reviewed pull request. Confirm
+   that no release blocker remains.
+6. **Promote.** Run **Promote tested candidate to Stable** with the tested version. The workflow
+   verifies the report and keeps the exact archive. Stable customers can then review the upgrade.
+
+If a check fails, fix it in a new candidate and restart its test period. Do not reuse a version.
+Hotfixes follow the same path. Promotion never happens just because time has passed.
+
+## How publication works
+
+A push to `main` runs the quality check and a deployment dry-run. The Nightly workflow also runs
+at 06:00 UTC each day. It publishes only when `package.json` has an unused committed version;
+otherwise that scheduled run does nothing. A maintainer can run it manually sooner.
+
+Each candidate uses a permanent `X.Y.Z` number. Rejected candidates can leave gaps in the Stable
+version sequence. A candidate does not change its version when promoted.
 
 ## Before you start
 
 In `HQBase/hqbase`:
 
-1. Set the new stable `X.Y.Z` version and minimum supported version in `package.json`. The signed
-   stable channel does not accept a prerelease suffix.
+1. Set the new candidate `X.Y.Z` version and minimum supported version in `package.json`. The signed
+   installation format does not accept a prerelease suffix.
 2. Update database compatibility when the release needs it.
 3. Add public release notes to `CHANGELOG.md`.
 4. Commit those changes to `main`.
@@ -30,13 +53,14 @@ The Discord release webhook must exist as the `DISCORD_RELEASE_WEBHOOK_URL` Acti
 secret. Configure its public name, avatar, and destination channel in Discord. Treat the webhook
 URL as a credential because anyone who has it can post to that channel.
 
-## Publish the release
+## Nightly checks and publication
 
-1. From `main`, start the signed-release workflow. The workflow reads the committed version from
+1. From `main`, start **Publish Nightly candidate**. The workflow reads the committed version from
    `package.json`; do not type a different version into a form.
 2. The workflow creates one release archive and calculates its SHA-256 checksum.
-3. It creates and signs two small release records: one for the version and one for the stable
-   channel.
+3. It signs a versioned installation record, an identical `stable.json`, and a `nightly.json`
+   discovery record. All identify the same archive, source commit, and updater. The versioned
+   installation format retains `channel: stable` so supported older updaters can install it.
 4. It uploads the records and archive to a draft GitHub Release named `vX.Y.Z`.
 5. Disposable staging uses the oldest supported bootstrap to install the previous stable release,
    creates data, reproduces its legacy Worker configuration, and installs the exact candidate. It
@@ -58,24 +82,86 @@ URL as a credential because anyone who has it can post to that channel.
    remote-D1 schema inspection statement must have no more than five compound `SELECT` terms; a
    local SQLite result is not sufficient. It waits until the public health response reports the
    exact candidate version, so an old healthy Worker cannot pass the gate.
-7. The workflow advances the `deploy` branch to the exact validated candidate commit. If
-   publication fails while the release is still a draft, it restores the previous branch commit.
-8. The workflow publishes the draft only if those checks and the branch update pass.
-9. It verifies that `deploy`, the public release, and the signed stable manifest identify the same
-   candidate.
-10. After the public signature and archive checks pass, the workflow posts the complete release
-   notes to Discord. It splits long notes into numbered messages without removing content.
+7. It publishes the checked draft as a GitHub prerelease with `make_latest: false`.
+8. It verifies the public archive, records, tag commit, and updater. It then updates the signed
+   Nightly pointer at `releases/download/nightly/nightly.json`.
+9. It verifies that GitHub Latest and the `deploy` branch did not change. It does not send a Stable
+   release announcement.
 
-After publication, download `releases/latest/download/stable.json` directly, verify its signature,
-download the exact archive it names, confirm the checksum, and open the public release notes.
+Owners need a release that includes the Nightly setting before they can opt in from the app.
+For the first candidate that introduces this setting, maintainers install its signed archive in a
+test workspace through the canonical bootstrap. The first Stable promotion then makes the setting
+available to other owners.
 
-The Discord message uses the name and avatar configured for the webhook. Its title links to the
-GitHub Release, and its body contains the complete release notes for that version. The workflow
-disables Discord mentions in release-note text. A Discord delivery failure creates a workflow
-warning but does not invalidate an otherwise verified signed release.
+## Public upgrade proof
 
-Manual staging is still available for a reviewed commit, but the signed-release workflow is the
-only path that publishes an official customer release.
+After both candidates are public, run **Verify public candidate upgrades** from `main`. Enter the
+candidate to promote and a later candidate. The workflow creates disposable resources and tests
+these paths in sequence:
+
+- Current Stable to the candidate.
+- The candidate to the later candidate.
+
+It serves a signed discovery fixture to the source app, calls the same `POST /api/updates/apply`
+route used by Settings, and lets Workers Builds finish. It checks the exact active archive tag,
+installed database version, update history, and preserved data. Mail, lifecycle, PWA, backup, and
+restore checks must also pass. Cleanup must finish before the combined evidence artifact is valid.
+The discovery fixture lets older Stable apps test the same archive before they support Nightly.
+
+The workflow stores both receipts under `public-upgrade-evidence` for 90 days. If the evidence
+expires, rerun the test. If Stable changes, rerun it against the new Stable version.
+
+## Record real use
+
+Open a GitHub issue or discussion for the test report. Record the candidate version and archive
+checksum, test start and end times, results, and any faults. Do not include mail content or
+credentials. After at least 72 hours of use, add `release/evidence/X.Y.Z.json` in `HQBase/hqbase`
+through a reviewed pull request. Use this structure with your actual values:
+
+```json
+{
+  "version": "1.4.2",
+  "artifactSha256": "COPY THE 64-CHARACTER ARCHIVE SHA256",
+  "sourceCommit": "COPY THE 40-CHARACTER SOURCE COMMIT",
+  "successorVersion": "1.4.3",
+  "publicUpgradeRunId": "COPY THE SUCCESSFUL WORKFLOW RUN ID",
+  "reportUrl": "https://github.com/HQBase/hqbase/issues/123",
+  "startedAt": "2026-09-02T00:00:00Z",
+  "finishedAt": "2026-09-05T00:00:00Z",
+  "checks": {
+    "send": true,
+    "receive": true,
+    "attachments": true,
+    "search": true,
+    "backgroundJobs": true,
+    "backupRestore": true,
+    "noOpenBlockers": true
+  }
+}
+```
+
+The source commit and checksum are in the decoded signed candidate record. The report is a human
+statement of observed use. Automated checks verify its identity, duration, required results, and
+workflow evidence; they cannot prove that a human used the app. Review it before merging.
+
+## Promote to Stable
+
+From `main`, run **Promote tested candidate to Stable** with the candidate version. It uses the
+protected `release` environment. It rejects missing evidence, a short test period, a schema
+downgrade, changed archives, or unverified upgrade paths. There is no bypass input.
+
+The workflow advances `deploy` to the tested source commit, then changes the existing GitHub
+prerelease to Stable and Latest. It does not compile, repackage, rename, or replace the candidate
+archive or versioned records. If publication fails and the release is still a prerelease, it restores
+`deploy` only if that branch still points to this candidate. An ambiguous public result stops for
+inspection. Do not delete the candidate or replace its assets to retry.
+
+After publication, it verifies `releases/latest/download/stable.json`, the archive digest, and the
+`deploy` commit. Only then does it post the complete release notes to Discord. A Discord failure
+does not invalidate a verified release. Discord mentions in release notes are disabled.
+
+Customer deployment still builds the fixed source archive with its frozen dependency lockfile.
+Promotion preserves the tested source; it does not promise identical compiled bytes across machines.
 
 HQBase 1.3.4 has one reviewed compatibility exception. Its committed `hqbaseRelease` metadata pins
 `updaterCommit` to the HQBase 1.3.3 bootstrap commit and limits that pin with
@@ -84,7 +170,8 @@ signed updater identity unchanged for a 1.3.3 installation whose current inline 
 matches it. Packaging and public-release verification stop if the pin is missing, unavailable, or
 used for another version. Remove both fields before the next release.
 
-The official Deploy to Cloudflare button targets `HQBase/hqbase` at the `deploy` branch. Do not
+The official Deploy to Cloudflare button targets `HQBase/hqbase` at the `deploy` branch. Only
+Stable promotion moves it. Do not
 move that branch by hand. Moving it before publication fails closed because its committed product
 version is newer than the previous stable release. Publishing first would expose a new signed
 artifact to an older deployment configuration.

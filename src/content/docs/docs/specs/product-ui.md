@@ -41,6 +41,14 @@ Specialized topics live in their own specifications: sending in
   HQBase** below the authentication card. **Powered by HQBase** links to `https://hqbase.io/` in a
   new browser tab or window.
 
+## Update settings
+
+**Settings → Updates** has a **Receive Nightly updates** checkbox. Only owners can change it.
+The text explains that candidates can contain faults and each update still needs approval.
+Switching off Nightly keeps the current installation. If Stable is older, show **Waiting for Stable**
+and do not present the older version as an available installation. Disable the channel control
+while a change or installation is in progress.
+
 ## Authorization surfaces
 
 Cloudflare-hosted deployment, authorization, and consent screens keep Cloudflare&apos;s design. The
