@@ -107,6 +107,10 @@ these paths in sequence:
 - Current Stable to the candidate.
 - The candidate to the later candidate.
 
+For each path, it waits for the exact source version to become healthy and records the deployed
+Worker in the lifecycle manifest before preparing the update fixture and build trigger. Older
+source installers can leave this local deployment flag unset.
+
 It serves a signed discovery fixture to the source app, calls the same `POST /api/updates/apply`
 route used by Settings, and lets Workers Builds finish. It checks the exact active archive tag,
 installed database version, update history, and preserved data. Mail, lifecycle, PWA, backup, and
