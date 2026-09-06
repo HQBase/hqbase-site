@@ -75,6 +75,9 @@ multi-domain administration.
   `update_channel` in the existing settings table, independently of the installed release marker.
 - Candidate publication creates a GitHub prerelease and updates only the signed Nightly pointer.
   It cannot move `deploy` or GitHub Latest, and it does not publish `stable.json` on the candidate.
+  Verification retries an older, valid signed pointer for a bounded publication-propagation period.
+  It stops immediately for an invalid signature, a newer version, or a changed checksum for the
+  expected version. A stale pointer cannot pass the release gate.
   Stable promotion selects an existing candidate, verifies
   its signature, archive digest and source commit, and preserves its version and all archive bytes.
   Only promotion attaches `stable.json` and advances `deploy` and GitHub Latest. Promotion does not rebuild or repackage.

@@ -87,6 +87,9 @@ URL as a credential because anyone who has it can post to that channel.
 7. It publishes the checked draft as a GitHub prerelease with `make_latest: false`.
 8. It verifies the public archive, records, tag commit, and updater. It then updates the signed
    Nightly pointer at `releases/download/nightly/nightly.json`.
+   If GitHub still serves an older valid pointer, verification retries up to 30 reads, two seconds
+   apart. An invalid signature, a newer version, or a changed checksum for the expected version
+   stops the check immediately. The expected version and checksum must match before it passes.
 9. It verifies that GitHub Latest and the `deploy` branch did not change. It does not send a Stable
    release announcement.
 
