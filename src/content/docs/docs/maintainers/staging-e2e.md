@@ -95,8 +95,10 @@ It also needs these Environment variables:
 
 The API token behind `HQBASE_E2E_BUILD_TOKEN_UUID` must permit the complete signed deployment in
 the staging account. In addition to Worker deployment permissions, it needs **D1 Edit** for database
-checks and migrations, and **Queues Edit** for queue consumers. Check the underlying API token,
-not only the Workers Builds reference. A successful cancelled update probe proves request
+checks and migrations, and **Queues Edit** for queue consumers. Its **Workers Routes Edit**
+permission must include the zone of the staging application hostname. Access to a different zone
+does not permit deployment to that hostname. Check the underlying API token, not only the Workers
+Builds reference. A successful cancelled update probe proves request
 acceptance; it does not prove that this token can complete the database update and deployment.
 
 The Environment also needs `HQBASE_E2E_UPDATE_API_TOKEN` as a separate secret. It is a user-scoped
