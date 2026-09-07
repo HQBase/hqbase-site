@@ -88,6 +88,10 @@ multi-domain administration.
   archive digests, and workflow. Maintainers choose the test duration; there is no minimum waiting
   period. A new candidate needs its own evidence. There is no automatic
   stable promotion or untested hotfix bypass.
+- Public upgrade builds use only their disposable lifecycle resources. The test passes the
+  recorded configuration through a build variable and checks the Cloudflare Worker name and tag
+  before writing the build configuration. The trigger and accepted build must retain that exact
+  value. Repository defaults cannot stand in for the disposable workspace configuration.
 - Source archives are fixed; deployment still compiles them with the frozen dependency lockfile.
   This does not promise identical compiled output on different build machines.
 

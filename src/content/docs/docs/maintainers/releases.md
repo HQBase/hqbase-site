@@ -111,6 +111,11 @@ For each path, it waits for the exact source version to become healthy and recor
 Worker in the lifecycle manifest before preparing the update fixture and build trigger. Older
 source installers can leave this local deployment flag unset.
 
+The disposable trigger also receives its recorded resource configuration in a build variable.
+Before the signed updater starts, the build checks its Cloudflare Worker name and tag and writes
+that configuration to the checkout. The gate checks the variable on the trigger and accepted
+build. This keeps the test attached to its disposable Worker, database, bucket, and queues.
+
 It serves a signed discovery fixture to the source app, calls the same `POST /api/updates/apply`
 route used by Settings, and lets Workers Builds finish. It checks the exact active archive tag,
 installed database version, update history, and preserved data. Mail, lifecycle, PWA, backup, and
