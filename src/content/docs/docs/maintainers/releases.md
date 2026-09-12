@@ -178,6 +178,13 @@ After publication, it verifies `releases/latest/download/stable.json`, the archi
 `deploy` commit. Only then does it post the complete release notes to Discord. A Discord failure
 does not invalidate a verified release. Discord mentions in release notes are disabled.
 
+If the announcement was skipped, run **Announce verified Stable release** from `main` with the
+published version. First check the original job to confirm that it did not send the announcement.
+This recovery workflow verifies the public signature and archive, the reviewed evidence, GitHub
+Latest, and the `deploy` commit. It then sends the same complete release notes through the same
+Discord sender. It cannot promote a candidate or change release assets. If delivery was attempted
+but its result is unknown, inspect Discord before retrying to avoid a duplicate announcement.
+
 Customer deployment still builds the fixed source archive with its frozen dependency lockfile.
 Promotion preserves the tested source; it does not promise identical compiled bytes across machines.
 
