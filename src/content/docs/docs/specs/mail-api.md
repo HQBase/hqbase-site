@@ -23,7 +23,10 @@ Both versions use the one-address-per-mailbox model. V2 returns that mailbox dir
 its `mailDomainId`, `kind`, and `deletedAt` fields. V1 returns its earlier mailbox shape with an
 `addresses` list. That compatibility list always contains one primary address whose `id` and
 `mailboxId` equal the mailbox identifier. Its `receiveEnabled` and `sendEnabled` values equal the
-mailbox's `isActive` value. The v1 response does not group separate mailboxes back into aliases.
+mailbox's `isActive` value. Its `domainEnabled` value is `false` when an owner has turned off or
+disconnected the address's email domain, and `true` otherwise. HQBase versions before this field
+was added do not send it; clients that support them treat a missing value as `true`. The v1
+response does not group separate mailboxes back into aliases.
 
 During the upgrade, each old additional address becomes a mailbox with a copy of the source
 mailbox's access grants and retention policy. The new mailbox stays active only if the source
