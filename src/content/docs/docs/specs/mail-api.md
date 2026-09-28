@@ -319,6 +319,12 @@ Clients must use this value to distinguish downloadable files from parts rendere
 message body. A content ID does not make a part inline by itself because Gmail and other senders can
 give ordinary downloadable attachments a content ID.
 
+`GET /attachments/{id}` returns the file bytes with the attachment's recorded `Content-Type`, for
+example `image/png` or `application/pdf`, and a `Content-Disposition: attachment` header with the
+file name. The response type is not always `application/octet-stream`. Clients must accept any media
+type from this endpoint. The OpenAPI document declares the response as `*/*` so that generated
+clients do not reject a typed file.
+
 ### Draft attachments
 
 `POST /drafts/{id}/attachments` accepts one `file` part and an optional `inline` part. HQBase records
