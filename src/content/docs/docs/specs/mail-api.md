@@ -145,7 +145,7 @@ in both the token and current consent can outlive the approving browser session.
 can invalidate an access token; the client can use its refresh token to continue. Tokens without
 `offline_access` require an active approving session. Password reset revokes all OAuth tokens and
 approvals.
-Use **Settings > Connections** to revoke an app's access. Offline access does not extend the
+Use the **Connections** list in **Agents** to revoke an app's access. Offline access does not extend the
 browser session or remove the access-token and refresh-token expiry limits.
 
 HQBase rotates refresh tokens. A second matching refresh request that uses the previous token

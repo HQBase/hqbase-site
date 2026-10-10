@@ -28,6 +28,10 @@ MCP connects an AI tool to HQBase through a remote MCP server.
 6. Follow the short-code verification link that the client displays.
 7. Sign in to HQBase, check the requested access, and select **Allow**.
 
+If your MCP client supports refresh tokens, the requested access includes **Stay connected until you
+revoke access**. The client then stays connected after its access token expires, and you do not
+need to connect again. Revoke the connection in **Agents** when you no longer want it.
+
 **Mail actions** is selected by default for complete email workflows. Choose **Read-only** when the
 client must not change or send mail.
 
@@ -75,6 +79,12 @@ Each `list_mailboxes` item has one `address` and its `mailDomainId`. It does not
   approve the connection.
 - **Token boundary:** `/mcp` and `/mcp/full` issue tokens for different OAuth resources. A token for
   one profile does not work with the other profile or the Mail API.
+- **Stay connected:** HQBase adds `offline_access` to an Authorization Code or Device Authorization
+  request for `/mcp` or `/mcp/full` when the client registered the `refresh_token` grant type and
+  `offline_access` is one of the client's allowed scopes. The client then receives a refresh token
+  after you approve. This is authorization-server policy. As MCP SEP-2207 recommends, the
+  `WWW-Authenticate` challenges and the protected-resource metadata list only the profile
+  permissions and do not include `offline_access`.
 - **Attachments:** Each attachment transferred through MCP can be up to 10 MiB. Normal HQBase
   recipient and total attachment limits still apply. `add_draft_attachment` accepts `inline: true`
   for a supported image and then returns its private `htmlSrc`. Use that exact source in the draft's
@@ -95,7 +105,7 @@ MCP uses these OAuth permissions:
 | `mail:read` | List visible mailboxes and conversations, search and open mail, and download attachments. |
 | `mail:write` | Mark mail read or unread, add or remove stars, archive mail, and move it to Trash. |
 | `mail:send` | Manage private drafts, draft labels, and attachments; send new mail, reply, and forward. |
-| `offline_access` | Let a compatible client request an optional refresh token. |
+| `offline_access` | Keep the connection active with a refresh token until you revoke it. HQBase requests it for clients that support refresh tokens. |
 
 ## Connect via SKILL.md
 
@@ -177,7 +187,7 @@ connected person can also access that mailbox.
 Access changes apply to the next request. This includes a revoked connection, changed mailbox
 access, banned user, or changed role. Tokens without `offline_access` also require the approving
 browser session. With `offline_access` in the token and current consent, a client can refresh its
-tokens after browser expiry or sign-out. Revoke the connection in **Settings > Connections** to
+tokens after browser expiry or sign-out. Revoke the connection in **Agents** to
 stop that access. Password reset also revokes OAuth tokens. HQBase never sends passwords, app secrets, or
 browser session cookies to the AI agent. Logs and audit records do not contain access tokens or
 email content.
