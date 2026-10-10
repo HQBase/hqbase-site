@@ -1,0 +1,186 @@
+---
+title: Contacts and labels
+description: How HQBase finds correspondents, keeps private contact notes, and organizes conversations with shared labels.
+---
+
+HQBase helps people and mail agents reuse known addresses and organize mail without sending contact
+data outside the customer&apos;s installation.
+
+## Contacts
+
+Contacts are personal to one signed-in person. A contact contains one normalized email address, an
+optional display name, and private notes. Two people can save different names or notes for the same
+address. Contact notes never appear to another workspace user, a mailbox agent, or an email
+recipient.
+
+The **Contacts** destination sits beside **Mail** and **Settings** in primary navigation. The page
+lists saved external contacts and external recipients from accessible outbound mail. A successful
+send can add addresses from **To**, **Cc**, and **Bcc** as recent contacts. Receiving a message does
+not add its sender, and recipients on inbound messages do not become contacts. Current workspace
+mailbox addresses never appear in Contacts, including after a person sends mail to one of them.
+
+The page supports search, create, edit, and delete actions. Its directory and exchange rows use the
+same list surface, spacing, hover color, and focus treatment as conversation rows. Removing a saved
+contact removes its saved name and notes. The address can still appear as a recent contact when it
+is an accessible outbound recipient.
+
+Opening a contact shows:
+
+- the saved name and exact email address;
+- a collapsed **Private contact details** section for the editable saved name and private notes;
+- every accessible conversation with that address, loaded in stable pages; and
+- a **New email** action that opens the normal composer with the address in **To**.
+
+The private contact section expands in place and contains the save and remove actions with its
+fields. The fields inherit the contact page background. They do not use a separate card, border, or
+raised surface. The exchange list uses the same responsive conversation rows, date groups, labels,
+star action, spacing, and focus treatment as the Inbox. It uses exact sender and recipient matching.
+A person can load older pages until all accessible exchanges are visible. It never reveals a
+conversation from a mailbox the person cannot currently read. Losing mailbox access removes those
+exchanges on the next request.
+
+### Recipient suggestions
+
+The **To**, **Cc**, and **Bcc** fields suggest addresses while the person types. Suggestions combine:
+
+1. saved contacts;
+2. recent **To**, **Cc**, and **Bcc** recipients from accessible outbound mail; and
+3. the person&apos;s available mailbox addresses as separate **Mailbox** suggestions.
+
+An address found only in an inbound **From**, **To**, **Cc**, or **Bcc** field is not a contact or a
+recent suggestion. Available mailbox addresses can appear in the composer, but they never appear in
+the Contacts directory.
+
+Prefix matches on a saved name or email address appear first, followed by other literal matches and
+recent exchanges. Each row shows the display name, address, and why it is known. Keyboard users can
+move through the list, select a result, close it with Escape, and continue entering more recipients.
+
+Typing does not show an invalid-address error. HQBase validates completed recipients when the field
+loses focus and again before saving or sending. A selected suggestion inserts one normalized address
+and does not send anything.
+
+### Contact storage and privacy
+
+Saved contact records belong to a workspace user and stay in D1. HQBase derives recent contacts
+only from **To**, **Cc**, and **Bcc** metadata on accessible outbound messages. It does not copy
+message bodies into contacts.
+
+HQBase stores a decoded sender display name as message metadata when an inbound message provides
+one. This observed name does not create or save a contact. For an address that is already saved or
+eligible as a recent outbound recipient, the latest accessible observed name can appear as a
+fallback. A private saved name always takes priority. Clearing a private name does not copy the
+observed name into the saved contact.
+
+Names and notes do not enter logs, analytics, push notifications, or Cloudflare configuration.
+HQBase does not retrieve personal profile photos from Gmail, Gravatar, or another remote directory.
+Contact avatars use initials until a separate, explicit photo source is supported.
+
+## Labels
+
+Labels are shared workspace organization. A label has a unique case-insensitive name and one
+workspace color token from the supported product palette. Owners and admins can create, rename,
+recolor, and delete labels in **Settings → Labels**. Deleting a label removes its assignments but
+does not delete or move mail.
+
+A person or machine agent with **Handle mail** or **Manager** access can add or remove an existing
+label on mail they can organize. **Read** access can see labels but cannot change them. A label never
+grants mailbox access and never makes an inaccessible message visible.
+
+HQBase applies labels to messages and private drafts. A conversation row shows the union of labels
+on its accessible messages. A conversation-level action adds or removes the label from every
+message in that conversation that the actor can organize. It does not change inaccessible copies.
+
+A draft label belongs to the draft author and stays private with the draft. Applying a label to a
+saved reply or forward does not change the existing conversation. After a successful send, HQBase
+copies the draft labels to the new outbound message before it removes the draft. The labels then
+appear in the normal conversation union. Discarding a draft removes its label assignments.
+
+Every conversation folder and the Drafts folder support an optional set of label filters. The
+filters combine with the active folder, mailbox, and literal search filters. A conversation matches
+when its accessible messages contain every selected label. A draft matches when its private
+assignments contain every selected label. Selecting no labels shows all labels. Changing the label
+filters returns to the newest page and does not change the underlying folder.
+
+### Human controls
+
+Conversation rows and the conversation reader have a one-click **Labels** action. The folder
+toolbar uses the normal label icon. The reader shows one thread-level control outside every
+individual message header. On desktop, put the control in the top action toolbar directly before
+the read or unread action. Give it the same action treatment as the adjacent toolbar controls, but
+show the normal label icon and current label pills inside it. On compact layouts, align the same
+control to the trailing edge in a tightly spaced row directly below the top toolbar and before the
+first message. A person with Handle or Manager access can open that control and change the
+assignments. Read access shows the
+same control without an edit action. Keep the icon at the control's leading edge with clear space
+before the label pills. When no label is assigned, the editable
+control says **Add label**. The compact control uses a light dashed border in that empty state.
+Labels do not appear in **More actions**.
+On desktop, the row
+shows up to three named pills over the trailing edge of the preview, then stacks the remaining
+labels so their colors stay visible. The fully rounded container uses the current conversation-row
+surface, including its hover or selected state, two CSS pixels of outer padding, and a solid shadow
+in the same color. The shadow
+extends past the container edge so preview text cannot show through. It has no blur or border. Its
+trailing edge stays fixed so the desktop label icons align between rows. The complete container is
+the Labels button, and selecting any visible part opens the assignment menu. The label icon has no
+separate button background. Hovering the container changes only the icon color. Each
+named pill uses a translucent label-color background with darker color-matched text in light mode
+and lighter color-matched text in dark mode. It reserves at least a four-letter width and shows at
+least nine characters, including **Important**, before truncation.
+The action menu lists current labels with checked state, applies a choice immediately, and reports
+success or failure. Owners and admins also see **Create label** below the assignments. This action
+opens the normal labelled form. A successful create applies the new label to the current
+conversation or draft. Other people can apply existing labels when their mailbox access permits,
+but they cannot create a label definition. While the request runs, the control keeps its normal
+opacity and shows the new assignment immediately. If the request fails, it restores the previous
+assignment. The same menu can remove a label. Compact layouts show every assigned label in
+one non-wrapping, read-only row at the bottom trailing edge of the message preview, separate from the
+star. The trailing edge stays aligned with the preview boundary. If the group is wider than the
+preview, it extends to the left instead of clipping labels. A compact row does not show the label
+action; a person opens the conversation to change its labels.
+
+Draft rows use the same desktop label control and compact label pills. A compact draft row uses the
+existing trailing utility lane for a label action because opening the row starts the composer, not a
+conversation reader. The action does not change the row grid.
+
+The folder toolbar uses a small-text compact checkbox multiselect instead of a standard field
+dropdown. Its trigger shows selected label names and colors, not only their count. On desktop, its
+trailing edge aligns with the row Labels buttons at the trailing edge of the preview. A person can
+add or remove more than one active filter without closing the menu after each choice.
+
+**Settings → Labels** uses compact rows and normal-size dropdowns. Add and edit actions use a
+labelled dialog. No large button size is used. The mailbox selector in the app header remains the
+only extra-compact dropdown.
+
+### Mail API and agents
+
+Both stable Mail API versions support labels without changing existing clients:
+
+- `GET /labels` lists labels visible to the caller.
+- `PUT /messages/{id}/labels/{labelId}` and the matching `DELETE` add or remove one label.
+- `PUT /conversations/{id}/labels/{labelId}` and the matching `DELETE` apply the change to every
+  accessible message that the caller can organize.
+- `PUT /drafts/{id}/labels/{labelId}` and the matching `DELETE` add or remove one private draft
+  label for its author.
+- Repeating `labelIds` is an optional filter on message, conversation, and draft list requests. A
+  result must contain every requested label. The existing single `labelId` parameter keeps its
+  behavior and can be combined with `labelIds`.
+
+Session-authenticated `/api/labels` management routes let an owner or admin create, update, and
+delete label definitions. Machine credentials cannot change workspace label definitions. A label
+definition change sends a wake-only `labels` event so connected clients refresh the authoritative
+label list and visible mail.
+
+The MCP server exposes `list_labels`, `add_label`, and `remove_label`. The add and remove tools
+accept message, conversation, and private draft targets. Tool descriptions state that labels
+organize mail but never change mailbox access or message folders. Label changes use the same
+ownership and mailbox checks as the web app and Mail API.
+
+## Errors and accessibility
+
+Contact and label controls use persistent labels, visible focus, keyboard navigation, and status
+messages. Compact targets are at least 44 by 44 CSS pixels where practical.
+
+Stable label errors are `LABEL_NOT_FOUND`, `LABEL_FORBIDDEN`, `LABEL_NAME_CONFLICT`, and
+`LABEL_INVALID`. Stable contact errors are `CONTACT_NOT_FOUND` and `CONTACT_INVALID`. Error
+responses never contain contact notes or email content.

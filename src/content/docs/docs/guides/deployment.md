@@ -169,4 +169,6 @@ pnpm run hqbase -- destroy
 
 Choose the exact removal scope and confirm it. HQBase uses its saved deployment record to remove
 only resources it created; shared or unclear resources are preserved. It saves progress after each
-successful removal, so you can correct a Cloudflare error and run the same command again.
+successful removal, so you can correct a Cloudflare error and run the same command again. When
+removal includes an R2 bucket that HQBase created, HQBase permanently deletes every object in that
+recorded bucket before it deletes the bucket. It never empties a reused bucket.
