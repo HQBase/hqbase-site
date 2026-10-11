@@ -75,8 +75,8 @@ multi-domain administration.
   `update_channel` in the existing settings table, independently of the installed release marker.
 - Candidate publication creates a GitHub prerelease and updates only the signed Nightly pointer.
   It cannot move `deploy` or GitHub Latest, and it does not publish `stable.json` on the candidate.
-  Verification makes up to 30 reads, including the initial read, with two seconds between reads
-  while GitHub serves an older, valid signed pointer.
+  While GitHub serves an older, valid signed pointer, verification reads it every five seconds for
+  up to five minutes: 61 reads, including the initial read.
   It stops immediately for an invalid signature, a newer version, or a changed checksum for the
   expected version. A stale pointer cannot pass the release gate.
   Stable promotion selects an existing candidate, verifies
