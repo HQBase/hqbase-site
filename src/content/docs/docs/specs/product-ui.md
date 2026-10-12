@@ -545,7 +545,11 @@ a file fails this check, the current version stays active and a later update che
 After a redirect, the service worker keeps only the final response, so the offline page can open
 from the cache. A request for a missing file under `/assets/`, `/fonts/`, `/icons/`, or `/sounds/`
 returns `404` with `Cache-Control: no-store`. It never returns the app page, because a browser could
-keep that page as a script for a long time.
+keep that page as a script for a long time. Cloudflare sends any other missing path to the app page
+before the Worker can run. These four directories therefore run the Worker first: it returns the
+stored file unchanged and replaces only the app page fallback with the `404`. Each request to these
+directories counts as a Worker request; the service worker cache serves most of them after the first
+load. Installation and every update add these routes to the Worker configuration.
 
 If a page or the message editor cannot load, or fails while it shows, the rest of the app stays
 visible. After a load failure, the app reloads once. If the failure occurs again within one minute,
