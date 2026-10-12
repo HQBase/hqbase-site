@@ -19,6 +19,7 @@ The test code lives in `hqbase/test/e2e/staging`. GitHub runs it through
 Each run checks:
 
 - the public health response, web-app manifest, service worker, offline shell, and rendered app;
+- a `404` with `Cache-Control: no-store`, not the app page, for a missing file under `/assets/`;
 - creation of the first owner and browser sign-in;
 - mailbox access for different users;
 - operator diagnostics; and
