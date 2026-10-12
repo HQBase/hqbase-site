@@ -539,5 +539,17 @@ waiting service worker to activate. If that activation signal is stale or does n
 performs a normal page refresh after a short delay. Background offline mail storage requires a
 separate privacy and delivery design.
 
+The service worker reads each file for its cache from the network, not from the browser cache. It
+installs only when every file returns a success response, and only the offline page can be HTML. If
+a file fails this check, the current version stays active and a later update check tries again.
+After a redirect, the service worker keeps only the final response, so the offline page can open
+from the cache. A request for a missing file under `/assets/`, `/fonts/`, `/icons/`, or `/sounds/`
+returns `404` with `Cache-Control: no-store`. It never returns the app page, because a browser could
+keep that page as a script for a long time.
+
+If a page or the message editor cannot load, or fails while it shows, the rest of the app stays
+visible. After a load failure, the app reloads once. If the failure occurs again within one minute,
+or the part fails while it shows, the app says that HQBase could not open it and offers **Reload**.
+
 Testing requirements and repository ownership live in
 [Engineering Standards](/docs/maintainers/engineering-standards/).
