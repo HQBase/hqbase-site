@@ -186,9 +186,26 @@ The original HTML remains in customer storage; sanitization happens when the mes
 - Changing a filter returns to the newest page. Opening a conversation and returning preserves
   loaded pages and scroll position. Background refresh updates the newest page without discarding
   older loaded pages. Paging cursors stay opaque and never bypass mailbox access.
-- Every mail folder, including Drafts, uses the same list geometry as Inbox. Each mail-list scroll
-  surface always reserves its vertical scrollbar gutter, so short and long folders keep the same
-  horizontal position.
+- Every mail folder, including Drafts, uses the same list geometry as Inbox, apart from the
+  selection lane. Each mail-list scroll surface always reserves its vertical scrollbar gutter, so
+  short and long folders keep the same horizontal position.
+- On desktop, a list offers selection when it shows a folder other than Trash or Drafts and the
+  person can organize at least one loaded conversation. That list reserves a 24 CSS pixel selection
+  lane before the star, in the header and in every row, so that all columns stay aligned. A row
+  that the person cannot organize keeps the lane empty. Compact layouts do not show the lane.
+- A row that the person can organize shows a selection checkbox in the lane. The header shows a
+  select-all checkbox before the folder name. It selects every loaded conversation that the person
+  can organize, and shows a mixed state when only some of them are selected. While conversations
+  are selected, the header shows the number selected in place of the folder name, and **Move to
+  Trash** and **Clear selection** in place of the label filter. **Move to Trash** moves each
+  selected conversation to Trash, reports how many moved and how many did not, and clears the
+  selection. The selection clears when the folder changes.
+- On desktop, in a folder other than Trash, a row that the person can organize shows a **Move
+  conversation to Trash** icon button over the time lane while the pointer is on the row, or while
+  the button has keyboard focus. The button uses the current conversation-row surface and covers
+  the time. One click moves the conversation to Trash and shows the same confirmation as the
+  reader action. The button does not respond to a pointer on a device without hover.
+- A click on a row control does not open the conversation.
 - The folder header and conversation list use a shared maximum width of 960 CSS pixels. Desktop
   rows keep the correspondent and utility columns compact so the subject and preview use all
   remaining space, and align every column vertically. A fixed attachment lane sits between the
